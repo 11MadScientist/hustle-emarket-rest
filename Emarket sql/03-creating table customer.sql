@@ -6,11 +6,11 @@ CREATE TABLE customer
     first_name varchar(77) DEFAULT NULL,
     last_name varchar(77) NOT NULL,
     username varchar(77) UNIQUE NOT NULL,
-    `password` varchar(77) UNIQUE NOT NULL,
-	customer_detail int,
+    `password` varchar(77) NOT NULL,
+	customer_detail_id int,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (customer_detail) REFERENCES customer_detail(id)
+    FOREIGN KEY (customer_detail_id) REFERENCES customer_detail(id)
     ON DELETE NO ACTION ON UPDATE NO ACTION
     
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
