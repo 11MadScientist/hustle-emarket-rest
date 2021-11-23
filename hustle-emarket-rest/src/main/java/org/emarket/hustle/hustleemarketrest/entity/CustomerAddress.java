@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "customer_address")
 public class CustomerAddress
@@ -22,9 +24,10 @@ public class CustomerAddress
 	@Column(name = "address")
 	private String address;
 
+	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH,
 			CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinColumn(name = "instructor_id")
+	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
 	public CustomerAddress()
@@ -56,6 +59,7 @@ public class CustomerAddress
 	public void setAddress(String address)
 	{
 		this.address = address;
+		System.out.println(toString());
 	}
 
 	public Customer getCustomer()
@@ -66,6 +70,12 @@ public class CustomerAddress
 	public void setCustomer(Customer customer)
 	{
 		this.customer = customer;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "CustomerAddress [id=" + id + ", address=" + address + ", customer=" + customer + "]";
 	}
 
 }

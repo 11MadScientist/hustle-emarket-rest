@@ -2,7 +2,6 @@ package org.emarket.hustle.hustleemarketrest.entity;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "customer")
@@ -36,10 +37,12 @@ public class Customer
 	@Column(name = "password")
 	private String password;
 
+	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_detail_id")
 	private CustomerDetail customerDetail;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<CustomerAddress> customerAddress;
 
@@ -113,7 +116,6 @@ public class Customer
 
 	public void setCustomerDetail(CustomerDetail customerDetail)
 	{
-		System.out.println(this.toString());
 		this.customerDetail = customerDetail;
 	}
 
@@ -124,6 +126,7 @@ public class Customer
 
 	public void setCustomerAddress(List<CustomerAddress> customerAddress)
 	{
+
 		this.customerAddress = customerAddress;
 	}
 
@@ -133,12 +136,6 @@ public class Customer
 		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password + ", customerDetail=" + customerDetail + ", customerAddress="
 				+ customerAddress + "]";
-	}
-
-	@PostConstruct
-	public void print()
-	{
-		System.out.println(toString());
 	}
 
 }

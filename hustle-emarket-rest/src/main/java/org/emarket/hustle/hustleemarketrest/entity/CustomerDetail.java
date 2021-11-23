@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "customer_detail")
 public class CustomerDetail
@@ -24,6 +26,7 @@ public class CustomerDetail
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
+	@JsonBackReference
 	@OneToOne(mappedBy = "customerDetail", cascade = { CascadeType.DETACH, CascadeType.MERGE,
 			CascadeType.PERSIST, CascadeType.REFRESH })
 	private Customer customer;
@@ -37,7 +40,6 @@ public class CustomerDetail
 	{
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.customer = customer;
 	}
 
 	public int getId()
