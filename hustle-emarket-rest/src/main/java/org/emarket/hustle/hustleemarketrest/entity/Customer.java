@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,7 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "customer")
@@ -38,12 +43,12 @@ public class Customer
 	private String password;
 
 	@JsonManagedReference
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "customer_detail_id")
 	private CustomerDetail customerDetail;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<CustomerAddress> customerAddress;
 
 	public Customer()
@@ -99,11 +104,13 @@ public class Customer
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword()
 	{
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password)
 	{
 		this.password = password;
@@ -119,6 +126,7 @@ public class Customer
 		this.customerDetail = customerDetail;
 	}
 
+	@JsonInclude(Include.NON_EMPTY)
 	public List<CustomerAddress> getCustomerAddress()
 	{
 		return customerAddress;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,20 +26,20 @@ public class CustomerDetailRestController
 		return customerDetailService.getCustomerDetail();
 	}
 
-	@GetMapping("/customer-detils/{id}")
+	@GetMapping("/customer-details/{id}")
 	public CustomerDetail getCustomerDetailById(@PathVariable int id)
 	{
 		return customerDetailService.getCustomerDetailById(id);
 
 	}
 
-	@PostMapping("/customer-details")
-	public CustomerDetail addCustomerDetail(@RequestBody CustomerDetail customerDetail)
-	{
-		customerDetail.setId(0);
-		customerDetailService.saveCustomerDetail(customerDetail);
-		return customerDetail;
-	}
+//	@PostMapping("/customer-details")
+//	public CustomerDetail addCustomerDetail(@RequestBody CustomerDetail customerDetail)
+//	{
+//		customerDetail.setId(0);
+//		customerDetailService.saveCustomerDetail(customerDetail);
+//		return customerDetail;
+//	}
 
 	@PutMapping("/customer-details")
 	public CustomerDetail updateCustomerDetail(@RequestBody CustomerDetail customerDetail)
@@ -52,7 +51,12 @@ public class CustomerDetailRestController
 	@DeleteMapping("/customer-details/{id}")
 	public String deleteCustomerDetail(@PathVariable int id)
 	{
-		customerDetailService.deleteCustomerDetailById(id);
+
+		CustomerDetail customerDetail = customerDetailService.getCustomerDetailById(id);
+
+		customerDetail.getCustomer().setCustomerDetail(null);
+
+		customerDetailService.deleteCustomerDetail(customerDetail);
 
 		return ("Deleted Customer Detail with id - " + id);
 	}

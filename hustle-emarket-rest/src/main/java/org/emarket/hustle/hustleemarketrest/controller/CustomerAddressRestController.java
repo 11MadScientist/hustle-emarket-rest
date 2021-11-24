@@ -8,14 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/hustle-emarket")
+@RequestMapping("/emarket-hustle")
 public class CustomerAddressRestController
 {
 	@Autowired
@@ -33,13 +32,13 @@ public class CustomerAddressRestController
 		return customerAddressService.getCustomerAddressById(id);
 	}
 
-	@PostMapping("/customer-address")
-	public CustomerAddress addCustomerAddress(@RequestBody CustomerAddress customerAddress)
-	{
-		customerAddress.setId(0);
-		customerAddressService.saveCustomerAddress(customerAddress);
-		return customerAddress;
-	}
+//	@PostMapping("/customer-address")
+//	public CustomerAddress addCustomerAddress(@RequestBody CustomerAddress customerAddress)
+//	{
+//		customerAddress.setId(0);
+//		customerAddressService.saveCustomerAddress(customerAddress);
+//		return customerAddress;
+//	}
 
 	@PutMapping("/customer-address")
 	public CustomerAddress updateCustomerAddress(@RequestBody CustomerAddress customerAddress)

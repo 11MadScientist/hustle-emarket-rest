@@ -43,7 +43,14 @@ public class CustomerDetailServiceImpl implements CustomerDetailService
 	@Override
 	public void deleteCustomerDetailById(int id)
 	{
-		// TODO Auto-generated method stub
+		customerDetailRepository.deleteById(id);
+
+	}
+
+	@Override
+	public void deleteCustomerDetail(CustomerDetail customerDetail)
+	{
+		customerDetailRepository.delete(customerDetail);
 
 	}
 
