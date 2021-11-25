@@ -113,7 +113,6 @@ public class CustomerRestController
 				address.setCustomer(customer);
 			}
 		}
-=======
 
 		try
 		{
@@ -126,7 +125,6 @@ public class CustomerRestController
 			throw new UniqueErrorException("Customer [email, username] should be unique");
 		}
 
->>>>>>> Stashed changes
 	}
 
 	@DeleteMapping("/customers/{id}")
@@ -135,8 +133,6 @@ public class CustomerRestController
 		customerService.deleteCustomerById(id);
 		return ("Deleted Customer with id - " + id);
 	}
-<<<<<<< Updated upstream
-=======
 
 	// login
 	@PostMapping("/customers/login")
@@ -196,5 +192,4 @@ public class CustomerRestController
 		}
 	}
 
->>>>>>> Stashed changes
 }
