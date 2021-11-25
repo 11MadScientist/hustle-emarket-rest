@@ -23,6 +23,8 @@ public class CustomerDetailRestController
 	@GetMapping("/customer-details")
 	public List<CustomerDetail> getCustomerDetail()
 	{
+		// check if customer is retrieved
+
 		return customerDetailService.getCustomerDetail();
 	}
 

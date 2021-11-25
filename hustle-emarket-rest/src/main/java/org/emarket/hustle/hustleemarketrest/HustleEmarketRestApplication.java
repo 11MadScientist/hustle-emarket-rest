@@ -10,6 +10,7 @@ public class HustleEmarketRestApplication
 	public static void main(String [] args)
 	{
 		SpringApplication.run(HustleEmarketRestApplication.class, args);
+
 	}
 
 }
