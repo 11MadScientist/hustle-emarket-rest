@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerRestController
 {
 	Logger log = Logger.getLogger(CustomerRestController.class.getName());
+
+	// for the bean bCrypt
 	@Autowired
 	private BcryptSecurity bcrypt;
 
@@ -66,7 +68,7 @@ public class CustomerRestController
 	{
 		customer.setId(0);
 
-		customer.setPassword("{bcrypt}" + bcrypt.encode(customer.getPassword()));
+		customer.setPassword(bcrypt.encode(customer.getPassword()));
 		log.info(customer.getPassword());
 
 		if(customer.getCustomerAddress() != null)
@@ -119,6 +121,57 @@ public class CustomerRestController
 	{
 		customerService.deleteCustomerById(id);
 		return ("Deleted Customer with id - " + id);
+	}
+
+	// login
+	@PostMapping("/customers/login")
+	public Customer loginCustomer(@RequestBody Customer customer)
+	{
+		try
+		{
+			Customer dbCustomer = customerService.loginCustomer(customer.getUsername());
+
+			boolean result = bcrypt.matches(customer.getPassword(), dbCustomer.getPassword());
+			log.info(result + "");
+			if(bcrypt.matches(customer.getPassword(), dbCustomer.getPassword()))
+			{
+				return dbCustomer;
+			}
+			throw new CustomerNotFoundException("Customer [Email, Password] does not match.");
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new CustomerNotFoundException("No Customer with Found");
+		}
+	}
+
+	@PutMapping("/customers/changePassword")
+	public Customer changePassword(Customer customer)
+	{
+		customer.setPassword(bcrypt.encode(customer.getPassword()));
+		log.info(customer.getPassword());
+
+		if(customer.getCustomerAddress() != null)
+		{
+			for (CustomerAddress address : customer.getCustomerAddress())
+			{
+				address.setCustomer(customer);
+			}
+		}
+
+		customer.getCustomerDetail().setCustomer(customer);
+
+		try
+		{
+			customerService.saveCustomer(customer);
+			return customer;
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException("Saving new Password Failed");
+		}
 	}
 
 }

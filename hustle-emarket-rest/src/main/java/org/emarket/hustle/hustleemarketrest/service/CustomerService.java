@@ -14,4 +14,6 @@ public interface CustomerService
 
 	public void deleteCustomerById(int id);
 
+	public Customer loginCustomer(String username);
+
 }
