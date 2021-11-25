@@ -113,7 +113,14 @@ public class CustomerRestController
 				address.setCustomer(customer);
 			}
 		}
+<<<<<<< HEAD
 =======
+<<<<<<< Updated upstream
+		customerService.saveCustomer(customer);
+		customer.getCustomerAddress();
+		return customer;
+=======
+>>>>>>> customer_api
 
 		try
 		{
@@ -122,11 +129,17 @@ public class CustomerRestController
 		}
 		catch (Exception e)
 		{
+<<<<<<< HEAD
+			throw new UniqueErrorException("Customer [email, username] should be unique");
+		}
+
+=======
 			e.printStackTrace();
 			throw new UniqueErrorException("Customer [email, username] should be unique");
 		}
 
 >>>>>>> Stashed changes
+>>>>>>> customer_api
 	}
 
 	@DeleteMapping("/customers/{id}")
@@ -135,8 +148,11 @@ public class CustomerRestController
 		customerService.deleteCustomerById(id);
 		return ("Deleted Customer with id - " + id);
 	}
+<<<<<<< HEAD
+=======
 <<<<<<< Updated upstream
 =======
+>>>>>>> customer_api
 
 	// login
 	@PostMapping("/customers/login")
@@ -161,6 +177,8 @@ public class CustomerRestController
 			throw new CustomerNotFoundException("No Customer with Found");
 		}
 	}
+<<<<<<< HEAD
+=======
 	/*
 	 * we need to put a custom mapping for changing of password
 	 * because there is no method that checks if the password has
@@ -168,6 +186,7 @@ public class CustomerRestController
 	 * password and not hash the previous password, we need to create
 	 * a new mapping
 	 */
+>>>>>>> customer_api
 
 	@PutMapping("/customers/changePassword")
 	public Customer changePassword(Customer customer)
@@ -196,5 +215,8 @@ public class CustomerRestController
 		}
 	}
 
+<<<<<<< HEAD
+=======
 >>>>>>> Stashed changes
+>>>>>>> customer_api
 }
