@@ -48,4 +48,17 @@ public class RestExceptionHandler
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 
 	}
+
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(SellerNotFoundException e)
+	{
+		ErrorResponse error = new ErrorResponse();
+
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setClassName("Seller");
+		error.setMessage(e.getMessage());
+		error.setTimeStamp(System.currentTimeMillis());
+
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
 }
