@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.CustomerRepository;
 import org.emarket.hustle.hustleemarketrest.entity.Customer;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService
 
 		if(result.isEmpty())
 		{
-			throw new RuntimeException("Did not find employee id - " + id);
+			throw new NotFoundException("CUSTOMER WITH ID: " + id);
 		}
 
 		return result.get();

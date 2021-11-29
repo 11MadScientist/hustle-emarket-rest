@@ -9,12 +9,12 @@ CREATE TABLE seller
     last_name varchar(77) NOT NULL,
     username varchar(77) UNIQUE NOT NULL,
     `password` varchar(77) NOT NULL,
-    seller_store_id int,
+    seller_detail_id int UNIQUE,
     
 	`creation_date` long NOT NULL,
     `modified_date` long NOT NULL,
     
 	PRIMARY KEY(id),
-    FOREIGN KEY (seller_store_id) REFERENCES store(id)
+    FOREIGN KEY (seller_detail_id) REFERENCES seller_detail(id)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

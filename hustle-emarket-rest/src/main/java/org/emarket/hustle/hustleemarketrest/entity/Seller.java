@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -38,8 +40,14 @@ public class Seller
 	private String password;
 
 	@JsonManagedReference
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "seller_store_id")
+	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.REFRESH, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "seller_detail_id")
+	private SellerDetail sellerDetail;
+
+	@JsonBackReference
+	@OneToOne(cascade = CascadeType.ALL,
+			mappedBy = "seller")
 	private Store sellerStore;
 
 	@Column(name = "creation_date")
@@ -50,7 +58,6 @@ public class Seller
 
 	public Seller()
 	{
-		creationDate = System.currentTimeMillis();
 		modifiedDate = System.currentTimeMillis();
 
 	}
@@ -95,6 +102,7 @@ public class Seller
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword()
 	{
 		return password;
@@ -103,6 +111,16 @@ public class Seller
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+
+	public SellerDetail getSellerDetail()
+	{
+		return sellerDetail;
+	}
+
+	public void setSellerDetail(SellerDetail sellerDetail)
+	{
+		this.sellerDetail = sellerDetail;
 	}
 
 	public Store getSellerStore()

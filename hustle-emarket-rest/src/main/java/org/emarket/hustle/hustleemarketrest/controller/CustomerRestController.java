@@ -12,6 +12,7 @@ import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.response.UniqueErrorException;
 import org.emarket.hustle.hustleemarketrest.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,8 +90,15 @@ public class CustomerRestController
 	{
 		/*
 		 * set customer id to 0 to trigger INSERT, not UPDATE
+		 * check if the customerDetail exist
+		 * change id to 0 if exists
 		 */
 		customer.setId(0);
+
+		if(customer.getCustomerDetail() != null)
+		{
+			customer.getCustomerDetail().setId(0);
+		}
 
 		/*
 		 * encrypting password using bcrypt
@@ -124,6 +132,8 @@ public class CustomerRestController
 		 * the password when the client wants to update their data.
 		 * we can do this by getting the data first then pinning the saved password
 		 * from the database to passed Customer data
+		 *
+		 * stop customer from creating more than one customer detail
 		 */
 
 		try
@@ -131,20 +141,27 @@ public class CustomerRestController
 			Customer dbCustomer = customerService.getCustomerById(customer.getId());
 			customer.setPassword(dbCustomer.getPassword());
 
-			try
+			if(customer.getCustomerDetail() != null)
 			{
+				try
+				{
+					customer.getCustomerDetail().setId(dbCustomer.getCustomerDetail().getId());
+				}
+				catch (NullPointerException e)
+				{
+					customer.getCustomerDetail().setId(0);
+				}
+			}
 
-				return customerService.saveCustomer(customer);
-			}
-			catch (Exception e)
-			{
-				throw new UniqueErrorException("CUSTOMER [EMAIL/USERNAME]");
-			}
+			return customerService.saveCustomer(customer);
+
 		}
-
+		catch (DataIntegrityViolationException e)
+		{
+			throw new UniqueErrorException("CUSTOMER [USERNAME/EMAIL]");
+		}
 		catch (Exception e)
 		{
-
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}

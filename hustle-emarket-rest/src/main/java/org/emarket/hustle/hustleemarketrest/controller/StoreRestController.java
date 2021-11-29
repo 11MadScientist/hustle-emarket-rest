@@ -3,26 +3,22 @@ package org.emarket.hustle.hustleemarketrest.controller;
 import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
+import org.emarket.hustle.hustleemarketrest.entity.Seller;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.NotPermittedException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-/**
- *
- * there is no post/insert in Store
- * because you need to be a Seller to create
- * a Store
- *
- */
 
 @RestController
 @RequestMapping("/emarket-hustle")
@@ -41,7 +37,7 @@ public class StoreRestController
 	 */
 
 	@GetMapping("/stores")
-	public List<Store> getSeller()
+	public List<Store> getStore()
 	{
 		try
 		{
@@ -62,7 +58,7 @@ public class StoreRestController
 	 */
 
 	@GetMapping("/stores/{id}")
-	public Store getSellerById(@PathVariable int id)
+	public Store getStoreById(@PathVariable int id)
 	{
 		try
 		{
@@ -77,17 +73,30 @@ public class StoreRestController
 
 	/*
 	 * #######################################
-	 * ########### UPDATE STORE ##############
+	 * ############# ADD STORE ###############
 	 * #######################################
 	 */
 
-	@PutMapping("/stores")
-	public Store updateSeller(@RequestBody Store store)
+	@PostMapping("/stores")
+	public Store addStore(@RequestBody Seller seller)
 	{
+		/*
+		 * we pass the Seller when creating Store to confirm that
+		 * the seller is registered.
+		 * and to establish connection.
+		 */
+		Store store = seller.getSellerStore();
+
+		store.setSeller(seller);
+		store.setCreationDate(store.getModifiedDate());
+
 		try
 		{
-			store.setModifiedDate(System.currentTimeMillis());
-			storeService.saveStore(store);
+			return storeService.saveStore(store);
+		}
+		catch (DataIntegrityViolationException e)
+		{
+			throw new NotPermittedException("SELLER CREATING MORE THAN ONE STORE");
 		}
 		catch (Exception e)
 		{
@@ -95,7 +104,36 @@ public class StoreRestController
 			throw new RuntimeException(e);
 		}
 
-		return store;
+	}
+
+	/*
+	 * #######################################
+	 * ########### UPDATE STORE ##############
+	 * #######################################
+	 */
+
+	@PutMapping("/stores")
+	public Store updateStore(@RequestBody Store store)
+	{
+		if(store.getId() == 0)
+		{
+			throw new NotPermittedException("CREATING STORE IN THIS ENDPOINT");
+		}
+
+		try
+		{
+			storeService.updateStore(store.getStoreName(), store.getStoreAddress(), store.getOverallRating(),
+					store.getItemsAdded(), store.getId());
+
+			return store;
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	/*

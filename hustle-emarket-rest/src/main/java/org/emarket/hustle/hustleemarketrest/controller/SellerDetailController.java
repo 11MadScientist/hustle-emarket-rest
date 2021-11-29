@@ -2,11 +2,11 @@ package org.emarket.hustle.hustleemarketrest.controller;
 
 import java.util.List;
 
-import org.emarket.hustle.hustleemarketrest.entity.SellerDetail;
+import org.emarket.hustle.hustleemarketrest.entity.CustomerDetail;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.response.UniqueErrorException;
-import org.emarket.hustle.hustleemarketrest.service.SellerDetailService;
+import org.emarket.hustle.hustleemarketrest.service.CustomerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,111 +19,111 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  *
  *
- * there is no post/insert in SellerDetail
- * because you need to be a Seller to create
- * a SellerDetail
+ * there is no post/insert in CustomerDetail
+ * because you need to be a Customer to create
+ * a CustomerDetail
  *
  */
 @RestController
 @RequestMapping("/emarket-hustle")
-public class CustomerDetailRestController
+public class SellerDetailController
 {
 	@Autowired
-	SellerDetailService sellerDetailService;
+	CustomerDetailService customerDetailService;
 
 	/*
 	 * #######################################
-	 * ########## GET SELLER DETAIL ##########
+	 * ######## GET CUSTOMER DETAIL ##########
 	 * #######################################
 	 */
-	@GetMapping("/seller-details")
-	public List<SellerDetail> getSellerDetail()
+	@GetMapping("/customer-details")
+	public List<CustomerDetail> getCustomerDetail()
 	{
-		// check if seller is retrieved
+		// check if customer is retrieved
 		try
 		{
-			return sellerDetailService.getSellerDetail();
+			return customerDetailService.getCustomerDetail();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new NotFoundException("NO SELLER DETAIL");
+			throw new NotFoundException("NO CUSTOMER DETAIL");
 		}
 
 	}
 
 	/*
 	 * #######################################
-	 * ###### GET SELLER DETAIL BY ID ########
+	 * ##### GET CUSTOMER DETAIL BY ID #######
 	 * #######################################
 	 */
 
-	@GetMapping("/seller-details/{id}")
-	public SellerDetail getSellerDetailById(@PathVariable int id)
+	@GetMapping("/customer-details/{id}")
+	public CustomerDetail getCustomerDetailById(@PathVariable int id)
 	{
 		try
 		{
-			return sellerDetailService.getSellerDetailById(id);
+			return customerDetailService.getCustomerDetailById(id);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new NotFoundException("SELLER DETAIL WITH ID: " + id);
+			throw new NotFoundException("CUSTOMER DETAIL WITH ID: " + id);
 		}
 
 	}
 
 	/*
 	 * #######################################
-	 * ######## UPDATE SELLER DETAIL #########
+	 * ####### UPDATE CUSTOMER DETAIL ########
 	 * #######################################
 	 */
 
-	@PutMapping("/seller-details")
-	public SellerDetail updateSellerDetail(@RequestBody SellerDetail sellerDetail)
+	@PutMapping("/customer-details")
+	public CustomerDetail updateCustomerDetail(@RequestBody CustomerDetail customerDetail)
 	{
 		try
 		{
-			sellerDetailService.saveSellerDetail(sellerDetail);
-			return sellerDetail;
+			customerDetailService.saveCustomerDetail(customerDetail);
+			return customerDetail;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new UniqueErrorException("SELLER [EMAIL]");
+			throw new UniqueErrorException("CUSTOMER [EMAIL]");
 		}
 
 	}
 
 	/*
 	 * #######################################
-	 * ####### DELETE SELLER DETAIL ##########
+	 * ###### DELETE CUSTOMER DETAIL #########
 	 * #######################################
 	 */
 
-	@DeleteMapping("/seller-details/{id}")
-	public ProcessConfirmation deleteSellerDetail(@PathVariable int id)
+	@DeleteMapping("/customer-details/{id}")
+	public ProcessConfirmation deleteCustomerDetail(@PathVariable int id)
 	{
 
 		try
 		{
-			SellerDetail sellerDetail = sellerDetailService.getSellerDetailById(id);
+			CustomerDetail customerDetail = customerDetailService.getCustomerDetailById(id);
 
-			if(sellerDetail == null)
+			if(customerDetail == null)
 			{
-				throw new NotFoundException("SELLER WITH ID: " + id);
+				throw new NotFoundException("CUSTOMER WITH ID: " + id);
 			}
 
 			/*
 			 * severe the ties between the customer and the customerdetail
 			 * so we can safely delete the customerdetail
 			 */
-			sellerDetail.getSeller().setSellerDetail(null);
+			customerDetail.getCustomer().setCustomerDetail(null);
 
-			sellerDetailService.deleteSellerDetail(sellerDetail);
+			customerDetailService.deleteCustomerDetail(customerDetail);
 
 			return new ProcessConfirmation("SUCCESS",
-					"SELLERDETAIL", "SELLER DETAIL WITH ID: " + id + " WAS DELETED.");
+					"CUSTOMERDETAIL", "CUSTOMER DETAIL WITH ID: " + id + " WAS DELETED.");
 		}
 		catch (Exception e)
 		{

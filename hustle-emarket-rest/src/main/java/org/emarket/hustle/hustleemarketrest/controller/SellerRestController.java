@@ -7,9 +7,12 @@ import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
 import org.emarket.hustle.hustleemarketrest.entity.Seller;
 import org.emarket.hustle.hustleemarketrest.response.ErrorLoginException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.NotPermittedException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
+import org.emarket.hustle.hustleemarketrest.response.UniqueErrorException;
 import org.emarket.hustle.hustleemarketrest.service.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,19 +82,39 @@ public class SellerRestController
 	@PostMapping("/sellers")
 	public Seller addSeller(@RequestBody Seller seller)
 	{
-
 		/*
+		 * don't permit creating/updating store using
+		 * this endpoint
+		 *
 		 * set seller id to 0 to invoke insert function
 		 * not update
+		 *
+		 * then instantiate creation date
+		 *
+		 * then encrypt password
 		 */
-		seller.setId(0);
+		if(seller.getSellerStore() != null)
+		{
+			throw new NotPermittedException("SELLER ADDING/UPDATING STORE IN THIS ENDPOINT");
+		}
 
-		seller.setPassword(bcrypt.encode(seller.getPassword()));
+		seller.setId(0);
+		seller.setCreationDate(seller.getModifiedDate());
+
+		if(seller.getSellerDetail() != null)
+		{
+			seller.getSellerDetail().setId(0);
+		}
 
 		try
 		{
+			seller.setPassword(bcrypt.encode(seller.getPassword()));
 			return sellerService.saveSeller(seller);
 
+		}
+		catch (DataIntegrityViolationException e)
+		{
+			throw new UniqueErrorException("SELLER [USERNAME/EMAIL]");
 		}
 		catch (Exception e)
 		{
@@ -112,19 +135,43 @@ public class SellerRestController
 		try
 		{
 			/*
+			 * we dont permit adding/updating store here
+			 */
+			if(seller.getSellerStore() != null)
+			{
+				throw new NotPermittedException("SELLER ADDING/UPDATING STORE IN THIS ENDPOINT");
+			}
+
+			/*
 			 * Getting the password from the database and injecting it to the
 			 * current seller
+			 * passing the creation date to remain unchanged
 			 * updating the modifiedDate
 			 */
 
 			Seller dbseller = sellerService.getSellerById(seller.getId());
 
-			seller.setPassword(dbseller.getPassword());
+			if(seller.getSellerDetail() != null)
+			{
+				try
+				{
+					seller.getSellerDetail().setId(dbseller.getSellerDetail().getId());
+				}
+				catch (NullPointerException e)
+				{
+					seller.getSellerDetail().setId(0);
+				}
+			}
 
+			seller.setPassword(dbseller.getPassword());
 			seller.setCreationDate(dbseller.getCreationDate());
 
 			return sellerService.saveSeller(seller);
 
+		}
+		catch (DataIntegrityViolationException e)
+		{
+			throw new UniqueErrorException("SELLER [USERNAME/EMAIL]");
 		}
 		catch (Exception e)
 		{

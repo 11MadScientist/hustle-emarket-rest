@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.CustomerDetailRepository;
 import org.emarket.hustle.hustleemarketrest.entity.CustomerDetail;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class CustomerDetailServiceImpl implements CustomerDetailService
 
 		if(result.isEmpty())
 		{
-			throw new RuntimeException("Did not find CustomerDetail id - " + id);
+			throw new NotFoundException("CUSTOMERDETAIL WITH ID: " + id);
 		}
 		return result.get();
 
