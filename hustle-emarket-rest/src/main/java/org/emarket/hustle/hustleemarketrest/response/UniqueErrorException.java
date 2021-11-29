@@ -1,4 +1,4 @@
-package org.emarket.hustle.hustleemarketrest.error;
+package org.emarket.hustle.hustleemarketrest.response;
 
 public class UniqueErrorException extends RuntimeException
 {

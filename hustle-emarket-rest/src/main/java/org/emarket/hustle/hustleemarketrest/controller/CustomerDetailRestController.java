@@ -3,8 +3,9 @@ package org.emarket.hustle.hustleemarketrest.controller;
 import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.entity.CustomerDetail;
-import org.emarket.hustle.hustleemarketrest.error.CustomerNotFoundException;
-import org.emarket.hustle.hustleemarketrest.error.UniqueErrorException;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
+import org.emarket.hustle.hustleemarketrest.response.UniqueErrorException;
 import org.emarket.hustle.hustleemarketrest.service.CustomerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *
+ *
+ * there is no post/insert in CustomerDetail
+ * because you need to be a Customer to create
+ * a CustomerDetail
+ *
+ */
 @RestController
 @RequestMapping("/emarket-hustle")
 public class CustomerDetailRestController
@@ -22,6 +31,11 @@ public class CustomerDetailRestController
 	@Autowired
 	CustomerDetailService customerDetailService;
 
+	/*
+	 * #######################################
+	 * ######## GET CUSTOMER DETAIL ##########
+	 * #######################################
+	 */
 	@GetMapping("/customer-details")
 	public List<CustomerDetail> getCustomerDetail()
 	{
@@ -32,10 +46,17 @@ public class CustomerDetailRestController
 		}
 		catch (Exception e)
 		{
-			throw new CustomerNotFoundException("No Customer Detail/s Found");
+			e.printStackTrace();
+			throw new NotFoundException("NO CUSTOMER DETAIL");
 		}
 
 	}
+
+	/*
+	 * #######################################
+	 * ##### GET CUSTOMER DETAIL BY ID #######
+	 * #######################################
+	 */
 
 	@GetMapping("/customer-details/{id}")
 	public CustomerDetail getCustomerDetailById(@PathVariable int id)
@@ -46,22 +67,16 @@ public class CustomerDetailRestController
 		}
 		catch (Exception e)
 		{
-			throw new CustomerNotFoundException("Customer Details with id:" + id + " was not found");
+			e.printStackTrace();
+			throw new NotFoundException("CUSTOMER DETAIL WITH ID: " + id);
 		}
 
 	}
 
-	// @PostMapping is fobidden in CustomerDetail because it needs to be Saved with
-	// Customer
 	/*
-	 * @PostMapping("/customer-details")
-	 * public CustomerDetail addCustomerDetail(@RequestBody CustomerDetail
-	 * customerDetail)
-	 * {
-	 * customerDetail.setId(0);
-	 * customerDetailService.saveCustomerDetail(customerDetail);
-	 * return customerDetail;
-	 * }
+	 * #######################################
+	 * ####### UPDATE CUSTOMER DETAIL ########
+	 * #######################################
 	 */
 
 	@PutMapping("/customer-details")
@@ -74,27 +89,48 @@ public class CustomerDetailRestController
 		}
 		catch (Exception e)
 		{
-			throw new UniqueErrorException("Customer [email, username] should be unique");
+			e.printStackTrace();
+			throw new UniqueErrorException("CUSTOMER [EMAIL]");
 		}
 
 	}
 
+	/*
+	 * #######################################
+	 * ###### DELETE CUSTOMER DETAIL #########
+	 * #######################################
+	 */
+
 	@DeleteMapping("/customer-details/{id}")
-	public String deleteCustomerDetail(@PathVariable int id)
+	public ProcessConfirmation deleteCustomerDetail(@PathVariable int id)
 	{
 
-		CustomerDetail customerDetail = customerDetailService.getCustomerDetailById(id);
-
-		if(customerDetail == null)
+		try
 		{
-			throw new CustomerNotFoundException("Customer Details with id:" + id + " was not found");
+			CustomerDetail customerDetail = customerDetailService.getCustomerDetailById(id);
+
+			if(customerDetail == null)
+			{
+				throw new NotFoundException("CUSTOMER WITH ID: " + id);
+			}
+
+			/*
+			 * severe the ties between the customer and the customerdetail
+			 * so we can safely delete the customerdetail
+			 */
+			customerDetail.getCustomer().setCustomerDetail(null);
+
+			customerDetailService.deleteCustomerDetail(customerDetail);
+
+			return new ProcessConfirmation("SUCCESS",
+					"CUSTOMERDETAIL", "CUSTOMER DETAIL WITH ID: " + id + " WAS DELETED.");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		customerDetail.getCustomer().setCustomerDetail(null);
-
-		customerDetailService.deleteCustomerDetail(customerDetail);
-
-		return ("Deleted Customer Detail with id - " + id);
 	}
 
 }

@@ -34,9 +34,10 @@ public class CustomerServiceImpl implements CustomerService
 	}
 
 	@Override
-	public void saveCustomer(Customer customer)
+	public Customer saveCustomer(Customer customer)
 	{
 		customerRepository.save(customer);
+		return customerRepository.getById(customer.getId());
 	}
 
 	@Override

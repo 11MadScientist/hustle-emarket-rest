@@ -1,8 +1,7 @@
-package org.emarket.hustle.hustleemarketrest.error;
+package org.emarket.hustle.hustleemarketrest.response;
 
 public class ErrorResponse
 {
-	private String className;
 	private int status;
 	private String message;
 	private long timeStamp;
@@ -13,7 +12,6 @@ public class ErrorResponse
 
 	public ErrorResponse(String className, int status, String message, long timeStamp)
 	{
-		this.className = className;
 		this.status = status;
 		this.message = message;
 		this.timeStamp = timeStamp;
@@ -47,16 +45,6 @@ public class ErrorResponse
 	public void setTimeStamp(long timeStamp)
 	{
 		this.timeStamp = timeStamp;
-	}
-
-	public String getClassName()
-	{
-		return className;
-	}
-
-	public void setClassName(String className)
-	{
-		this.className = className;
 	}
 
 }

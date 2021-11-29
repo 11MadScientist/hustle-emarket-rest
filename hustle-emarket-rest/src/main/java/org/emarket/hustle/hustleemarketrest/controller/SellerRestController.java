@@ -5,7 +5,9 @@ import java.util.logging.Logger;
 
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
 import org.emarket.hustle.hustleemarketrest.entity.Seller;
-import org.emarket.hustle.hustleemarketrest.error.CustomerNotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.ErrorLoginException;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,10 +31,10 @@ public class SellerRestController
 	private BcryptSecurity bcrypt;
 
 	/*
-	 * BASIC CRUD OPERATIONS
-	 *
+	 * #######################################
+	 * ########### GET SELLER ################
+	 * #######################################
 	 */
-
 	@GetMapping("/sellers")
 	public List<Seller> getSeller()
 	{
@@ -42,39 +44,53 @@ public class SellerRestController
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException("No sellers were found");
+			e.printStackTrace();
+			throw new NotFoundException("NO SELLER");
 		}
 
 	}
 
+	/*
+	 * #######################################
+	 * ########### GET SELLER BY ID ##########
+	 * #######################################
+	 */
 	@GetMapping("/sellers/{id}")
 	public Seller getSellerById(@PathVariable int id)
 	{
+		try
+		{
+			return sellerService.getSellerById(id);
 
-		return sellerService.getSellerById(id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+			throw new NotFoundException("SELLER WITH ID: " + id);
+		}
 	}
 
+	/*
+	 * #######################################
+	 * ############# ADD SELLER ##############
+	 * #######################################
+	 */
 	@PostMapping("/sellers")
 	public Seller addSeller(@RequestBody Seller seller)
 	{
-		seller.setId(0);
 
 		/*
-		 * we appoint the seller as the store's seller
+		 * set seller id to 0 to invoke insert function
+		 * not update
 		 */
+		seller.setId(0);
 
-		if(seller.getSellerStore() != null)
-		{
-			log.info("inside if statement getSellerStore() != null");
-			seller.getSellerStore().setSeller(seller);
-		}
-		log.info("outside if statement getSellerStore() != null");
+		seller.setPassword(bcrypt.encode(seller.getPassword()));
 
 		try
 		{
-			seller.setPassword(bcrypt.encode(seller.getPassword()));
-			sellerService.saveSeller(seller);
-			return seller;
+			return sellerService.saveSeller(seller);
 
 		}
 		catch (Exception e)
@@ -85,6 +101,11 @@ public class SellerRestController
 
 	}
 
+	/*
+	 * #######################################
+	 * ############ UPDATE SELLER ############
+	 * #######################################
+	 */
 	@PutMapping("/sellers")
 	public Seller updateSeller(@RequestBody Seller seller)
 	{
@@ -102,36 +123,47 @@ public class SellerRestController
 
 			seller.setCreationDate(dbseller.getCreationDate());
 
-			/*
-			 * we appoint the seller as the store's seller
-			 */
-			if(seller.getSellerStore() != null)
-			{
+			return sellerService.saveSeller(seller);
 
-				seller.getSellerStore().setSeller(seller);
-			}
-
-			sellerService.saveSeller(seller);
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		return seller;
-	}
-
-	@DeleteMapping("/sellers/{id}")
-	public String deleteSellerById(@PathVariable int id)
-	{
-		sellerService.deleteSellerById(id);
-
-		return ("Deleted Seller with id:" + id);
 	}
 
 	/*
-	 * Seller login endpoint
+	 * #######################################
+	 * ########### DELETE SELLER #############
+	 * #######################################
 	 */
+	@DeleteMapping("/sellers/{id}")
+	public ProcessConfirmation deleteSellerById(@PathVariable int id)
+	{
+
+		try
+		{
+			sellerService.deleteSellerById(id);
+
+			return new ProcessConfirmation("SUCCESS", "SELLER",
+					"THE CUSTOMER WITH ID:" + id + " WAS DELETED.");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	/*
+	 * #######################################
+	 * ########### SELLER LOGIN ##############
+	 * #######################################
+	 */
+
 	@PostMapping("/sellers/login")
 	public Seller loginSeller(@RequestBody Seller seller)
 	{
@@ -148,13 +180,43 @@ public class SellerRestController
 				return dbSeller;
 			}
 
-			throw new CustomerNotFoundException("Seller [Email, Password] does not match.");
+			throw new ErrorLoginException("SELLER [EMAIL, PASSWORD]");
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new CustomerNotFoundException("No Seller with Found");
+			throw new RuntimeException(e);
+		}
+	}
+
+	/*
+	 * #######################################
+	 * ##### SELLER CHANGE PASSWORD ##########
+	 * #######################################
+	 */
+
+	@PutMapping("/sellers/changePassword")
+	public Seller changePassword(Seller seller)
+	{
+		seller.setPassword(bcrypt.encode(seller.getPassword()));
+		log.info(seller.getPassword());
+
+		if(seller.getSellerStore() != null)
+		{
+			seller.getSellerStore().setSeller(seller);
+		}
+
+		try
+		{
+			sellerService.saveSeller(seller);
+
+			return seller;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package org.emarket.hustle.hustleemarketrest.error;
+package org.emarket.hustle.hustleemarketrest.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,26 +9,31 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestExceptionHandler
 {
 
+	private String message;
+
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(Exception e)
 	{
 		ErrorResponse error = new ErrorResponse();
+
+		message = "BAD REQUEST! " + e.getMessage();
+
 		error.setStatus(HttpStatus.BAD_REQUEST.value());
-		error.setClassName("GeneralException");
-		error.setMessage(e.getMessage());
+		error.setMessage(message);
 		error.setTimeStamp(System.currentTimeMillis());
 
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler
-	public ResponseEntity<ErrorResponse> handleException(CustomerNotFoundException e)
+	public ResponseEntity<ErrorResponse> handleException(NotFoundException e)
 	{
 		ErrorResponse error = new ErrorResponse();
 
+		message = e.getMessage() + " WAS NOT FOUND!";
+
 		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setClassName("Customer");
-		error.setMessage(e.getMessage());
+		error.setMessage(message);
 		error.setTimeStamp(System.currentTimeMillis());
 
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -40,25 +45,29 @@ public class RestExceptionHandler
 	{
 		ErrorResponse error = new ErrorResponse();
 
-		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setClassName("GeneralException");
-		error.setMessage(e.getMessage());
+		message = e.getMessage() + " SHOULD BE UNIQUE!";
+
+		error.setStatus(HttpStatus.BAD_REQUEST.value());
+		error.setMessage(message);
 		error.setTimeStamp(System.currentTimeMillis());
 
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 
 	}
 
 	@ExceptionHandler
-	public ResponseEntity<ErrorResponse> handleException(SellerNotFoundException e)
+	public ResponseEntity<ErrorResponse> handleException(ErrorLoginException e)
 	{
 		ErrorResponse error = new ErrorResponse();
 
+		message = e.getMessage() + " DOES NOT MATCH!";
+
 		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setClassName("Seller");
-		error.setMessage(e.getMessage());
+		error.setMessage(message);
 		error.setTimeStamp(System.currentTimeMillis());
 
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+
 	}
+
 }

@@ -10,7 +10,7 @@ public interface SellerService
 
 	public Seller getSellerById(int id);
 
-	public void saveSeller(Seller seller);
+	public Seller saveSeller(Seller seller);
 
 	public void deleteSeller(Seller seller);
 

@@ -35,9 +35,10 @@ public class SellerServiceImpl implements SellerService
 	}
 
 	@Override
-	public void saveSeller(Seller seller)
+	public Seller saveSeller(Seller seller)
 	{
 		sellerRepository.save(seller);
+		return sellerRepository.getById(seller.getId());
 	}
 
 	@Override

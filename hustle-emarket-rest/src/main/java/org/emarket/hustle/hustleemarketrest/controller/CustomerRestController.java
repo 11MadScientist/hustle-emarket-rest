@@ -6,8 +6,10 @@ import java.util.logging.Logger;
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
 import org.emarket.hustle.hustleemarketrest.entity.Customer;
 import org.emarket.hustle.hustleemarketrest.entity.CustomerAddress;
-import org.emarket.hustle.hustleemarketrest.error.CustomerNotFoundException;
-import org.emarket.hustle.hustleemarketrest.error.UniqueErrorException;
+import org.emarket.hustle.hustleemarketrest.response.ErrorLoginException;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
+import org.emarket.hustle.hustleemarketrest.response.UniqueErrorException;
 import org.emarket.hustle.hustleemarketrest.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,12 @@ public class CustomerRestController
 	@Autowired
 	private CustomerService customerService;
 
+	/*
+	 * #######################################
+	 * ########### GET CUSTOMER ##############
+	 * #######################################
+	 */
+
 	@GetMapping("/customers")
 	public List<Customer> getCustomer()
 	{
@@ -43,10 +51,16 @@ public class CustomerRestController
 		}
 		catch (Exception e)
 		{
-			throw new CustomerNotFoundException("No customers was found");
+			e.printStackTrace();
+			throw new NotFoundException("NO CUSTOMERS");
 		}
 	}
 
+	/*
+	 * #######################################
+	 * ####### GET CUSTOMER BY ID ############
+	 * #######################################
+	 */
 	@GetMapping("/customers/{id}")
 	public Customer getCustomerById(@PathVariable int id)
 	{
@@ -58,40 +72,49 @@ public class CustomerRestController
 		}
 		catch (Exception e)
 		{
-			throw new CustomerNotFoundException("Customer with id:" + id + " not found");
+			e.printStackTrace();
+			throw new NotFoundException("CUSTOMER WITH ID: " + id);
 		}
 
 	}
+
+	/*
+	 * #######################################
+	 * ########### ADD CUSTOMER ##############
+	 * #######################################
+	 */
 
 	@PostMapping("/customers")
 	public Customer addCustomer(@RequestBody Customer customer)
 	{
+		/*
+		 * set customer id to 0 to trigger INSERT, not UPDATE
+		 */
 		customer.setId(0);
 
+		/*
+		 * encrypting password using bcrypt
+		 */
 		customer.setPassword(bcrypt.encode(customer.getPassword()));
-		log.info(customer.getPassword());
-
-		if(customer.getCustomerAddress() != null)
-		{
-			for (CustomerAddress address : customer.getCustomerAddress())
-			{
-				address.setCustomer(customer);
-			}
-		}
-
-		customer.getCustomerDetail().setCustomer(customer);
 
 		try
 		{
-			customerService.saveCustomer(customer);
-			return customer;
+			return customerService.saveCustomer(customer);
+
 		}
 		catch (Exception e)
 		{
-			throw new UniqueErrorException("Customer [email, username] should be unique");
+			e.printStackTrace();
+			throw new UniqueErrorException("Customer [EMAIL/USERNAME]");
 		}
 
 	}
+
+	/*
+	 * #######################################
+	 * ######## UPDATE CUSTOMER ##############
+	 * #######################################
+	 */
 
 	@PutMapping("/customers")
 	public Customer updateCustomer(@RequestBody Customer customer)
@@ -102,61 +125,94 @@ public class CustomerRestController
 		 * we can do this by getting the data first then pinning the saved password
 		 * from the database to passed Customer data
 		 */
-		Customer dbCustomer = customerService.getCustomerById(customer.getId());
-
-		customer.setPassword(dbCustomer.getPassword());
-
-		if(customer.getCustomerAddress() != null)
-		{
-			for (CustomerAddress address : customer.getCustomerAddress())
-			{
-				address.setCustomer(customer);
-			}
-		}
 
 		try
 		{
-			customerService.saveCustomer(customer);
-			return customer;
+			Customer dbCustomer = customerService.getCustomerById(customer.getId());
+			customer.setPassword(dbCustomer.getPassword());
+
+			try
+			{
+
+				return customerService.saveCustomer(customer);
+			}
+			catch (Exception e)
+			{
+				throw new UniqueErrorException("CUSTOMER [EMAIL/USERNAME]");
+			}
+		}
+
+		catch (Exception e)
+		{
+
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	/*
+	 * #######################################
+	 * ########## DELETE CUSTOMER ############
+	 * #######################################
+	 */
+	@DeleteMapping("/customers/{id}")
+	public ProcessConfirmation deleteCustomerById(@PathVariable int id)
+	{
+		try
+		{
+			customerService.deleteCustomerById(id);
+
+			return new ProcessConfirmation("SUCCESS", "CUSTOMER",
+					"THE CUSTOMER WITH ID:" + id + " WAS DELETED.");
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new UniqueErrorException("Customer [email, username] should be unique");
+			throw new RuntimeException(e);
 		}
-
 	}
 
-	@DeleteMapping("/customers/{id}")
-	public String deleteCustomerById(@PathVariable int id)
-	{
-		customerService.deleteCustomerById(id);
-		return ("Deleted Customer with id - " + id);
-	}
+	/*
+	 * #######################################
+	 * ########## LOGIN CUSTOMER #############
+	 * #######################################
+	 */
 
-	// login
 	@PostMapping("/customers/login")
 	public Customer loginCustomer(@RequestBody Customer customer)
 	{
+		/**
+		 *
+		 * fetching Customer through username,
+		 * checking the password on the returned
+		 * customer if it matches the password
+		 * given by the user.
+		 * gives data if true, error when false
+		 */
 		try
 		{
 			Customer dbCustomer = customerService.loginCustomer(customer.getUsername());
 
-			boolean result = bcrypt.matches(customer.getPassword(), dbCustomer.getPassword());
-			log.info(result + "");
 			if(bcrypt.matches(customer.getPassword(), dbCustomer.getPassword()))
 			{
 				return dbCustomer;
 			}
-			throw new CustomerNotFoundException("Customer [Email, Password] does not match.");
+			throw new ErrorLoginException("CUSTOMER [Email, Password]");
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new CustomerNotFoundException("No Customer with Found");
+			throw new RuntimeException(e);
 		}
 	}
+
+	/*
+	 * #######################################
+	 * ##### CUSTOMER CHANGE PASSWORD ########
+	 * #######################################
+	 */
 	/*
 	 * we need to put a custom mapping for changing of password
 	 * because there is no method that checks if the password has
@@ -179,7 +235,10 @@ public class CustomerRestController
 			}
 		}
 
-		customer.getCustomerDetail().setCustomer(customer);
+		if(customer.getCustomerDetail() != null)
+		{
+			customer.getCustomerDetail().setCustomer(customer);
+		}
 
 		try
 		{
@@ -188,6 +247,7 @@ public class CustomerRestController
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			throw new RuntimeException("Saving new Password Failed");
 		}
 	}

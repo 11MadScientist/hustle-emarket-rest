@@ -3,7 +3,8 @@ package org.emarket.hustle.hustleemarketrest.controller;
 import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.entity.CustomerAddress;
-import org.emarket.hustle.hustleemarketrest.error.CustomerNotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
+import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.CustomerAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *
+ *
+ * there is no post/insert in CustomerAddress
+ * because you need to be a Customer to create
+ * a CustomerAddress
+ *
+ */
+
 @RestController
 @RequestMapping("/emarket-hustle")
 public class CustomerAddressRestController
@@ -21,7 +31,12 @@ public class CustomerAddressRestController
 	@Autowired
 	private CustomerAddressService customerAddressService;
 
-	@GetMapping("/customer-address")
+	/*
+	 * #######################################
+	 * ######## GET CUSTOMER ADDRESS #########
+	 * #######################################
+	 */
+	@GetMapping("/customer-addresses")
 	public List<CustomerAddress> getCustomerAddress()
 	{
 		try
@@ -30,12 +45,18 @@ public class CustomerAddressRestController
 		}
 		catch (Exception e)
 		{
-			throw new CustomerNotFoundException("No Customer Address/es Found");
+			e.printStackTrace();
+			throw new NotFoundException("CUSTOMER ADDRESS");
 		}
 
 	}
 
-	@GetMapping("/customer-address/{id}")
+	/*
+	 * #######################################
+	 * ##### GET CUSTOMER ADDRESS BY ID ######
+	 * #######################################
+	 */
+	@GetMapping("/customer-addresses/{id}")
 	public CustomerAddress getCustomerAddressById(@PathVariable int id)
 	{
 		try
@@ -44,38 +65,52 @@ public class CustomerAddressRestController
 		}
 		catch (Exception e)
 		{
-			throw new CustomerNotFoundException("Customer Address with id:" + id + " was not found");
+			e.printStackTrace();
+			throw new NotFoundException("CUSTOMER ADDRESS WITH ID: " + id);
 		}
 
 	}
 
-	// @PostMapping is forbidden in CustomerAddress because it needs to be Saved
-	// with
-	// Customer
-
 	/*
-	 * @PostMapping("/customer-address")
-	 * public CustomerAddress addCustomerAddress(@RequestBody CustomerAddress
-	 * customerAddress)
-	 * {
-	 * customerAddress.setId(0);
-	 * customerAddressService.saveCustomerAddress(customerAddress);
-	 * return customerAddress;
-	 * }
+	 * #######################################
+	 * ###### UPDATE CUSTOMER ADDRESS ########
+	 * #######################################
 	 */
-
-	@PutMapping("/customer-address")
+	@PutMapping("/customer-addresses")
 	public CustomerAddress updateCustomerAddress(@RequestBody CustomerAddress customerAddress)
 	{
-		customerAddressService.saveCustomerAddress(customerAddress);
-		return customerAddress;
+		try
+		{
+			customerAddressService.saveCustomerAddress(customerAddress);
+			return customerAddress;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
-	@DeleteMapping("/customer-address/{id}")
-	public String deleteCustomerAddress(@PathVariable int id)
+	/*
+	 * #######################################
+	 * ####### DELETE CUSTOMER ADDRESS #######
+	 * #######################################
+	 */
+	@DeleteMapping("/customer-addresses/{id}")
+	public ProcessConfirmation deleteCustomerAddress(@PathVariable int id)
 	{
-		customerAddressService.deleteCustomerAddressById(id);
-		return ("Deleted Customer Address with id - " + id);
+		try
+		{
+			customerAddressService.deleteCustomerAddressById(id);
+
+			return new ProcessConfirmation("SUCCESS", "CUSTOMERDETAIL",
+					"CUSTOMER ADDRESS WITH ID: " + id + " WAS DELETED.");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }
