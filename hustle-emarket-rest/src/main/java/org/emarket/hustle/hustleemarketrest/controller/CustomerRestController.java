@@ -94,6 +94,7 @@ public class CustomerRestController
 		 * change id to 0 if exists
 		 */
 		customer.setId(0);
+		customer.setCreationDate(customer.getModifiedDate());
 
 		if(customer.getCustomerDetail() != null)
 		{
@@ -103,17 +104,21 @@ public class CustomerRestController
 		/*
 		 * encrypting password using bcrypt
 		 */
-		customer.setPassword(bcrypt.encode(customer.getPassword()));
 
 		try
 		{
+			customer.setPassword(bcrypt.encode(customer.getPassword()));
 			return customerService.saveCustomer(customer);
 
+		}
+		catch (DataIntegrityViolationException e)
+		{
+			throw new UniqueErrorException("CUSTOMER [USERNAME/EMAIL]");
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new UniqueErrorException("Customer [EMAIL/USERNAME]");
+			throw new RuntimeException(e);
 		}
 
 	}
@@ -139,7 +144,6 @@ public class CustomerRestController
 		try
 		{
 			Customer dbCustomer = customerService.getCustomerById(customer.getId());
-			customer.setPassword(dbCustomer.getPassword());
 
 			if(customer.getCustomerDetail() != null)
 			{
@@ -152,6 +156,8 @@ public class CustomerRestController
 					customer.getCustomerDetail().setId(0);
 				}
 			}
+			customer.setPassword(dbCustomer.getPassword());
+			customer.setCreationDate(dbCustomer.getCreationDate());
 
 			return customerService.saveCustomer(customer);
 

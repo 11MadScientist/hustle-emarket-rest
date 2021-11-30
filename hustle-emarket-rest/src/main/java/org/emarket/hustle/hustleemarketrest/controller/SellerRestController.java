@@ -132,16 +132,15 @@ public class SellerRestController
 	@PutMapping("/sellers")
 	public Seller updateSeller(@RequestBody Seller seller)
 	{
+		/*
+		 * we dont permit adding/updating store here
+		 */
+		if(seller.getSellerStore() != null)
+		{
+			throw new NotPermittedException("SELLER ADDING/UPDATING STORE IN THIS ENDPOINT");
+		}
 		try
 		{
-			/*
-			 * we dont permit adding/updating store here
-			 */
-			if(seller.getSellerStore() != null)
-			{
-				throw new NotPermittedException("SELLER ADDING/UPDATING STORE IN THIS ENDPOINT");
-			}
-
 			/*
 			 * Getting the password from the database and injecting it to the
 			 * current seller

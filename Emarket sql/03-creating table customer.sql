@@ -8,6 +8,9 @@ CREATE TABLE customer
     username varchar(77) UNIQUE NOT NULL,
     `password` varchar(77) NOT NULL,
 	customer_detail_id int,
+    
+    `creation_date` long NOT NULL,
+    `modified_date` long NOT NULL,
 
     PRIMARY KEY(id),
     FOREIGN KEY (customer_detail_id) REFERENCES customer_detail(id)

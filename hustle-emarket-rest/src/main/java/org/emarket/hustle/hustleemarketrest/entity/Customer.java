@@ -51,8 +51,15 @@ public class Customer
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<CustomerAddress> customerAddress;
 
+	@Column(name = "creation_date")
+	private long creationDate;
+
+	@Column(name = "modified_date")
+	private long modifiedDate;
+
 	public Customer()
 	{
+		modifiedDate = System.currentTimeMillis();
 	}
 
 	public Customer(String firstName, String lastName, String username, String password, CustomerDetail customerDetail)
@@ -136,6 +143,26 @@ public class Customer
 	{
 
 		this.customerAddress = customerAddress;
+	}
+
+	public long getCreationDate()
+	{
+		return creationDate;
+	}
+
+	public void setCreationDate(long creationDate)
+	{
+		this.creationDate = creationDate;
+	}
+
+	public long getModifiedDate()
+	{
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(long modifiedDate)
+	{
+		this.modifiedDate = modifiedDate;
 	}
 
 	@Override
