@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,44 +13,55 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.micrometer.core.lang.NonNull;
+
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "customer")
 public class Customer
 {
 	// customer fields
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private int id;
 
+	@NonNull
 	@Column(name = "first_name")
 	private String firstName;
 
+	@NonNull
 	@Column(name = "last_name")
 	private String lastName;
 
+	@NonNull
 	@Column(name = "username")
 	private String username;
 
+	@NonNull
 	@Column(name = "password")
 	private String password;
 
-	@JsonManagedReference
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "customer_detail_id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customer_detail_id", updatable = false)
 	private CustomerDetail customerDetail;
 
-	@JsonManagedReference
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customer_id")
 	private List<CustomerAddress> customerAddress;
 
-	@Column(name = "creation_date")
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customer_id")
+	private List<Basket> basket;
+
+	@Column(name = "creation_date", updatable = false)
 	private long creationDate;
 
 	@Column(name = "modified_date")
@@ -60,15 +70,6 @@ public class Customer
 	public Customer()
 	{
 		modifiedDate = System.currentTimeMillis();
-	}
-
-	public Customer(String firstName, String lastName, String username, String password, CustomerDetail customerDetail)
-	{
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.username = username;
-		this.password = password;
-		this.customerDetail = customerDetail;
 	}
 
 	public int getId()
@@ -133,16 +134,27 @@ public class Customer
 		this.customerDetail = customerDetail;
 	}
 
-	@JsonInclude(Include.NON_EMPTY)
+	@JsonIgnore
 	public List<CustomerAddress> getCustomerAddress()
 	{
 		return customerAddress;
 	}
 
+	@JsonProperty
 	public void setCustomerAddress(List<CustomerAddress> customerAddress)
 	{
-
 		this.customerAddress = customerAddress;
+	}
+
+	@JsonIgnore
+	public List<Basket> getBasket()
+	{
+		return basket;
+	}
+
+	public void setBasket(List<Basket> basket)
+	{
+		this.basket = basket;
 	}
 
 	public long getCreationDate()

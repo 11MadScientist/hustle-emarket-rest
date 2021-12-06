@@ -1,15 +1,11 @@
 package org.emarket.hustle.hustleemarketrest.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "seller_detail")
@@ -17,7 +13,7 @@ public class SellerDetail
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private int id;
 
 	@Column(name = "email")
@@ -26,10 +22,16 @@ public class SellerDetail
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
-	@JsonBackReference
-	@OneToOne(mappedBy = "sellerDetail", cascade = { CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.PERSIST, CascadeType.REFRESH })
-	private Seller seller;
+	@Column(name = "status")
+	private boolean status;
+
+	@Column(name = "authorized")
+	private boolean authorized;
+
+	@Column(name = "dp_link")
+	private String dpLink;
+
+//	private Image dp;
 
 	public SellerDetail()
 	{
@@ -66,21 +68,41 @@ public class SellerDetail
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Seller getSeller()
+	public boolean isStatus()
 	{
-		return seller;
+		return status;
 	}
 
-	public void setSeller(Seller seller)
+	public void setStatus(boolean status)
 	{
-		this.seller = seller;
+		this.status = status;
+	}
+
+	public boolean isAuthorized()
+	{
+		return authorized;
+	}
+
+	public void setAuthorized(boolean authorized)
+	{
+		this.authorized = authorized;
+	}
+
+	public String getDpLink()
+	{
+		return dpLink;
+	}
+
+	public void setDpLink(String dpLink)
+	{
+		this.dpLink = dpLink;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "SellerDetail [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", seller=" + seller
-				+ "]";
+		return "SellerDetail [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", status=" + status
+				+ ", authorized=" + authorized + ", dpLink=" + dpLink + "]";
 	}
 
 }

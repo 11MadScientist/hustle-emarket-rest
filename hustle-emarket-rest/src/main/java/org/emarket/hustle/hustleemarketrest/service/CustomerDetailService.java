@@ -15,4 +15,5 @@ public interface CustomerDetailService
 	public void deleteCustomerDetailById(int id);
 
 	public void deleteCustomerDetail(CustomerDetail customerDetail);
+
 }

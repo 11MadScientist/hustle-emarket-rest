@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.CustomerRepository;
 import org.emarket.hustle.hustleemarketrest.entity.Customer;
+import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,14 @@ public class CustomerServiceImpl implements CustomerService
 	@Override
 	public List<Customer> getCustomer()
 	{
-		return customerRepository.findAll();
+		List<Customer> customers = customerRepository.findAll();
+
+		if(customers.isEmpty())
+		{
+			throw new NotFoundException("CUSTOMERS");
+		}
+
+		return customers;
 	}
 
 	@Override
@@ -37,20 +45,43 @@ public class CustomerServiceImpl implements CustomerService
 	@Override
 	public Customer saveCustomer(Customer customer)
 	{
-		customerRepository.save(customer);
-		return customerRepository.getById(customer.getId());
+
+		try
+		{
+			return customerRepository.save(customer);
+
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("SAVING CUSTOMER");
+		}
+
 	}
 
 	@Override
 	public void deleteCustomerById(int id)
 	{
-		customerRepository.deleteById(id);
+		try
+		{
+			customerRepository.deleteById(id);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETE CUSTOMER BY ID");
+		}
 	}
 
 	@Override
 	public Customer loginCustomer(String username)
 	{
-		return customerRepository.findCustomerByUsername(username);
+		try
+		{
+			return customerRepository.findCustomerByUsername(username);
+		}
+		catch (Exception e)
+		{
+			throw new NotFoundException("CUSTOMER WITH USERNAME" + username);
+		}
 
 	}
 

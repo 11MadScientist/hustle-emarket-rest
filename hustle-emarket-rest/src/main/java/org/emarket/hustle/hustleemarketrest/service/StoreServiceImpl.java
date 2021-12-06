@@ -2,12 +2,13 @@ package org.emarket.hustle.hustleemarketrest.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
-import javax.transaction.Transactional;
-
-import org.emarket.hustle.hustleemarketrest.dao.SellerRepository;
+import org.emarket.hustle.hustleemarketrest.controller.StoreRestController;
 import org.emarket.hustle.hustleemarketrest.dao.StoreRepository;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
+import org.emarket.hustle.hustleemarketrest.response.FailedException;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,19 @@ public class StoreServiceImpl implements StoreService
 	@Autowired
 	StoreRepository storeRepository;
 
-	@Autowired
-	SellerRepository sellerRepository;
+	Logger log = Logger.getLogger(StoreRestController.class.getName());
 
 	@Override
 	public List<Store> getStore()
 	{
-		return storeRepository.findAll();
+		List<Store> stores = storeRepository.findAll();
+
+		if(stores.isEmpty())
+		{
+			throw new NotFoundException("STORES");
+		}
+
+		return stores;
 	}
 
 	@Override
@@ -43,32 +50,41 @@ public class StoreServiceImpl implements StoreService
 	@Override
 	public Store saveStore(Store store)
 	{
-		storeRepository.save(store);
-		store.setSeller(sellerRepository.getById(store.getSeller().getId()));
-
-		return store;
-
-	}
-
-	@Override
-	@Transactional
-	public void updateStore(String storeName, String storeAddress, double overallRating, int itemsAdded, int id)
-	{
-		storeRepository.updateStore(storeName, storeAddress, overallRating, itemsAdded, id);
+		try
+		{
+			return storeRepository.save(store);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("SAVING STORE");
+		}
 	}
 
 	@Override
 	public void deleteStore(Store store)
 	{
-		storeRepository.delete(store);
+		try
+		{
+			storeRepository.delete(store);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETING STORE");
+		}
 
 	}
 
 	@Override
 	public void deleteStoreById(int id)
 	{
-		storeRepository.deleteById(id);
-
+		try
+		{
+			storeRepository.deleteById(id);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETING STORE WITH ID: " + id);
+		}
 	}
 
 }

@@ -9,8 +9,8 @@ CREATE TABLE item
     `name` varchar(77) NOT NULL,
     in_stock int DEFAULT 0,
     stock_sold int DEFAULT 0,
-    price double DEFAULT 0,
-    measurement varchar(22),
+    price double NOT NULL,
+    measurement varchar(11) NOT NULL,
     overall_review double DEFAULT 0,
     `description` varchar(111) DEFAULT NULL,
     ingredient varchar(111) DEFAULT NULL,
@@ -22,5 +22,6 @@ CREATE TABLE item
     
     primary key(id),
     FOREIGN KEY(store_id) REFERENCES store(id)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
     
 )ENGINE InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=Latin1;

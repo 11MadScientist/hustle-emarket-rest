@@ -3,14 +3,11 @@ package org.emarket.hustle.hustleemarketrest.controller;
 import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
-import org.emarket.hustle.hustleemarketrest.entity.Seller;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
-import org.emarket.hustle.hustleemarketrest.response.NotPermittedException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/emarket-hustle")
+@RequestMapping("${api.basePath}")
 public class StoreRestController
 {
 	@Autowired
@@ -46,7 +43,7 @@ public class StoreRestController
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new NotFoundException("STORE");
 		}
 
 	}
@@ -67,7 +64,7 @@ public class StoreRestController
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new NotFoundException("STORE WITH ID: " + id);
 		}
 	}
 
@@ -78,32 +75,9 @@ public class StoreRestController
 	 */
 
 	@PostMapping("/stores")
-	public Store addStore(@RequestBody Seller seller)
+	public ProcessConfirmation addStore()
 	{
-		/*
-		 * we pass the Seller when creating Store to confirm that
-		 * the seller is registered.
-		 * and to establish connection.
-		 */
-		Store store = seller.getSellerStore();
-
-		store.setSeller(seller);
-		store.setCreationDate(store.getModifiedDate());
-
-		try
-		{
-			return storeService.saveStore(store);
-		}
-		catch (DataIntegrityViolationException e)
-		{
-			throw new NotPermittedException("SELLER CREATING MORE THAN ONE STORE");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-
+		return new ProcessConfirmation("Failed", "Store", "Unsupported endpoint");
 	}
 
 	/*
@@ -113,27 +87,9 @@ public class StoreRestController
 	 */
 
 	@PutMapping("/stores")
-	public Store updateStore(@RequestBody Store store)
+	public ProcessConfirmation updateStore(@RequestBody Store store)
 	{
-		if(store.getId() == 0)
-		{
-			throw new NotPermittedException("CREATING STORE IN THIS ENDPOINT");
-		}
-
-		try
-		{
-			storeService.updateStore(store.getStoreName(), store.getStoreAddress(), store.getOverallRating(),
-					store.getItemsAdded(), store.getId());
-
-			return store;
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-
+		return new ProcessConfirmation("Failed", "Store", "Unsupported endpoint");
 	}
 
 	/*
@@ -145,32 +101,23 @@ public class StoreRestController
 	public ProcessConfirmation deleteStoreById(@PathVariable int id)
 	{
 
-		try
+		Store store = storeService.getStoreById(id);
+
+		if(store == null)
 		{
-			Store store = storeService.getStoreById(id);
-
-			if(store == null)
-			{
-				throw new NotFoundException("STORE WITH ID: " + id);
-			}
-
-			/*
-			 * severe the ties between the store and the seller
-			 * so we can safely delete the store
-			 */
-			store.getSeller().setSellerStore(null);
-
-			storeService.deleteStoreById(id);
-
-			return new ProcessConfirmation("SUCCESS", "SELLER",
-					"THE CUSTOMER WITH ID:" + id + " WAS DELETED.");
+			throw new NotFoundException("STORE WITH ID: " + id);
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
 
-			throw new RuntimeException(e);
-		}
+		/*
+		 * severe the ties between the store and the seller
+		 * so we can safely delete the store
+		 */
+		store.getSeller().setStore(null);
+
+		storeService.deleteStoreById(id);
+
+		return new ProcessConfirmation("SUCCESS", "SELLER",
+				"THE CUSTOMER WITH ID:" + id + " WAS DELETED.");
 
 	}
 

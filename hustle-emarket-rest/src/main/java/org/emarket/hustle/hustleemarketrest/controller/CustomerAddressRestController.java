@@ -3,7 +3,6 @@ package org.emarket.hustle.hustleemarketrest.controller;
 import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.entity.CustomerAddress;
-import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.CustomerAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/emarket-hustle")
+@RequestMapping("${api.basePath}")
 public class CustomerAddressRestController
 {
 	@Autowired
@@ -39,16 +38,7 @@ public class CustomerAddressRestController
 	@GetMapping("/customer-addresses")
 	public List<CustomerAddress> getCustomerAddress()
 	{
-		try
-		{
-			return customerAddressService.getCustomerAddress();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new NotFoundException("CUSTOMER ADDRESS");
-		}
-
+		return customerAddressService.getCustomerAddress();
 	}
 
 	/*
@@ -59,16 +49,7 @@ public class CustomerAddressRestController
 	@GetMapping("/customer-addresses/{id}")
 	public CustomerAddress getCustomerAddressById(@PathVariable int id)
 	{
-		try
-		{
-			return customerAddressService.getCustomerAddressById(id);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new NotFoundException("CUSTOMER ADDRESS WITH ID: " + id);
-		}
-
+		return customerAddressService.getCustomerAddressById(id);
 	}
 
 	/*
@@ -79,16 +60,8 @@ public class CustomerAddressRestController
 	@PutMapping("/customer-addresses")
 	public CustomerAddress updateCustomerAddress(@RequestBody CustomerAddress customerAddress)
 	{
-		try
-		{
-			customerAddressService.saveCustomerAddress(customerAddress);
-			return customerAddress;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		customerAddressService.saveCustomerAddress(customerAddress);
+		return customerAddress;
 	}
 
 	/*
@@ -99,18 +72,10 @@ public class CustomerAddressRestController
 	@DeleteMapping("/customer-addresses/{id}")
 	public ProcessConfirmation deleteCustomerAddress(@PathVariable int id)
 	{
-		try
-		{
-			customerAddressService.deleteCustomerAddressById(id);
+		customerAddressService.deleteCustomerAddressById(id);
 
-			return new ProcessConfirmation("SUCCESS", "CUSTOMERDETAIL",
-					"CUSTOMER ADDRESS WITH ID: " + id + " WAS DELETED.");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		return new ProcessConfirmation("SUCCESS", "CUSTOMERDETAIL",
+				"CUSTOMER ADDRESS WITH ID: " + id + " WAS DELETED.");
 	}
 
 }

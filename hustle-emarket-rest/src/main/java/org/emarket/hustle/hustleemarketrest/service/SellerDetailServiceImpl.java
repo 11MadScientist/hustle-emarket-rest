@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.SellerDetailRepository;
 import org.emarket.hustle.hustleemarketrest.entity.SellerDetail;
+import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,13 @@ public class SellerDetailServiceImpl implements SellerDetailService
 	@Override
 	public List<SellerDetail> getSellerDetail()
 	{
-		return sellerDetailService.findAll();
+		List<SellerDetail> sellerDetails = sellerDetailService.findAll();
+
+		if(sellerDetails.isEmpty())
+		{
+			throw new NotFoundException("SELLERS");
+		}
+		return sellerDetails;
 	}
 
 	@Override
@@ -38,21 +45,41 @@ public class SellerDetailServiceImpl implements SellerDetailService
 	@Override
 	public void saveSellerDetail(SellerDetail sellerDetail)
 	{
-		sellerDetailService.save(sellerDetail);
+		try
+		{
+			sellerDetailService.save(sellerDetail);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("SAVING SELLERDETAIL");
+		}
 	}
 
 	@Override
 	public void deleteSellerDetailById(int id)
 	{
-		sellerDetailService.deleteById(id);
+		try
+		{
+			sellerDetailService.deleteById(id);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETING SELLERDETAIL WITH ID: " + id);
+		}
 
 	}
 
 	@Override
 	public void deleteSellerDetail(SellerDetail sellerDetail)
 	{
-		sellerDetailService.delete(sellerDetail);
-
+		try
+		{
+			sellerDetailService.delete(sellerDetail);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETING SELLERDETAIL");
+		}
 	}
 
 }

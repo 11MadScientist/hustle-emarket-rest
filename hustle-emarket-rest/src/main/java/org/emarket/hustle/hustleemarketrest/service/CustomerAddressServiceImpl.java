@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.CustomerAddressRepository;
 import org.emarket.hustle.hustleemarketrest.entity.CustomerAddress;
+import org.emarket.hustle.hustleemarketrest.response.FailedException;
+import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,14 @@ public class CustomerAddressServiceImpl implements CustomerAddressService
 	@Override
 	public List<CustomerAddress> getCustomerAddress()
 	{
-		return customerAddressRepository.findAll();
+		List<CustomerAddress> customerAddresses = customerAddressRepository.findAll();
+
+		if(customerAddresses.isEmpty())
+		{
+			throw new NotFoundException("CUSTOMERADDRESSES");
+		}
+
+		return customerAddresses;
 	}
 
 	@Override
@@ -28,7 +37,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService
 
 		if(result.isEmpty())
 		{
-			throw new RuntimeException("Not Found: CustomerAddress with id: " + id);
+			throw new NotFoundException("CUSTOMERADDRESS WITH ID: " + id);
 		}
 
 		return result.get();
@@ -37,14 +46,28 @@ public class CustomerAddressServiceImpl implements CustomerAddressService
 	@Override
 	public void saveCustomerAddress(CustomerAddress customerDetail)
 	{
-		customerAddressRepository.save(customerDetail);
+		try
+		{
+			customerAddressRepository.save(customerDetail);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("SAVING CUSTOMERADDRESS");
+		}
 
 	}
 
 	@Override
 	public void deleteCustomerAddressById(int id)
 	{
-		customerAddressRepository.deleteById(id);
+		try
+		{
+			customerAddressRepository.deleteById(id);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETING CUSTOMERADDRESS");
+		}
 
 	}
 

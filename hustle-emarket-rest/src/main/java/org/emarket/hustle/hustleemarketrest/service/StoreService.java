@@ -12,8 +12,6 @@ public interface StoreService
 
 	public Store saveStore(Store store);
 
-	public void updateStore(String storeName, String storeAddress, double overallRating, int itemsAdded, int id);
-
 	public void deleteStore(Store store);
 
 	public void deleteStoreById(int id);

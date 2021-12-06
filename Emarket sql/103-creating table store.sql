@@ -8,6 +8,7 @@ CREATE TABLE store
     store_name varchar(77) NOT NULL,
     store_address varchar(77) NOT NULL,
     overall_rating double DEFAULT NULL,
+    documents varchar(255) DEFAULT NULL,
     items_added int DEFAULT 0,
     
     seller_id int UNIQUE,

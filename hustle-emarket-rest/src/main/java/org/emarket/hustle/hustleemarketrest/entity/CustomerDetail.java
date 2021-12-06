@@ -1,45 +1,45 @@
 package org.emarket.hustle.hustleemarketrest.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.micrometer.core.lang.NonNull;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "customer_detail")
 public class CustomerDetail
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private int id;
 
+	@NonNull
 	@Column(name = "email")
 	private String email;
 
+	@NonNull
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
-	@JsonBackReference
-	@OneToOne(mappedBy = "customerDetail", cascade = { CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.PERSIST, CascadeType.REFRESH })
-	private Customer customer;
+	@Column(name = "status")
+	private boolean status;
+
+	@Column(name = "dp_link")
+	private String dpLink;
 
 	public CustomerDetail()
 	{
 
-	}
-
-	public CustomerDetail(String email, String phoneNumber, Customer customer)
-	{
-		this.email = email;
-		this.phoneNumber = phoneNumber;
 	}
 
 	public int getId()
@@ -72,21 +72,31 @@ public class CustomerDetail
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Customer getCustomer()
+	public boolean isStatus()
 	{
-		return customer;
+		return status;
 	}
 
-	public void setCustomer(Customer customer)
+	public void setStatus(boolean status)
 	{
-		this.customer = customer;
+		this.status = status;
+	}
+
+	public String getDpLink()
+	{
+		return dpLink;
+	}
+
+	public void setDpLink(String dpLink)
+	{
+		this.dpLink = dpLink;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "CustomerDetail [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", customer="
-				+ customer + "]";
+		return "CustomerDetail [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", status=" + status
+				+ ", dpLink=" + dpLink + "]";
 	}
 
 }

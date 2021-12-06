@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.CustomerDetailRepository;
 import org.emarket.hustle.hustleemarketrest.entity.CustomerDetail;
+import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,12 @@ public class CustomerDetailServiceImpl implements CustomerDetailService
 	@Override
 	public List<CustomerDetail> getCustomerDetail()
 	{
-		return customerDetailRepository.findAll();
+		List<CustomerDetail> customerDetails = customerDetailRepository.findAll();
+		if(customerDetails.isEmpty())
+		{
+			throw new NotFoundException("CUSTOMERDETAILS");
+		}
+		return customerDetails;
 	}
 
 	@Override
@@ -38,20 +44,42 @@ public class CustomerDetailServiceImpl implements CustomerDetailService
 	@Override
 	public void saveCustomerDetail(CustomerDetail customerDetail)
 	{
-		customerDetailRepository.save(customerDetail);
+		try
+		{
+			customerDetailRepository.save(customerDetail);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("SAVING CUSTOMERDETAIL");
+		}
 	}
 
 	@Override
 	public void deleteCustomerDetailById(int id)
 	{
-		customerDetailRepository.deleteById(id);
+		try
+		{
+			customerDetailRepository.deleteById(id);
+		}
+		catch (Exception e)
+		{
+			throw new FailedException("DELETING CUSTOMERDETAIL WITH ID: " + id);
+		}
 
 	}
 
 	@Override
 	public void deleteCustomerDetail(CustomerDetail customerDetail)
 	{
-		customerDetailRepository.delete(customerDetail);
+		try
+		{
+			customerDetailRepository.delete(customerDetail);
+		}
+		catch (Exception e)
+		{
+
+			throw new FailedException("DELETING CUSTOMERDETAIL");
+		}
 
 	}
 

@@ -1,5 +1,7 @@
 package org.emarket.hustle.hustleemarketrest.entity;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,21 +10,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "store")
-@JsonInclude(Include.NON_EMPTY)
+@JsonIdentityInfo(
+		scope = Store.class,
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Store
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private int id;
 
 	@Column(name = "store_name")
@@ -34,17 +40,26 @@ public class Store
 	@Column(name = "overall_rating")
 	private double overallRating;
 
+	@Column(name = "documents")
+	private String documents;
+
 	@Column(name = "items_added")
 	private int itemsAdded;
 
-	@JsonManagedReference
-	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH },
-			fetch = FetchType.EAGER)
-	@JoinColumn(name = "seller_id")
+	@OneToOne(cascade = { CascadeType.DETACH,
+			CascadeType.REFRESH, CascadeType.PERSIST })
+	@JoinColumn(name = "seller_id", updatable = false)
 	private Seller seller;
 
-	@Column(name = "creation_date")
+	@OneToMany(
+			cascade = { CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST, CascadeType.REFRESH,
+					CascadeType.REMOVE },
+			fetch = FetchType.LAZY,
+			mappedBy = "store")
+	@JsonManagedReference
+	private List<Item> items;
+
+	@Column(name = "creation_date", updatable = false)
 	private long creationDate;
 
 	@Column(name = "modified_date")
@@ -53,8 +68,13 @@ public class Store
 	public Store()
 	{
 		modifiedDate = System.currentTimeMillis();
-
 	}
+
+	/*
+	 * #######################################
+	 * ######### CUSTOMIZED METHODS ##########
+	 * #######################################
+	 */
 
 	public int getId()
 	{
@@ -96,6 +116,16 @@ public class Store
 		this.overallRating = overallRating;
 	}
 
+	public String getDocuments()
+	{
+		return documents;
+	}
+
+	public void setDocuments(String documents)
+	{
+		this.documents = documents;
+	}
+
 	public int getItemsAdded()
 	{
 		return itemsAdded;
@@ -114,6 +144,16 @@ public class Store
 	public void setSeller(Seller seller)
 	{
 		this.seller = seller;
+	}
+
+	public List<Item> getItems()
+	{
+		return items;
+	}
+
+	public void setItems(List<Item> items)
+	{
+		this.items = items;
 	}
 
 	public long getCreationDate()
@@ -140,8 +180,13 @@ public class Store
 	public String toString()
 	{
 		return "Store [id=" + id + ", storeName=" + storeName + ", storeAddress=" + storeAddress + ", overallRating="
-				+ overallRating + ", itemsAdded=" + itemsAdded + ", seller=" + seller + ", creationDate=" + creationDate
-				+ ", modifiedDate=" + modifiedDate + "]";
+				+ overallRating + ", documents=" + documents + ", itemsAdded=" + itemsAdded + ", seller=" + seller
+				+ ", items=" + items + ", creationDate=" + creationDate + ", modifiedDate=" + modifiedDate + "]";
+	}
+
+	public void updateItemsAdded(int update)
+	{
+		itemsAdded += update;
 	}
 
 }

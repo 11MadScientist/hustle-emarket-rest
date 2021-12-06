@@ -1,18 +1,16 @@
 package org.emarket.hustle.hustleemarketrest.controller;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
 import org.emarket.hustle.hustleemarketrest.entity.Seller;
 import org.emarket.hustle.hustleemarketrest.response.ErrorLoginException;
+import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.emarket.hustle.hustleemarketrest.response.NotPermittedException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
-import org.emarket.hustle.hustleemarketrest.response.UniqueErrorException;
 import org.emarket.hustle.hustleemarketrest.service.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,10 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/emarket-hustle")
+@RequestMapping("${api.basePath}")
 public class SellerRestController
 {
-	Logger log = Logger.getLogger(SellerRestController.class.getName());
 	@Autowired
 	private SellerServiceImpl sellerService;
 
@@ -41,16 +38,7 @@ public class SellerRestController
 	@GetMapping("/sellers")
 	public List<Seller> getSeller()
 	{
-		try
-		{
-			return sellerService.getSeller();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new NotFoundException("NO SELLER");
-		}
-
+		return sellerService.getSeller();
 	}
 
 	/*
@@ -61,17 +49,7 @@ public class SellerRestController
 	@GetMapping("/sellers/{id}")
 	public Seller getSellerById(@PathVariable int id)
 	{
-		try
-		{
-			return sellerService.getSellerById(id);
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-
-			throw new NotFoundException("SELLER WITH ID: " + id);
-		}
+		return sellerService.getSellerById(id);
 	}
 
 	/*
@@ -83,9 +61,6 @@ public class SellerRestController
 	public Seller addSeller(@RequestBody Seller seller)
 	{
 		/*
-		 * don't permit creating/updating store using
-		 * this endpoint
-		 *
 		 * set seller id to 0 to invoke insert function
 		 * not update
 		 *
@@ -93,35 +68,23 @@ public class SellerRestController
 		 *
 		 * then encrypt password
 		 */
-		if(seller.getSellerStore() != null)
-		{
-			throw new NotPermittedException("SELLER ADDING/UPDATING STORE IN THIS ENDPOINT");
-		}
 
 		seller.setId(0);
 		seller.setCreationDate(seller.getModifiedDate());
 
-		if(seller.getSellerDetail() != null)
-		{
-			seller.getSellerDetail().setId(0);
-		}
-
 		try
 		{
+			/* creating connection from store to seller */
+			seller.getStore().setId(0);
+			seller.getStore().setSeller(seller);
+			seller.getStore().setCreationDate(seller.getModifiedDate());
+		}
+		finally
+		{
 			seller.setPassword(bcrypt.encode(seller.getPassword()));
-			return sellerService.saveSeller(seller);
-
-		}
-		catch (DataIntegrityViolationException e)
-		{
-			throw new UniqueErrorException("SELLER [USERNAME/EMAIL]");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
 
+		return sellerService.saveSeller(seller);
 	}
 
 	/*
@@ -132,51 +95,37 @@ public class SellerRestController
 	@PutMapping("/sellers")
 	public Seller updateSeller(@RequestBody Seller seller)
 	{
+
 		/*
-		 * we dont permit adding/updating store here
+		 * Getting the password from the database and injecting it to the
+		 * current seller
+		 * passing the creation date to remain unchanged
+		 * updating the modifiedDate
 		 */
-		if(seller.getSellerStore() != null)
+
+		Seller dbseller = sellerService.getSellerById(seller.getId());
+
+		if(seller.getSellerDetail() == null)
 		{
-			throw new NotPermittedException("SELLER ADDING/UPDATING STORE IN THIS ENDPOINT");
+			throw new NotFoundException("SELLER WITH ID: " + seller.getId());
 		}
-		try
+
+		seller.setPassword(dbseller.getPassword());
+		seller.setCreationDate(dbseller.getCreationDate());
+
+		if(dbseller.getStore() == null)
 		{
-			/*
-			 * Getting the password from the database and injecting it to the
-			 * current seller
-			 * passing the creation date to remain unchanged
-			 * updating the modifiedDate
-			 */
-
-			Seller dbseller = sellerService.getSellerById(seller.getId());
-
-			if(seller.getSellerDetail() != null)
-			{
-				try
-				{
-					seller.getSellerDetail().setId(dbseller.getSellerDetail().getId());
-				}
-				catch (NullPointerException e)
-				{
-					seller.getSellerDetail().setId(0);
-				}
-			}
-
-			seller.setPassword(dbseller.getPassword());
-			seller.setCreationDate(dbseller.getCreationDate());
-
-			return sellerService.saveSeller(seller);
-
+			/* creating connection from store to seller */
+			seller.getStore().setId(0);
+			seller.getStore().setSeller(seller);
+			seller.getStore().setCreationDate(seller.getModifiedDate());
 		}
-		catch (DataIntegrityViolationException e)
+		else
 		{
-			throw new UniqueErrorException("SELLER [USERNAME/EMAIL]");
+			seller.getStore().setCreationDate(dbseller.getStore().getCreationDate());
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+
+		return sellerService.saveSeller(seller);
 
 	}
 
@@ -189,18 +138,10 @@ public class SellerRestController
 	public ProcessConfirmation deleteSellerById(@PathVariable int id)
 	{
 
-		try
-		{
-			sellerService.deleteSellerById(id);
+		sellerService.deleteSellerById(id);
 
-			return new ProcessConfirmation("SUCCESS", "SELLER",
-					"THE CUSTOMER WITH ID:" + id + " WAS DELETED.");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		return new ProcessConfirmation("SUCCESS", "SELLER",
+				"THE CUSTOMER WITH ID:" + id + " WAS DELETED.");
 
 	}
 
@@ -213,27 +154,32 @@ public class SellerRestController
 	@PostMapping("/sellers/login")
 	public Seller loginSeller(@RequestBody Seller seller)
 	{
-		try
+
+		Seller dbseller = sellerService.loginSeller(seller.getUsername());
+
+		if(bcrypt.matches(seller.getPassword(), dbseller.getPassword()))
 		{
-			Seller dbSeller = sellerService.loginSeller(seller.getUsername());
-
-			/*
-			 * Checking if the encrypted password matches
-			 */
-
-			if(bcrypt.matches(seller.getPassword(), dbSeller.getPassword()))
-			{
-				return dbSeller;
-			}
-
-			throw new ErrorLoginException("SELLER [EMAIL, PASSWORD]");
-
+			dbseller.getSellerDetail().setStatus(true);
+			return sellerService.saveSeller(dbseller);
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		throw new ErrorLoginException("SELLER [Email, Password]");
+
+	}
+
+	/*
+	 * #######################################
+	 * ########## SELLER LOGOUT ##############
+	 * #######################################
+	 */
+
+	@PostMapping("/sellers/logout")
+	public Seller logoutSeller(@RequestBody Seller seller)
+	{
+		seller.getSellerDetail().setStatus(false);
+		sellerService.saveSeller(seller);
+
+		throw new NotPermittedException("USE OF UNSUPPORTED ENDPOINT");
+
 	}
 
 	/*
@@ -242,28 +188,21 @@ public class SellerRestController
 	 * #######################################
 	 */
 
-	@PutMapping("/sellers/changePassword")
-	public Seller changePassword(Seller seller)
+	@PutMapping("/sellers/{password}")
+	public Seller changePassword(@PathVariable String password, @RequestBody Seller seller)
 	{
-		seller.setPassword(bcrypt.encode(seller.getPassword()));
-		log.info(seller.getPassword());
+		Seller dbCustomer = sellerService.getSellerById(seller.getId());
 
-		if(seller.getSellerStore() != null)
+		if(bcrypt.matches(password, dbCustomer.getPassword()))
 		{
-			seller.getSellerStore().setSeller(seller);
-		}
+			seller.setPassword(bcrypt.encode(seller.getPassword()));
 
-		try
-		{
 			sellerService.saveSeller(seller);
-
 			return seller;
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+
+		throw new FailedException("UPDATING PASSWORD");
+
 	}
 
 }

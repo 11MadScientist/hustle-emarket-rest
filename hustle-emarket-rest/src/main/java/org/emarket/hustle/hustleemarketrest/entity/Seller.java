@@ -3,7 +3,6 @@ package org.emarket.hustle.hustleemarketrest.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,20 +10,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "seller")
-@JsonInclude(Include.NON_EMPTY)
+@JsonIdentityInfo(
+		scope = Seller.class,
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Seller
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private int id;
 
 	@Column(name = "first_name")
@@ -39,18 +40,15 @@ public class Seller
 	@Column(name = "password")
 	private String password;
 
-	@JsonManagedReference
-	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH, CascadeType.REMOVE }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "seller_detail_id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "seller_detail_id", updatable = false)
 	private SellerDetail sellerDetail;
 
-	@JsonBackReference
 	@OneToOne(cascade = CascadeType.ALL,
 			mappedBy = "seller")
-	private Store sellerStore;
+	private Store store;
 
-	@Column(name = "creation_date")
+	@Column(name = "creation_date", updatable = false)
 	private long creationDate;
 
 	@Column(name = "modified_date")
@@ -108,6 +106,7 @@ public class Seller
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password)
 	{
 		this.password = password;
@@ -123,14 +122,14 @@ public class Seller
 		this.sellerDetail = sellerDetail;
 	}
 
-	public Store getSellerStore()
+	public Store getStore()
 	{
-		return sellerStore;
+		return store;
 	}
 
-	public void setSellerStore(Store sellerStore)
+	public void setStore(Store store)
 	{
-		this.sellerStore = sellerStore;
+		this.store = store;
 	}
 
 	public long getCreationDate()
@@ -157,7 +156,7 @@ public class Seller
 	public String toString()
 	{
 		return "Seller [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
-				+ ", password=" + password + ", sellerStore=" + sellerStore + ", creationDate=" + creationDate
+				+ ", password=" + password + ", sellerStore=" + store + ", creationDate=" + creationDate
 				+ ", modifiedDate=" + modifiedDate + "]";
 	}
 

@@ -1,16 +1,11 @@
 package org.emarket.hustle.hustleemarketrest.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "customer_address")
@@ -18,27 +13,27 @@ public class CustomerAddress
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "address")
-	private String address;
+	@Column(name = "name")
+	private String name;
 
-	@JsonBackReference
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
+	@Column(name = "city")
+	private String city;
+
+	@Column(name = "province")
+	private String province;
+
+	@Column(name = "zip_code")
+	private int zipCode;
+
+	@Column(name = "direction")
+	private String direction;
 
 	public CustomerAddress()
 	{
 
-	}
-
-	public CustomerAddress(String address, Customer customer)
-	{
-		this.address = address;
-		this.customer = customer;
 	}
 
 	public int getId()
@@ -51,31 +46,61 @@ public class CustomerAddress
 		this.id = id;
 	}
 
-	public String getAddress()
+	public String getName()
 	{
-		return address;
+		return name;
 	}
 
-	public void setAddress(String address)
+	public void setName(String name)
 	{
-		this.address = address;
-		System.out.println(toString());
+		this.name = name;
 	}
 
-	public Customer getCustomer()
+	public String getCity()
 	{
-		return customer;
+		return city;
 	}
 
-	public void setCustomer(Customer customer)
+	public void setCity(String city)
 	{
-		this.customer = customer;
+		this.city = city;
+	}
+
+	public String getProvince()
+	{
+		return province;
+	}
+
+	public void setProvince(String province)
+	{
+		this.province = province;
+	}
+
+	public int getZipCode()
+	{
+		return zipCode;
+	}
+
+	public void setZipCode(int zipCode)
+	{
+		this.zipCode = zipCode;
+	}
+
+	public String getDirection()
+	{
+		return direction;
+	}
+
+	public void setDirection(String direction)
+	{
+		this.direction = direction;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "CustomerAddress [id=" + id + ", address=" + address + ", customer=" + customer + "]";
+		return "CustomerAddress [id=" + id + ", name=" + name + ", city=" + city + ", province=" + province
+				+ ", zipCode=" + zipCode + ", direction=" + direction + "]";
 	}
 
 }

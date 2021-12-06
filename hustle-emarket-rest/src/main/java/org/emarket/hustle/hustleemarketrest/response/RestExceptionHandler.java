@@ -72,6 +72,21 @@ public class RestExceptionHandler
 	}
 
 	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(FailedException e)
+	{
+		ErrorResponse error = new ErrorResponse();
+
+		message = e.getMessage() + " FAILED!";
+
+		error.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+		error.setMessage(message);
+		error.setTimeStamp(System.currentTimeMillis());
+
+		return new ResponseEntity<>(error, HttpStatus.EXPECTATION_FAILED);
+
+	}
+
+	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(Exception e)
 	{
 		ErrorResponse error = new ErrorResponse();
