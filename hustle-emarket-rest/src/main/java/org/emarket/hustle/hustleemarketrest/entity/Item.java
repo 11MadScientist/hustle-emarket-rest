@@ -18,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.micrometer.core.lang.NonNull;
+
 @Entity
 @Table(name = "item")
 @JsonInclude(Include.NON_EMPTY)
@@ -28,9 +30,11 @@ public class Item
 	@Column(name = "id", updatable = false)
 	private int id;
 
+	@NonNull
 	@Column(name = "category")
 	private int category;
 
+	@NonNull
 	@Column(name = "name")
 	private String name;
 
@@ -40,9 +44,11 @@ public class Item
 	@Column(name = "stock_sold")
 	private int stockSold;
 
+	@NonNull
 	@Column(name = "price")
 	private double price;
 
+	@NonNull
 	@Column(name = "measurement")
 	private String measurement;
 
@@ -116,6 +122,10 @@ public class Item
 
 	public void setInStock(int inStock)
 	{
+		if(checkLessZero(inStock))
+		{
+			return;
+		}
 		this.inStock = inStock;
 	}
 
@@ -131,11 +141,16 @@ public class Item
 
 	public double getPrice()
 	{
+
 		return price;
 	}
 
 	public void setPrice(double price)
 	{
+		if(checkLessZero(price))
+		{
+			return;
+		}
 		this.price = price;
 	}
 
@@ -244,5 +259,34 @@ public class Item
 	 * ######### CUSTOMIZED METHODS ##########
 	 * #######################################
 	 */
+	public void updateInStock(int num)
+	{
+		if(checkLessZero(inStock + num))
+		{
+			return;
+		}
+		inStock += num;
+
+	}
+
+	public boolean checkLessZero(int num)
+	{
+		if(num < 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean checkLessZero(double num)
+	{
+		if(num < 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 }
