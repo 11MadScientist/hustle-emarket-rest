@@ -229,22 +229,6 @@ public class Item
 		this.modifiedDate = modifiedDate;
 	}
 
-	/*
-	 * #######################################
-	 * ######### CUSTOMIZED METHODS ##########
-	 * #######################################
-	 */
-
-	public void updateInStock(int update)
-	{
-		inStock += update;
-	}
-
-	public void updateStockSold()
-	{
-		stockSold += 1;
-	}
-
 	@Override
 	public String toString()
 	{
@@ -254,5 +238,11 @@ public class Item
 				+ ", store=" + store + ", itemImage=" + itemImage + ", creationDate=" + creationDate + ", modifiedDate="
 				+ modifiedDate + "]";
 	}
+
+	/*
+	 * #######################################
+	 * ######### CUSTOMIZED METHODS ##########
+	 * #######################################
+	 */
 
 }

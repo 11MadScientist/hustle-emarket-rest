@@ -184,6 +184,12 @@ public class Store
 				+ ", items=" + items + ", creationDate=" + creationDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 
+	/*
+	 * #######################################
+	 * ######### CUSTOMIZED METHODS ##########
+	 * #######################################
+	 */
+
 	public void updateItemsAdded(int update)
 	{
 		itemsAdded += update;
