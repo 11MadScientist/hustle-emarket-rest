@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
+import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestStore;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.StoreService;
@@ -34,18 +35,14 @@ public class StoreRestController
 	 */
 
 	@GetMapping("/stores")
-	public List<Store> getStore()
+	public List<Store> getStore(@RequestBody GetRequestStore getRequest)
 	{
-		try
+		if(getRequest == null)
 		{
 			return storeService.getStore();
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new NotFoundException("STORE");
-		}
 
+		return storeService.getStore(getRequest);
 	}
 
 	/*
@@ -57,15 +54,7 @@ public class StoreRestController
 	@GetMapping("/stores/{id}")
 	public Store getStoreById(@PathVariable int id)
 	{
-		try
-		{
-			return storeService.getStoreById(id);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new NotFoundException("STORE WITH ID: " + id);
-		}
+		return storeService.getStoreById(id);
 	}
 
 	/*

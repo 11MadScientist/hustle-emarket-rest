@@ -1,8 +1,8 @@
-package org.emarket.hustle.hustleemarketrest.entity;
+package org.emarket.hustle.hustleemarketrest.entity.request;
 
 import java.util.List;
 
-public class GetRequest
+public class GetRequestItem
 {
 
 	private String name;
@@ -15,7 +15,7 @@ public class GetRequest
 
 	private int size;
 
-	public GetRequest()
+	public GetRequestItem()
 	{
 		name = "";
 		field = "stockSold";

@@ -5,9 +5,14 @@ import java.util.Optional;
 
 import org.emarket.hustle.hustleemarketrest.dao.SellerRepository;
 import org.emarket.hustle.hustleemarketrest.entity.Seller;
+import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestUser;
 import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +26,41 @@ public class SellerServiceImpl implements SellerService
 	public List<Seller> getSeller()
 	{
 		List<Seller> sellers = sellerRepository.findAll();
+
+		if(sellers.isEmpty())
+		{
+			throw new NotFoundException("SELLERS");
+		}
+
+		return sellers;
+	}
+
+	@Override
+	public List<Seller> getSeller(GetRequestUser getRequest)
+	{
+		// @formatter:off
+		Pageable pageable = PageRequest.of(getRequest.getPage(),
+							getRequest.getSize(),
+							Sort.by(Sort.Direction.ASC, getRequest.getField()));
+
+
+		Slice<Seller> slicedSellers = null;
+
+		// @formatter:off
+		if(getRequest.getSearchField().equals("name"))
+		{
+			slicedSellers = sellerRepository.findSellerByFirstNameLikeOrLastNameLike
+			("%"+getRequest.getSearchPattern()+"%","%"+getRequest.getSearchPattern()+"%"
+							, pageable);
+		}
+
+		else if(getRequest.getSearchField().equals("username"))
+		{
+			slicedSellers = sellerRepository.findSellerByUsernameLike
+					("%"+getRequest.getSearchPattern()+"%", pageable);
+		}
+
+		List<Seller> sellers = slicedSellers.getContent();
 
 		if(sellers.isEmpty())
 		{
@@ -96,5 +136,7 @@ public class SellerServiceImpl implements SellerService
 			throw new NotFoundException("SELLER WITH USERNAME: " + username);
 		}
 	}
+
+
 
 }

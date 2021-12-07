@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 
 import org.emarket.hustle.hustleemarketrest.dao.BasketRepository;
 import org.emarket.hustle.hustleemarketrest.dao.ItemRepository;
-import org.emarket.hustle.hustleemarketrest.entity.GetRequest;
 import org.emarket.hustle.hustleemarketrest.entity.Item;
+import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestItem;
 import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService
 
 	@Override
 	@Transactional
-	public List<Item> getItem(GetRequest getRequest)
+	public List<Item> getItem(GetRequestItem getRequest)
 	{
 
 		// @formatter:off

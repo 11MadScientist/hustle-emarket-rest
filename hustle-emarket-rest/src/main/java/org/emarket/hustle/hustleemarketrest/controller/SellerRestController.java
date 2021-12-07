@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.emarket.hustle.hustleemarketrest.BcryptSecurity;
 import org.emarket.hustle.hustleemarketrest.entity.Seller;
+import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestUser;
 import org.emarket.hustle.hustleemarketrest.response.ErrorLoginException;
 import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
@@ -36,9 +37,14 @@ public class SellerRestController
 	 * #######################################
 	 */
 	@GetMapping("/sellers")
-	public List<Seller> getSeller()
+	public List<Seller> getSeller(@RequestBody(required = false) GetRequestUser getRequest)
 	{
-		return sellerService.getSeller();
+		if(getRequest == null)
+		{
+			return sellerService.getSeller();
+		}
+
+		return sellerService.getSeller(getRequest);
 	}
 
 	/*

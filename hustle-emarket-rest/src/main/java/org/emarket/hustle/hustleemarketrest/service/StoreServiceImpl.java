@@ -2,14 +2,17 @@ package org.emarket.hustle.hustleemarketrest.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
-import org.emarket.hustle.hustleemarketrest.controller.StoreRestController;
 import org.emarket.hustle.hustleemarketrest.dao.StoreRepository;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
+import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestStore;
 import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,8 +22,6 @@ public class StoreServiceImpl implements StoreService
 	@Autowired
 	StoreRepository storeRepository;
 
-	Logger log = Logger.getLogger(StoreRestController.class.getName());
-
 	@Override
 	public List<Store> getStore()
 	{
@@ -29,6 +30,40 @@ public class StoreServiceImpl implements StoreService
 		if(stores.isEmpty())
 		{
 			throw new NotFoundException("STORES");
+		}
+
+		return stores;
+	}
+
+	@Override
+	public List<Store> getStore(GetRequestStore getRequest)
+	{
+		// @formatter:off
+		Pageable pageable = PageRequest.of(getRequest.getPage(),
+							getRequest.getSize(),
+							Sort.by(Sort.Direction.ASC, getRequest.getField()));
+
+
+		Slice<Store> slicedCustomers = null;
+
+		// @formatter:off
+		if(getRequest.getSearchField().equals("storeName"))
+		{
+			slicedCustomers = storeRepository.findStoreByStoreNameLike
+					("%"+getRequest.getSearchPattern()+"%", pageable);
+		}
+
+		else if(getRequest.getSearchField().equals("storeAddress"))
+		{
+			slicedCustomers = storeRepository.findStoreByStoreAddressLike
+					("%"+getRequest.getSearchPattern()+"%", pageable);
+		}
+
+		List<Store> stores = slicedCustomers.getContent();
+
+		if(stores.isEmpty())
+		{
+			throw new NotFoundException("STORE");
 		}
 
 		return stores;
@@ -86,5 +121,7 @@ public class StoreServiceImpl implements StoreService
 			throw new FailedException("DELETING STORE WITH ID: " + id);
 		}
 	}
+
+
 
 }

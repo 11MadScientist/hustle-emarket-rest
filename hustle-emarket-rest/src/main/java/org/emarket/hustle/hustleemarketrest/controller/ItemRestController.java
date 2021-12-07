@@ -2,9 +2,9 @@ package org.emarket.hustle.hustleemarketrest.controller;
 
 import java.util.List;
 
-import org.emarket.hustle.hustleemarketrest.entity.GetRequest;
 import org.emarket.hustle.hustleemarketrest.entity.Item;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
+import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestItem;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.emarket.hustle.hustleemarketrest.response.ProcessConfirmation;
 import org.emarket.hustle.hustleemarketrest.service.ItemService;
@@ -37,7 +37,7 @@ public class ItemRestController
 	 */
 
 	@GetMapping("/items")
-	public List<Item> getItem(@RequestBody(required = false) GetRequest getRequest)
+	public List<Item> getItem(@RequestBody(required = false) GetRequestItem getRequest)
 	{
 		if(getRequest == null)
 		{
