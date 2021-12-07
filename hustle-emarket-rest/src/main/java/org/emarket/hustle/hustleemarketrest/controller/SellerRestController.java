@@ -159,6 +159,11 @@ public class SellerRestController
 
 		if(bcrypt.matches(seller.getPassword(), dbseller.getPassword()))
 		{
+			if(seller.getSellerDetail().isAuthorized() == false)
+			{
+				throw new NotPermittedException("ACCESSING UNAUTHORIZED SELLER ACCOUNT");
+			}
+
 			dbseller.getSellerDetail().setStatus(true);
 			return sellerService.saveSeller(dbseller);
 		}

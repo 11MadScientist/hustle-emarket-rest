@@ -15,6 +15,7 @@ CREATE TABLE item
     `description` varchar(111) DEFAULT NULL,
     ingredient varchar(111) DEFAULT NULL,
     direction varchar(111) DEFAULT NULL,
+    delisted boolean DEFAULT false,
     store_id int,
     
     `creation_date` long NOT NULL,

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,14 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.micrometer.core.lang.NonNull;
 
 @Entity
 @Table(name = "item")
-@JsonInclude(Include.NON_EMPTY)
 public class Item
 {
 	@Id
@@ -64,11 +60,13 @@ public class Item
 	@Column(name = "direction")
 	private String direction;
 
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH },
-			fetch = FetchType.EAGER)
-	@JoinColumn(name = "store_id", updatable = false)
+	@Column(name = "delisted")
+	private boolean delisted;
+
 	@JsonBackReference
-	private Store store = new Store();
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "store_id", updatable = false)
+	private Store store;
 
 	@OneToMany(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "item_id")
@@ -204,6 +202,16 @@ public class Item
 		this.direction = direction;
 	}
 
+	public boolean isDelisted()
+	{
+		return delisted;
+	}
+
+	public void setDelisted(boolean delisted)
+	{
+		this.delisted = delisted;
+	}
+
 	public Store getStore()
 	{
 		return store;
@@ -250,8 +258,8 @@ public class Item
 		return "Item [id=" + id + ", category=" + category + ", name=" + name + ", inStock=" + inStock + ", stockSold="
 				+ stockSold + ", price=" + price + ", measurement=" + measurement + ", overallReview=" + overallReview
 				+ ", description=" + description + ", ingredient=" + ingredient + ", direction=" + direction
-				+ ", store=" + store + ", itemImage=" + itemImage + ", creationDate=" + creationDate + ", modifiedDate="
-				+ modifiedDate + "]";
+				+ ", delisted=" + delisted + ", store=" + store + ", itemImage=" + itemImage + ", creationDate="
+				+ creationDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 
 	/*

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/emarket-hustle")
-public class SellerDetailController
+public class SellerDetailRestController
 {
 
 	@Autowired

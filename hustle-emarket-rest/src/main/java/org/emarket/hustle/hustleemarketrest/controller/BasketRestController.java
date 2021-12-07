@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("${api.basePath}")
-public class BasketController
+public class BasketRestController
 {
 	@Autowired
 	private BasketService basketService;

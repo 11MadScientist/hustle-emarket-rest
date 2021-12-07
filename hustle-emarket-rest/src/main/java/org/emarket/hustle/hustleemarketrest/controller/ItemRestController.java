@@ -2,6 +2,7 @@ package org.emarket.hustle.hustleemarketrest.controller;
 
 import java.util.List;
 
+import org.emarket.hustle.hustleemarketrest.entity.GetRequest;
 import org.emarket.hustle.hustleemarketrest.entity.Item;
 import org.emarket.hustle.hustleemarketrest.entity.Store;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
@@ -36,9 +37,14 @@ public class ItemRestController
 	 */
 
 	@GetMapping("/items")
-	public List<Item> getItem()
+	public List<Item> getItem(@RequestBody(required = false) GetRequest getRequest)
 	{
-		return itemService.getItem();
+		if(getRequest == null)
+		{
+			return itemService.getItem();
+		}
+
+		return itemService.getItem(getRequest);
 	}
 
 	/*
@@ -62,12 +68,17 @@ public class ItemRestController
 	@PostMapping("/items/{id}")
 	public Item addItem(@RequestBody Item item, @PathVariable int id)
 	{
-		Store store = storeService.getStoreById(id);
 
-		if(store == null)
+		Store store;
+		try
+		{
+			store = storeService.getStoreById(id);
+		}
+		catch (Exception e)
 		{
 			throw new NotFoundException("STORE WITH ID: " + id);
 		}
+
 		store.updateItemsAdded(1);
 
 		item.setId(0);

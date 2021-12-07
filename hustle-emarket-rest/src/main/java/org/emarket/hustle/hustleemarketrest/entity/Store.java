@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,9 +51,7 @@ public class Store
 	private Seller seller;
 
 	@OneToMany(
-			cascade = { CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST, CascadeType.REFRESH,
-					CascadeType.REMOVE },
-			fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL,
 			mappedBy = "store")
 	@JsonManagedReference
 	private List<Item> items;

@@ -72,6 +72,7 @@ public class BasketServiceImpl implements BasketService
 		}
 		catch (DataIntegrityViolationException e)
 		{
+			e.printStackTrace();
 			throw new NotPermittedException("DUPLICATE ITEM IN BASKET");
 		}
 		catch (Exception e)
@@ -116,7 +117,7 @@ public class BasketServiceImpl implements BasketService
 	{
 		try
 		{
-			basketRepository.deleteCustomerBasket(customerId);
+			basketRepository.deleteByCustomerId(customerId);
 		}
 		catch (Exception e)
 		{

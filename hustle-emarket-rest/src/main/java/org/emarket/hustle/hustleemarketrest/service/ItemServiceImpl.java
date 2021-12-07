@@ -5,11 +5,17 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.emarket.hustle.hustleemarketrest.dao.BasketRepository;
 import org.emarket.hustle.hustleemarketrest.dao.ItemRepository;
+import org.emarket.hustle.hustleemarketrest.entity.GetRequest;
 import org.emarket.hustle.hustleemarketrest.entity.Item;
 import org.emarket.hustle.hustleemarketrest.response.FailedException;
 import org.emarket.hustle.hustleemarketrest.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,10 +24,39 @@ public class ItemServiceImpl implements ItemService
 	@Autowired
 	ItemRepository itemRepository;
 
+	@Autowired
+	BasketRepository basketRepository;
+
 	@Override
 	public List<Item> getItem()
 	{
 		List<Item> items = itemRepository.findAll();
+
+		if(items.isEmpty())
+		{
+			throw new NotFoundException("ITEMS");
+		}
+
+		return items;
+	}
+
+	@Override
+	@Transactional
+	public List<Item> getItem(GetRequest getRequest)
+	{
+
+		// @formatter:off
+		Pageable pageable = PageRequest.of(getRequest.getPage(),
+							getRequest.getSize(),
+							Sort.by(Sort.Direction.DESC, getRequest.getField()));
+
+		// @formatter:off
+		Slice<Item> slicedItems = getRequest.getCategory() == null ?
+								  itemRepository.findByDelistedFalse(pageable)
+								  : itemRepository.findByCategory(getRequest.getCategory(),
+							      "%" + getRequest.getName() + "%", pageable);
+
+		List<Item> items = slicedItems.getContent();
 
 		if(items.isEmpty())
 		{
@@ -45,14 +80,22 @@ public class ItemServiceImpl implements ItemService
 	}
 
 	@Override
+	@Transactional
 	public void saveItem(Item item)
 	{
 		try
 		{
+			if(item.isDelisted())
+			{
+				basketRepository.deleteByItem(item);
+			}
 			itemRepository.save(item);
+
+
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			throw new FailedException("SAVING ITEM");
 		}
 
