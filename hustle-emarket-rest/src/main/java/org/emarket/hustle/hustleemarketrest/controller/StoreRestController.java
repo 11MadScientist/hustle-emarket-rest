@@ -35,7 +35,7 @@ public class StoreRestController
 	 */
 
 	@GetMapping("/stores")
-	public List<Store> getStore(@RequestBody GetRequestStore getRequest)
+	public List<Store> getStore(@RequestBody(required = false) GetRequestStore getRequest)
 	{
 		if(getRequest == null)
 		{

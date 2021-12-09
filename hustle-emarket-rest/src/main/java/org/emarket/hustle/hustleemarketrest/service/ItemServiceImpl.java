@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService
 	{
 		try
 		{
-			if(item.isDelisted())
+			if(item.isDelisted() && item.getId() != 0)
 			{
 				basketRepository.deleteByItem(item);
 			}

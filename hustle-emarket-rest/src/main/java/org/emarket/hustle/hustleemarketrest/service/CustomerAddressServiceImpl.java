@@ -31,6 +31,22 @@ public class CustomerAddressServiceImpl implements CustomerAddressService
 	}
 
 	@Override
+	public List<CustomerAddress> getCustomerAddressByCustomerId(int id)
+	{
+
+		// @formatter:off
+		List<CustomerAddress> customerAddresses = customerAddressRepository
+									  .findCustomerAddressByCustomerId(id);
+
+		if(customerAddresses.isEmpty())
+		{
+			throw new NotFoundException("CUSTOMERADDRESSES");
+		}
+
+		return customerAddresses;
+	}
+
+	@Override
 	public CustomerAddress getCustomerAddressById(int id)
 	{
 		Optional<CustomerAddress> result = customerAddressRepository.findById(id);

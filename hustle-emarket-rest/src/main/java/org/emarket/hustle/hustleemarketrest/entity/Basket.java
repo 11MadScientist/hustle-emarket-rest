@@ -9,7 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Basket
 {
 	@Id
@@ -75,6 +82,10 @@ public class Basket
 
 	public void setQuantity(double quantity)
 	{
+		if(quantity > item.getInStock())
+		{
+			this.quantity = item.getInStock();
+		}
 		this.quantity = quantity;
 	}
 
@@ -103,6 +114,24 @@ public class Basket
 	{
 		return "Basket [id=" + id + ", item=" + item + ", quantity=" + quantity + ", creationDate=" + creationDate
 				+ ", modifiedDate=" + modifiedDate + "]";
+	}
+
+	/*
+	 * ####################################################
+	 * ################# CUSTOM METHODS ###################
+	 * ####################################################
+	 */
+
+	@JsonIgnore
+	public String getStoreAddress()
+	{
+		return item.getStore().getStoreAddress();
+	}
+
+	@JsonIgnore
+	public int getStoreId()
+	{
+		return item.getStore().getId();
 	}
 
 }

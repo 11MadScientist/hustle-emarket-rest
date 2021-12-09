@@ -1,6 +1,7 @@
 package org.emarket.hustle.hustleemarketrest.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.hustleemarketrest.entity.Basket;
 import org.emarket.hustle.hustleemarketrest.entity.Customer;
@@ -24,14 +25,19 @@ public class BasketRestController
 	@Autowired
 	private BasketService basketService;
 
+	Logger log = Logger.getLogger(BasketRestController.class.getName());
+
 	/*
 	 * checking if quantity is not greater than instock and quantity not less than 1
 	 */
 	public boolean checkQuantity(Basket basket)
 	{
+
 		if(basket.getItem().getInStock() < basket.getQuantity() || basket.getQuantity() < 1)
 		{
+			log.info(basket.getItem().getInStock() + ":" + basket.getQuantity());
 			throw new NotPermittedException("DECLARING QUANTITY GREATER THAN INSTOCK OR LESS THAN 0");
+
 		}
 		return true;
 	}
@@ -42,21 +48,14 @@ public class BasketRestController
 	 * #######################################
 	 */
 
-	@GetMapping("/baskets/all")
-	public List<Basket> getBasket()
-	{
-		return basketService.getBasket();
-	}
-
-	/*
-	 * #######################################
-	 * ###### GET BASKET BY CUSTOMER #########
-	 * #######################################
-	 */
-
 	@GetMapping("/baskets")
-	public List<Basket> getCustomerBasket(@RequestBody Customer customer)
+	public List<Basket> getCustomerBasket(@RequestBody(required = false) Customer customer)
 	{
+		if(customer == null)
+		{
+			return basketService.getBasket();
+		}
+
 		return basketService.getCustomerBasket(customer.getId());
 	}
 

@@ -10,7 +10,7 @@ CREATE TABLE customer_address
     zip_code int NOT NULL,
     direction varchar(77) NOT NULL,
 
-    customer_id int,
+    customer_id int NOT NULL,
     
     PRIMARY KEY(id),
     FOREIGN KEY (customer_id) REFERENCES customer(id)

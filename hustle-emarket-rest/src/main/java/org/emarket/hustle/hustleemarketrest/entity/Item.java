@@ -13,11 +13,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.emarket.hustle.hustleemarketrest.response.NotPermittedException;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.lang.NonNull;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "item")
 public class Item
 {
@@ -35,10 +42,10 @@ public class Item
 	private String name;
 
 	@Column(name = "in_stock")
-	private int inStock;
+	private double inStock;
 
 	@Column(name = "stock_sold")
-	private int stockSold;
+	private double stockSold;
 
 	@NonNull
 	@Column(name = "price")
@@ -47,6 +54,10 @@ public class Item
 	@NonNull
 	@Column(name = "measurement")
 	private String measurement;
+
+	@NonNull
+	@Column(name = "increment")
+	private double increment;
 
 	@Column(name = "overall_review")
 	private double overallReview;
@@ -64,7 +75,7 @@ public class Item
 	private boolean delisted;
 
 	@JsonBackReference
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH })
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "store_id", updatable = false)
 	private Store store;
 
@@ -113,27 +124,32 @@ public class Item
 		this.name = name;
 	}
 
-	public int getInStock()
+	public double getInStock()
 	{
 		return inStock;
 	}
 
-	public void setInStock(int inStock)
+	public void setInStock(double inStock)
 	{
 		if(checkLessZero(inStock))
 		{
-			return;
+			throw new NotPermittedException("INSTOCK LESS THAN 0");
 		}
 		this.inStock = inStock;
 	}
 
-	public int getStockSold()
+	public double getStockSold()
 	{
 		return stockSold;
 	}
 
-	public void setStockSold(int stockSold)
+	public void setStockSold(double stockSold)
 	{
+		if(checkLessZero(stockSold))
+		{
+			throw new NotPermittedException("STOCKSOLD LESS THAN 0");
+		}
+
 		this.stockSold = stockSold;
 	}
 
@@ -160,6 +176,20 @@ public class Item
 	public void setMeasurement(String measurement)
 	{
 		this.measurement = measurement;
+	}
+
+	public double getIncrement()
+	{
+		return increment;
+	}
+
+	public void setIncrement(double increment)
+	{
+		if(checkLessZero(increment))
+		{
+			throw new NotPermittedException("INCREMENT LESS THAN 0");
+		}
+		this.increment = increment;
 	}
 
 	public double getOverallReview()
@@ -267,26 +297,18 @@ public class Item
 	 * ######### CUSTOMIZED METHODS ##########
 	 * #######################################
 	 */
-	public void updateInStock(int num)
+	@JsonIgnore
+	public void updateInStock(double num)
 	{
 		if(checkLessZero(inStock + num))
 		{
-			return;
+			throw new NotPermittedException("UPDATING INSTOCK WITH LESS THAN 0");
 		}
 		inStock += num;
 
 	}
 
-	public boolean checkLessZero(int num)
-	{
-		if(num < 0)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
+	@JsonIgnore
 	public boolean checkLessZero(double num)
 	{
 		if(num < 0)

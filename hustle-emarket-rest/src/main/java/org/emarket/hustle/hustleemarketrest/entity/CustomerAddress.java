@@ -7,7 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "customer_address")
 public class CustomerAddress
 {
@@ -30,6 +35,9 @@ public class CustomerAddress
 
 	@Column(name = "direction")
 	private String direction;
+
+	@Column(name = "customer_id")
+	private int customerId;
 
 	public CustomerAddress()
 	{
@@ -96,11 +104,21 @@ public class CustomerAddress
 		this.direction = direction;
 	}
 
+	public int getCustomerId()
+	{
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId)
+	{
+		this.customerId = customerId;
+	}
+
 	@Override
 	public String toString()
 	{
 		return "CustomerAddress [id=" + id + ", name=" + name + ", city=" + city + ", province=" + province
-				+ ", zipCode=" + zipCode + ", direction=" + direction + "]";
+				+ ", zipCode=" + zipCode + ", direction=" + direction + ", customerId=" + customerId + "]";
 	}
 
 }
