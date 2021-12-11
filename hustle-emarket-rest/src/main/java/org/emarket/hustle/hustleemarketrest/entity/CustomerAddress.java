@@ -36,7 +36,7 @@ public class CustomerAddress
 	@Column(name = "direction")
 	private String direction;
 
-	@Column(name = "customer_id")
+	@Column(name = "customer_id", updatable = false)
 	private int customerId;
 
 	public CustomerAddress()

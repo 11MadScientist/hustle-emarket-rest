@@ -1,6 +1,7 @@
 package org.emarket.hustle.hustleemarketrest.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.hustleemarketrest.entity.CustomerAddress;
 import org.emarket.hustle.hustleemarketrest.entity.request.GetRequestAddress;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("${api.basePath}")
 public class CustomerAddressRestController
 {
+	Logger log = Logger.getLogger(CustomerAddressRestController.class.getName());
 	@Autowired
 	private CustomerAddressService customerAddressService;
 
@@ -31,7 +33,7 @@ public class CustomerAddressRestController
 	@GetMapping("/customer-addresses")
 	public List<CustomerAddress> getCustomerAddress(@RequestBody(required = false) GetRequestAddress getRequest)
 	{
-		if(getRequest.getId() == 0)
+		if(getRequest == null)
 		{
 			return customerAddressService.getCustomerAddress();
 		}
@@ -44,7 +46,7 @@ public class CustomerAddressRestController
 	 * ##### GET CUSTOMER ADDRESS BY ID ######
 	 * #######################################
 	 */
-	@GetMapping("/customer-addresses/{gear}/{id}")
+	@GetMapping("/customer-addresses/{id}")
 	public CustomerAddress getCustomerAddressById(@PathVariable int id)
 	{
 		return customerAddressService.getCustomerAddressById(id);
