@@ -1,1 +1,1 @@
-CREATE DATABASE IF NOT EXISTS ltzekpmy_emarketdb;
+CREATE DATABASE IF NOT EXISTS emarketdb;

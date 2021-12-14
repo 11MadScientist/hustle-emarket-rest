@@ -1,4 +1,4 @@
-use ltzekpmy_emarketdb;
+use emarketdb;
 
 DROP TABLE IF EXISTS customer_detail;
 CREATE TABLE customer_detail

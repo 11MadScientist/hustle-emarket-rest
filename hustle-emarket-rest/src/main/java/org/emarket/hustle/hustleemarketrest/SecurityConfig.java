@@ -28,4 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		return new BcryptSecurity();
 	}
 
+	@Bean
+	public ImageConverter imageConverter()
+	{
+		return new ImageConverter();
+	}
+
 }
