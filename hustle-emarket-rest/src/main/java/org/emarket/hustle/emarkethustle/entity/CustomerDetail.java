@@ -34,7 +34,7 @@ public class CustomerDetail
 	@Column(name = "status")
 	private boolean status;
 
-	@Column(name = "dp_link")
+	@Column(name = "dp_link", updatable = false)
 	private String dpLink;
 
 	public CustomerDetail()
