@@ -34,9 +34,6 @@ public class CustomerDetail
 	@Column(name = "status")
 	private boolean status;
 
-	@Column(name = "dp_link", updatable = false)
-	private String dpLink;
-
 	public CustomerDetail()
 	{
 
@@ -82,21 +79,11 @@ public class CustomerDetail
 		this.status = status;
 	}
 
-	public String getDpLink()
-	{
-		return dpLink;
-	}
-
-	public void setDpLink(String dpLink)
-	{
-		this.dpLink = dpLink;
-	}
-
 	@Override
 	public String toString()
 	{
 		return "CustomerDetail [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", status=" + status
-				+ ", dpLink=" + dpLink + "]";
+				+ ", dpLink=" + "]";
 	}
 
 }

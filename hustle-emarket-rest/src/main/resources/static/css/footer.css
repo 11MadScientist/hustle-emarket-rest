@@ -1,0 +1,13 @@
+#footer
+{
+    height: 50px;
+
+}
+#footer .footer-content
+{
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+    
+}

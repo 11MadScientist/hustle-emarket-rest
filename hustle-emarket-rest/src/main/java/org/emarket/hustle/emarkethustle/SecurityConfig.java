@@ -1,13 +1,10 @@
 package org.emarket.hustle.emarkethustle;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@EnableWebMvc
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 
@@ -16,22 +13,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	{
 		http.csrf()
 				.disable()
-
 				.authorizeRequests()
-				.antMatchers("/")
+
+				.antMatchers("/", "/public/**", "/resources/**", "/resources/public/**")
 				.permitAll();
-	}
 
-	@Bean
-	public BcryptSecurity Bcrypt()
-	{
-		return new BcryptSecurity();
-	}
-
-	@Bean
-	public ImageConverter imageConverter()
-	{
-		return new ImageConverter();
 	}
 
 }

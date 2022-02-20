@@ -26,15 +26,15 @@ public class Basket
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "customer_id")
-	private int customerId;
-
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "item_id", updatable = false)
 	private Item item;
 
 	@Column(name = "quantity")
 	private double quantity;
+
+	@Column(name = "customer_id")
+	private int customerId;
 
 	@Column(name = "creation_date", updatable = false)
 	private long creationDate;

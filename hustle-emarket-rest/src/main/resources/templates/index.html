@@ -1,10 +1,95 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Emarket</title>
+		<link rel="stylesheet" th:href="@{/css/index.css}" />
+		<link rel="stylesheet" th:href="@{/css/topbar.css}" />
+		<link rel="stylesheet" th:href="@{/css/footer.css}" />
+		<script type="text/javascript" th:src="@{/js/index.js}"></script>
+		
+		
+	</head>
+	<body>
+		<!--topbar start-->
+		<div th:replace="topbar :: topbar"></div>
+		<!-- topbar end -->
+		
 
-<html xmlns : th="http://www.thymeleaf.org">
-<head>
-	<title>EMARKET-HUSTLE</title>
-</head>
-<body>
-	<p th:text="'EMARKET OFFICIAL PAGE'"/>
-</body>
+		<!-- image slide show  start-->
+		<div class="slider">
+			<div class="slides">
+				<!-- radio buttons start -->
+				<input type="radio" name="radio-btn" id="radio1">
+				<input type="radio" name="radio-btn" id="radio2">
+				<input type="radio" name="radio-btn" id="radio3">
+				<input type="radio" name="radio-btn" id="radio4">
+				<input type="radio" name="radio-btn" id="radio5">
+				<!-- radio buttons end -->
+				
+				<!-- slide images start -->
+				<div class="slide first">
+					<img th:src="@{/emarket-page/image1.jpg}" alt="">
+				</div>
+				<div class="slide">
+					<img th:src="@{/emarket-page/image2.jpg}" alt="">
+				</div>
+				<div class="slide">
+					<img th:src="@{/emarket-page/image3.png}" alt="">
+				</div>
+				<div class="slide">
+					<img th:src="@{/emarket-page/image4.png}" alt="">
+				</div>
+				<div class="slide">
+					<img th:src="@{/emarket-page/image5.jpg}" alt="">
+				</div>
+				<!-- slide images end -->
 
+				<!-- automatic navigation first -->
+				<div class="navigation-auto">
+					<div class="auto-btn1"></div>
+					<div class="auto-btn2"></div>
+					<div class="auto-btn3"></div>
+					<div class="auto-btn4"></div>
+					<div class="auto-btn5"></div>
+				</div>
+				<!-- automatic navigation end -->
+			</div>
+			<!-- manual navigation start -->
+			<div class="navigation-manual">
+				<label for="radio1" class="manual-btn"></label>
+				<label for="radio2" class="manual-btn"></label>
+				<label for="radio3" class="manual-btn"></label>
+				<label for="radio4" class="manual-btn"></label>
+				<label for="radio5" class="manual-btn"></label>
+			</div>
+			<!-- manual navigation end -->
+		</div>
+		<!-- image slide show end -->
+
+		<!-- about section start -->
+		 <div id="about">
+			<h2>EMERKADO</h2>
+			<p class="about-description"><i>Making Simple Task Easier</i></p>
+			<p class="about-sentence">Emerkado is a mobile-based application which is designed for a new normal adaptation to remotely buy and sell goods. With this, people can sell, or order goods without hesitation given this pandemic. The project aims to provide convenience to both parties as it will help those who have anxiety to go to the market, or those who does not have time and energy to prepare ingredients for their food. To the sellers on the other hand, this will help them increase their profit as their will be customers online aside from the customers who will visit their market stalls.</p>
+		  </div>
+		  <!-- about section end -->
+
+		  <!-- links section start -->
+		  <div id="links">
+			 <div class="link-box">
+				 <a th:href="seller-signup">Register as a Seller</a>
+			 </div>
+			 <div class="link-box">
+				 <a href="">Download the Application</a>
+			 </div>
+		  </div>
+		  <!-- links section end -->
+		  
+		  
+		  <!-- footer start -->
+		  <div th:replace="footer :: footer"></div>
+		  <!-- footer end -->
+		 
+
+		
+	</body>
 </html>

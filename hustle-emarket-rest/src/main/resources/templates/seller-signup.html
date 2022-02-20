@@ -1,0 +1,51 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Seller SignUp Form</title>
+		<link rel="stylesheet" th:href="@{/css/topbar.css}" />
+		<link rel="stylesheet" th:href="@{/css/footer.css}" />
+		<link rel="stylesheet" th:href="@{/css/seller-signup.css}" />
+		<script src=""></script>
+		
+    </head>
+    <body>
+        <!--topbar start-->
+		<div th:replace="topbar :: topbar"></div>
+		<!-- topbar end -->
+        <div id="registration-form">
+            <h2>Seller Registration Form</h2>
+
+            <div id="form-group">
+                <h3>Seller Information Information:</h3>
+                <div id="form-section">
+                    <form:form action="">
+                        First Name: <form:input path="firstName"/>
+                        <br><br>
+                        Last Name (*): <form:input path="lastName"/>
+                        <form:errors path = "lastName" cssClass = "error"/>
+                        <br><br>
+                        Free passes: <form:input path="freePass"/> 
+                        <form:errors path="freePass" cssClass = "error"/>
+                        <br><br>
+                        
+                        Postal Code: <form:input path="postalCode"/> 
+                        <form:errors path="postalCode" cssClass = "error"/>
+                        <br><br>
+                        
+                        Course Code: <form:input path="courseCode"/>
+                        <form:errors path="courseCode" cssClass = "error"/>
+                        <br><br>
+                        
+                        <input type="submit" value="Submit"/>
+                    </form:form>
+                </div>
+
+            </div>
+            
+        </div>
+
+        <!-- footer start -->
+		  <div th:replace="footer :: footer"></div>
+		  <!-- footer end -->
+    </body>
+</html>

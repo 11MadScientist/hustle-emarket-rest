@@ -1,0 +1,198 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    font-family: 'inter';
+    background-color: #242526;
+    
+}
+
+
+/* IMAGE SLIDESHOW  */
+.slider
+{
+    margin: auto;
+    width: 1000px;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 5px;
+    
+}
+.slides
+{
+    width: 500%;
+    height: 500px;
+    display: flex;
+}
+
+.slides input
+{
+    display: none;
+}
+.slide
+{
+    width: 20%;
+    transition: 2s;
+}
+.slide img
+{
+    width: 1000px;
+    height: 500px;
+}
+
+/* css for manual slide navigation */
+.navigation-manual
+{
+    position: absolute;
+    width: 1000px;
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+}
+
+.manual-btn
+{
+    border: 2px solid #01A49F;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 1s;
+}
+.manual-btn:not(:last-child)
+{
+    margin-right: 40px;
+}
+
+.manual-btn:hover
+{
+    background: #01A49F;
+}
+
+#radio1:checked~ .first
+{
+    margin-left: 0%;
+}
+
+#radio2:checked~ .first
+{
+    margin-left: -20%;
+}
+
+#radio3:checked~ .first
+{
+    margin-left: -40%;
+}
+
+#radio4:checked~ .first
+{
+    margin-left: -60%;
+}
+
+#radio5:checked~ .first
+{
+    margin-left: -80%;
+}
+
+/* ccs for automatic navigation */
+
+.navigation-auto
+{
+    position: absolute;
+    display: flex;
+    width: 1000px;
+    justify-content: center;
+    margin-top: 460px;
+}
+
+.navigation-auto div
+{
+    border: 2px solid #01A49F;
+    padding: 5px;
+    border-radius: 10px;
+    transition: 1s;
+}
+
+.navigation-auto div:not(:last-child)
+{
+    margin-right: 40px;
+}
+
+#radio1:checked ~ .navigation-auto .auto-btn1
+{
+    background:#01A49F;
+}
+
+#radio2:checked ~ .navigation-auto .auto-btn2
+{
+    background:#01A49F;
+}
+
+#radio3:checked ~ .navigation-auto .auto-btn3
+{
+    background:#01A49F;
+}
+
+#radio4:checked ~ .navigation-auto .auto-btn4
+{
+    background:#01A49F;
+}
+
+#radio5:checked ~ .navigation-auto .auto-btn5
+{
+    background:#01A49F;
+}
+
+/* about section */
+#about
+{
+    margin: auto;
+    text-align: center;
+    width: 800px;
+    color: #FFFFFF;
+    
+}
+#about p
+{
+    font-weight: thin 100;
+    font-weight: lighter;
+}
+
+/* links section */
+#links
+{
+    margin: auto;
+    margin-bottom: 20px;
+    height: 50px;
+    width: 800px;
+    text-align: center;
+    
+
+
+}
+
+#links .link-box
+{
+    width: 250px;
+    height: 40px;
+    display: inline-block; 
+    margin-left: 40px;
+    margin-right: 40px;
+    background-color: #00C46F;
+    border-radius: 5px;
+}
+
+#links a
+{
+    color: 01A1A0;
+    text-decoration: none;
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #FFFFFF;
+    
+}
+
