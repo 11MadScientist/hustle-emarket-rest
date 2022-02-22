@@ -1,6 +1,7 @@
 package org.emarket.hustle.emarkethustle.service;
 
 import java.nio.file.FileSystems;
+import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImageServiceImpl implements ImageService
 {
+	Logger log = Logger.getLogger(ImageServiceImpl.class.getName());
 	@Autowired
 	ImageConverter imageConverter;
 
@@ -26,7 +28,7 @@ public class ImageServiceImpl implements ImageService
 	@Transactional
 	public void saveImage(ImageEntity imageEntity)
 	{
-
+		log.info("Hello");
 		imageConverter.saveImage(imageEntity);
 
 	}
