@@ -12,10 +12,4 @@ public class RootPageController
 		return ("index");
 	}
 
-	@GetMapping("/seller-signup")
-	public String sellerSignup()
-	{
-		return ("seller-signup");
-	}
-
 }

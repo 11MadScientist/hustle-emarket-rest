@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer>
 {
-	public Customer findCustomerByUsername(String username);
+	public Customer findByUsername(String username);
 
-	public Slice<Customer> findCustomerByFirstNameLikeOrLastNameLike(
+	public Slice<Customer> findByFirstNameLikeOrLastNameLike(
 			String searchPattern, String searchPattern2, Pageable pageable);
 
-	public Slice<Customer> findCustomerByUsernameLike(
+	public Slice<Customer> findByUsernameLike(
 			String searchPattern, Pageable pageable);
 
 }

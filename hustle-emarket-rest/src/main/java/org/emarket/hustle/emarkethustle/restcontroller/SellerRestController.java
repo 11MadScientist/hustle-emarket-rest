@@ -10,7 +10,9 @@ import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
+import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
 import org.emarket.hustle.emarkethustle.service.SellerServiceImpl;
+import org.emarket.hustle.emarkethustle.service.ValidationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,9 @@ public class SellerRestController
 {
 	@Autowired
 	private SellerServiceImpl sellerService;
+
+	@Autowired
+	private ValidationServiceImpl validationService;
 
 	@Autowired
 	private BcryptSecurity bcrypt;
@@ -66,6 +71,19 @@ public class SellerRestController
 	@PostMapping("/sellers")
 	public Seller addSeller(@RequestBody Seller seller)
 	{
+
+		// check if the username is already taken and if the email is taken
+
+		if(validationService.isEmailTaken(seller.getSellerDetail().getEmail()))
+		{
+			throw new UniqueErrorException("Email ");
+		}
+
+		if(validationService.isUsernameTaken(seller.getUsername()))
+		{
+			throw new UniqueErrorException("Username ");
+		}
+
 		/*
 		 * set seller id to 0 to invoke insert function
 		 * not update
@@ -202,9 +220,9 @@ public class SellerRestController
 	@PutMapping("/sellers/{password}")
 	public Seller changePassword(@PathVariable String password, @RequestBody Seller seller)
 	{
-		Seller dbCustomer = sellerService.getSellerById(seller.getId());
+		Seller dbSeller = sellerService.getSellerById(seller.getId());
 
-		if(bcrypt.matches(password, dbCustomer.getPassword()))
+		if(bcrypt.matches(password, dbSeller.getPassword()))
 		{
 			seller.setPassword(bcrypt.encode(seller.getPassword()));
 

@@ -10,3 +10,6 @@ setInterval(function ()
         counter = 1;
     }
 },5000);
+
+var pirate = document.getElementById("mine");
+

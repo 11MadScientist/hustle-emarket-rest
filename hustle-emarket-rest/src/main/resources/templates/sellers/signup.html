@@ -1,0 +1,143 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Seller SignUp Form</title>
+		<link rel="stylesheet" th:href="@{/css/topbar.css}" />
+		<link rel="stylesheet" th:href="@{/css/footer.css}" />
+		<link rel="stylesheet" th:href="@{/css/seller-signup.css}" />
+		
+    </head>
+    <body>
+        <!--topbar start-->
+		<div th:replace="topbar :: topbar"></div>
+		<!-- topbar end -->
+
+        <!-- form-container start -->
+        <div class="form-container">
+
+            <!-- form start -->
+            <form action="#" th:action = "@{/sellers/save}"
+                  th:object = "${seller}" method="post">
+
+                  <!-- step container start -->
+                  <div id="step1" class="step-container">
+                    <h3>Seller Information</h3>
+
+                    <input type="hidden" th:field = "*{id}">
+    
+                    <input type="text" th:field = "*{firstName}"
+                            class="form-field" placeholder="First Name">
+    
+                    <input type="text" th:field = "*{lastName}"
+                        class="form-field" placeholder="Last Name">
+    
+                    <input type="text" th:field = "*{username}"
+                        id = "username" class="form-field" placeholder="Username">
+    
+                    <input type="text" th:field = "*{password}"
+                        id="password1" class="form-field" placeholder="Password">
+                            
+                    <input type="text" th:field = "*{password}"
+                        id="password2" class="form-field" placeholder="Confirm Password">
+
+                    <!-- btn-box div start -->
+                    <div class="btn-box">
+                        <button type="button" id="next1">Next</button>
+                    </div>
+                    <!-- btn-box div end -->
+                    
+                  </div>
+
+                  <!-- step container end -->
+
+                  <!-- step container 2 start -->
+                  <div id="step2" class="step-container">
+                    <h3>Seller Contact Details</h3>
+
+                    <input type="hidden" th:field = "*{sellerDetail.id}">
+    
+                    <input type="email" th:field = "*{sellerDetail.email}"
+                            class="form-field" placeholder="Email"
+                            id="email">
+    
+                    <input type="text" th:field = "*{sellerDetail.phoneNumber}"
+                        class="form-field" placeholder="Phone Number">
+
+
+                    <input type="number" th:field = "*{sellerDetail.age}"
+                        class="form-field" placeholder="Age"
+                        id="age">
+                    
+                        
+
+                    <input type="text" th:field = "*{sellerDetail.gender}"
+                        class="form-field" placeholder="Gender">
+
+                    <input type="text" th:field = "*{sellerDetail.dateOfBirth}"
+                        class="form-field" placeholder="Date of Birth"
+                        onfocus="this.type = 'date'" onchange="this.type = 'text'">
+
+                    <!-- btn-box div start -->
+                    <div class="btn-box">
+                        <button type="button" id="back1">Back</button>
+                        <button type="button" id="next2">Next</button>
+                    </div>
+
+                    <!-- btn-box div end -->
+                    
+                  </div>
+
+                  <!-- step container 2 end -->
+
+                  <!-- step container 3 start -->
+                  <div id="step3" class="step-container">
+                    <h3>Store Information</h3>
+
+                    <input type="hidden" th:field = "*{store.id}">
+    
+                    <input type="text" th:field = "*{store.storeName}"
+                            class="form-field" placeholder="Store Name">
+    
+                    <input type="text" th:field = "*{store.storeAddress}"
+                        class="form-field" placeholder="Store Address">
+    
+                    <input type="text" th:field = "*{store.documents}"
+                        class="form-field" placeholder="Documents">
+    
+
+                    <!-- btn-box div start -->
+                    <div class="btn-box">
+                        <button type="button" id="back2">Back</button>
+                        <button type="submit" id="submit">Submit</button>
+                    </div>
+                    <!-- btn-box div end -->
+                    
+                  </div>
+
+                  <!-- step container 3 end -->
+
+
+            </form>
+            <!-- form end -->
+
+            <!-- step-row start -->
+            <div class="step-row">
+                <div id="progress"></div>
+                <div class="step-col"><small>Step 01</small></div>
+                <div class="step-col"><small>Step 02</small></div>
+                <div class="step-col"><small>Step 03</small></div>
+            </div>
+            </div>
+            </div>
+            <!-- step-row end -->
+
+        </div>
+        <!-- form-container end -->
+
+
+        <!-- footer start -->
+		   <div th:replace="footer :: footer"></div>
+		<!-- footer end -->
+
+          <script type="text/javascript" th:src="@{/js/seller-signup.js}"></script>
+    </body>
+</html>

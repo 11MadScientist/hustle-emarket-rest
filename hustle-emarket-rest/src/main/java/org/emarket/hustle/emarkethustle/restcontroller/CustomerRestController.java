@@ -9,7 +9,9 @@ import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
+import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
 import org.emarket.hustle.emarkethustle.service.CustomerService;
+import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,10 @@ public class CustomerRestController
 	// for the bean bCrypt
 	@Autowired
 	private BcryptSecurity bcrypt;
+
+//	for duplicate validation
+	@Autowired
+	private ValidationService validationService;
 
 	@Autowired
 	private CustomerService customerService;
@@ -69,6 +75,18 @@ public class CustomerRestController
 	@PostMapping("/customers")
 	public Customer addCustomer(@RequestBody Customer customer)
 	{
+		// check if the username is already taken and if the email is taken
+
+		if(validationService.isEmailTaken(customer.getCustomerDetail().getEmail()))
+		{
+			throw new UniqueErrorException("Email ");
+		}
+
+		if(validationService.isUsernameTaken(customer.getUsername()))
+		{
+			throw new UniqueErrorException("Username ");
+		}
+
 		/*
 		 * set customer id to 0 to trigger INSERT, not UPDATE
 		 * check if the customerDetail exist

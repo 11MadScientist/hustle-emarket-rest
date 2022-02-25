@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.lang.NonNull;
 
 @Entity
 @DynamicInsert
@@ -21,9 +22,20 @@ public class SellerDetail
 	@Column(name = "id", updatable = false)
 	private int id;
 
+	@Column(name = "age")
+	private Integer age;
+
+	@Column(name = "gender")
+	private String gender;
+
+	@Column(name = "date_of_birth")
+	private String dateOfBirth;
+
+	@NonNull
 	@Column(name = "email")
 	private String email;
 
+	@NonNull
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
@@ -32,11 +44,6 @@ public class SellerDetail
 
 	@Column(name = "authorized")
 	private boolean authorized;
-
-	@Column(name = "dp_link")
-	private String dpLink;
-
-//	private Image dp;
 
 	public SellerDetail()
 	{
@@ -51,6 +58,36 @@ public class SellerDetail
 	public void setId(int id)
 	{
 		this.id = id;
+	}
+
+	public Integer getAge()
+	{
+		return age;
+	}
+
+	public void setAge(Integer age)
+	{
+		this.age = age;
+	}
+
+	public String getGender()
+	{
+		return gender;
+	}
+
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
+
+	public String getDateOfBirth()
+	{
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(String dateOfBirth)
+	{
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public String getEmail()
@@ -93,21 +130,12 @@ public class SellerDetail
 		this.authorized = authorized;
 	}
 
-	public String getDpLink()
-	{
-		return dpLink;
-	}
-
-	public void setDpLink(String dpLink)
-	{
-		this.dpLink = dpLink;
-	}
-
 	@Override
 	public String toString()
 	{
-		return "SellerDetail [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", status=" + status
-				+ ", authorized=" + authorized + ", dpLink=" + dpLink + "]";
+		return "SellerDetail [id=" + id + ", age=" + age + ", gender=" + gender + ", dateOfBirth=" + dateOfBirth
+				+ ", email=" + email + ", phoneNumber=" + phoneNumber + ", status=" + status + ", authorized="
+				+ authorized + "]";
 	}
 
 }

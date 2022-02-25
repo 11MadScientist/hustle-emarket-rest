@@ -3,6 +3,9 @@ DROP TABLE IF EXISTS customer_detail;
 CREATE TABLE customer_detail
 (
 	id int NOT NULL AUTO_INCREMENT,
+    age int NOT NULL,
+    gender varchar(11) NOT NULL,
+    date_of_birth date,
     email varchar(77) UNIQUE DEFAULT NULL,
     phone_number varchar(22) DEFAULT NULL,
     `status` boolean DEFAULT false,
