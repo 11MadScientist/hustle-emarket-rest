@@ -77,12 +77,12 @@ public class CustomerRestController
 	{
 		// check if the username is already taken and if the email is taken
 
-		if(validationService.isEmailTaken(customer.getCustomerDetail().getEmail()))
+		if(!validationService.isEmailNotTaken(customer.getCustomerDetail().getEmail()))
 		{
 			throw new UniqueErrorException("Email ");
 		}
 
-		if(validationService.isUsernameTaken(customer.getUsername()))
+		if(!validationService.isUsernameNotTaken(customer.getUsername()))
 		{
 			throw new UniqueErrorException("Username ");
 		}

@@ -37,8 +37,8 @@ public class ValidationServiceImpl implements ValidationService
 	@Override
 	public boolean isUsernameNotTaken(String username)
 	{
-		if(customerRepository.findByUsername(username) == null
-				&& sellerRepository.findByUsername(username) == null)
+		if(customerRepository.findCustomerByUsername(username) == null
+				&& sellerRepository.findSellerByUsername(username) == null)
 		{
 			return true;
 		}

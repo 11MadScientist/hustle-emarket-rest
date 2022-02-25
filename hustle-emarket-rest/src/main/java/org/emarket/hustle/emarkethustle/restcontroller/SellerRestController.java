@@ -74,12 +74,12 @@ public class SellerRestController
 
 		// check if the username is already taken and if the email is taken
 
-		if(validationService.isEmailTaken(seller.getSellerDetail().getEmail()))
+		if(!validationService.isEmailNotTaken(seller.getSellerDetail().getEmail()))
 		{
 			throw new UniqueErrorException("Email ");
 		}
 
-		if(validationService.isUsernameTaken(seller.getUsername()))
+		if(!validationService.isUsernameNotTaken(seller.getUsername()))
 		{
 			throw new UniqueErrorException("Username ");
 		}

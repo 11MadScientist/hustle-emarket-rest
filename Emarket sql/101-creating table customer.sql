@@ -1,4 +1,4 @@
-USE emarketdb;
+-- USE emarketdb;
 DROP TABLE IF EXISTS customer;
 CREATE TABLE customer
 (

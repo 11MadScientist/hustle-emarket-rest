@@ -8,12 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SellerRepository extends JpaRepository<Seller, Integer>
 {
 
-	Seller findByUsername(String username);
+	Seller findSellerByUsername(String username);
 
-	public Slice<Seller> findByFirstNameLikeOrLastNameLike(
+	public Slice<Seller> findSellerByFirstNameLikeOrLastNameLike(
 			String searchPattern, String searchPattern2, Pageable pageable);
 
-	public Slice<Seller> findByUsernameLike(
+	public Slice<Seller> findSellerByUsernameLike(
 			String searchPattern, Pageable pageable);
 
 }

@@ -1,10 +1,10 @@
-USE emarketdb;
+-- USE emarketdb;
 DROP TABLE IF EXISTS customer_detail;
 CREATE TABLE customer_detail
 (
 	id int NOT NULL AUTO_INCREMENT,
-    age int NOT NULL,
-    gender varchar(11) NOT NULL,
+    age int,
+    gender varchar(11),
     date_of_birth date,
     email varchar(77) UNIQUE DEFAULT NULL,
     phone_number varchar(22) DEFAULT NULL,

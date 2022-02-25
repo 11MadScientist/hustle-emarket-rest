@@ -1,4 +1,4 @@
-USE emarketdb;
+-- USE emarketdb;
 
 DROP TABLE IF EXISTS customer_address;
 CREATE TABLE customer_address
