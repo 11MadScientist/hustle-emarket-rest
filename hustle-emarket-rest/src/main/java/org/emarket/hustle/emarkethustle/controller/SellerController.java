@@ -32,7 +32,7 @@ public class SellerController
 	{
 		Seller seller = new Seller();
 		model.addAttribute("seller", seller);
-		return ("/sellers/signup");
+		return ("sellers/signup");
 	}
 
 	@PostMapping("/save")
