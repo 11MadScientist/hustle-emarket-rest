@@ -151,6 +151,13 @@ body
     color: #FFFFFF;
     
 }
+#about img
+{
+    padding-top: 10px;
+    height: 50px;
+    width: 350px;
+}
+
 #about p
 {
     font-weight: thin 100;

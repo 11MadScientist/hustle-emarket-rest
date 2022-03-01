@@ -1,4 +1,4 @@
--- USE emarketdb;
+USE emarketdb;
 
 DROP TABLE IF EXISTS customer_address;
 CREATE TABLE customer_address
@@ -9,6 +9,8 @@ CREATE TABLE customer_address
     province varchar(77) NOT NULL,
     zip_code int NOT NULL,
     direction varchar(77) NOT NULL,
+    latitude long,
+    longitude long,
 
     customer_id int NOT NULL,
     

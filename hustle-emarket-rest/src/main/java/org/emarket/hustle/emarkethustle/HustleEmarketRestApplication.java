@@ -26,4 +26,10 @@ public class HustleEmarketRestApplication
 		return new ImageConverter();
 	}
 
+	@Bean
+	public Algorithms algorithms()
+	{
+		return new Algorithms();
+	}
+
 }

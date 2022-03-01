@@ -79,7 +79,7 @@ public class Item
 	@JoinColumn(name = "store_id", updatable = false)
 	private Store store;
 
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+	@OneToMany(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "item_id")
 	private List<ItemImage> itemImage;
 

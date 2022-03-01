@@ -10,4 +10,5 @@ public interface StoreRepository extends JpaRepository<Store, Integer>
 	public Slice<Store> findStoreByStoreNameLike(String searchPattern, Pageable pageable);
 
 	public Slice<Store> findStoreByStoreAddressLike(String searchPattern, Pageable pageable);
+
 }

@@ -36,6 +36,12 @@ public class CustomerAddress
 	@Column(name = "direction")
 	private String direction;
 
+	@Column(name = "latitude")
+	private long latitude;
+
+	@Column(name = "longitude")
+	private long longitude;
+
 	@Column(name = "customer_id", updatable = false)
 	private int customerId;
 
@@ -104,6 +110,26 @@ public class CustomerAddress
 		this.direction = direction;
 	}
 
+	public long getLatitude()
+	{
+		return latitude;
+	}
+
+	public void setLatitude(long latitude)
+	{
+		this.latitude = latitude;
+	}
+
+	public long getLongitude()
+	{
+		return longitude;
+	}
+
+	public void setLongitude(long longitude)
+	{
+		this.longitude = longitude;
+	}
+
 	public int getCustomerId()
 	{
 		return customerId;
@@ -118,7 +144,8 @@ public class CustomerAddress
 	public String toString()
 	{
 		return "CustomerAddress [id=" + id + ", name=" + name + ", city=" + city + ", province=" + province
-				+ ", zipCode=" + zipCode + ", direction=" + direction + ", customerId=" + customerId + "]";
+				+ ", zipCode=" + zipCode + ", direction=" + direction + ", latitude=" + latitude + ", longitude="
+				+ longitude + ", customerId=" + customerId + "]";
 	}
 
 }

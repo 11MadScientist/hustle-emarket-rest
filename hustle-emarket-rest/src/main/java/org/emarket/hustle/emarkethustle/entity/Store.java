@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -43,6 +44,10 @@ public class Store
 
 	@Column(name = "overall_rating")
 	private double overallRating;
+
+//	statistical data
+	@Transient
+	private double overallStockSold = 0;
 
 	@Column(name = "documents")
 	private String documents;
@@ -116,6 +121,19 @@ public class Store
 	public void setOverallRating(double overallRating)
 	{
 		this.overallRating = overallRating;
+	}
+
+	public double getOverallStockSold()
+	{
+		if(overallStockSold == 0)
+		{
+			for (int i = 0; i < items.size(); i++)
+			{
+				overallStockSold += items.get(i).getStockSold();
+			}
+		}
+
+		return overallStockSold;
 	}
 
 	public String getDocuments()

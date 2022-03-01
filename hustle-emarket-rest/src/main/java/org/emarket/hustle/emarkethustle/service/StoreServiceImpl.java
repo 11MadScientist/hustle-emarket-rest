@@ -3,6 +3,7 @@ package org.emarket.hustle.emarkethustle.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.emarket.hustle.emarkethustle.Algorithms;
 import org.emarket.hustle.emarkethustle.dao.StoreRepository;
 import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestStore;
@@ -21,6 +22,9 @@ public class StoreServiceImpl implements StoreService
 
 	@Autowired
 	StoreRepository storeRepository;
+
+	@Autowired
+	Algorithms algorithms;
 
 	@Override
 	public List<Store> getStore()
@@ -120,6 +124,19 @@ public class StoreServiceImpl implements StoreService
 		{
 			throw new FailedException("DELETING STORE WITH ID: " + id);
 		}
+	}
+
+//	get store by overall stock sold
+	@Override
+	public List<Store> getStoreByOverallStockSold()
+	{
+		List<Store> stores = storeRepository.findAll();
+
+//		using quicksort to sort stores
+		algorithms.sortStoreByStockSold(stores, 0, stores.size());
+
+		return stores;
+
 	}
 
 
