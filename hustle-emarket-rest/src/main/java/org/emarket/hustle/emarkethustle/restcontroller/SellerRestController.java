@@ -94,7 +94,6 @@ public class SellerRestController
 		 */
 
 		seller.setId(0);
-		seller.setCreationDate(seller.getModifiedDate());
 
 		try
 		{
@@ -135,7 +134,6 @@ public class SellerRestController
 		}
 
 		seller.setPassword(dbseller.getPassword());
-		seller.setCreationDate(dbseller.getCreationDate());
 
 		if(dbseller.getStore() == null)
 		{

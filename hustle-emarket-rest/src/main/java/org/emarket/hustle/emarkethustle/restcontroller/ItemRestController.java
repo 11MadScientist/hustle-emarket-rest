@@ -83,7 +83,6 @@ public class ItemRestController
 
 		item.setId(0);
 		item.setStore(store);
-		item.setCreationDate(item.getModifiedDate());
 
 		itemService.saveItem(item);
 

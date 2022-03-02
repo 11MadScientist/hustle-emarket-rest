@@ -85,7 +85,6 @@ public class BasketRestController
 
 		basket.setId(0);
 		basket.setCustomerId(customerId);
-		basket.setCreationDate(basket.getModifiedDate());
 
 		basketService.saveBasket(basket);
 

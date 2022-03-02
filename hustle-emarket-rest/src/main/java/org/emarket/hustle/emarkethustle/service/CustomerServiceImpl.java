@@ -8,6 +8,7 @@ import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerServiceImpl implements CustomerService
 {
+	Logger log = Logger.getLogger(CustomerServiceImpl.class);
+
 	@Autowired
 	private CustomerRepository customerRepository;
 
@@ -87,9 +90,9 @@ public class CustomerServiceImpl implements CustomerService
 	@Override
 	public Customer saveCustomer(Customer customer)
 	{
-
 		try
 		{
+			log.info(customer.getId());
 			return customerRepository.save(customer);
 
 		}

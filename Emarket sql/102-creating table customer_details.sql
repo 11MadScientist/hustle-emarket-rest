@@ -6,7 +6,7 @@ CREATE TABLE customer_detail
     age int,
     gender varchar(11),
     date_of_birth date,
-    email varchar(77) UNIQUE DEFAULT NULL,
+    email varchar(77) unique DEFAULT NULL,
     phone_number varchar(22) DEFAULT NULL,
     `status` boolean DEFAULT false,
     

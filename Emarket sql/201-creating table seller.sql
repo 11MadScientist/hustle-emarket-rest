@@ -11,8 +11,9 @@ CREATE TABLE seller
     `password` varchar(77) NOT NULL,
     seller_detail_id int UNIQUE,
     
-	`creation_date` long NOT NULL,
-    `modified_date` long NOT NULL,
+	`creation_date` datetime default current_timestamp,
+    `modified_date` datetime default current_timestamp
+					on update current_timestamp,
     
 	PRIMARY KEY(id),
     FOREIGN KEY (seller_detail_id) REFERENCES seller_detail(id)

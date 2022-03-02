@@ -9,8 +9,9 @@ CREATE TABLE basket
     quantity double NOT NULL,
     customer_id int NOT NULL,
     
-	`creation_date` long NOT NULL,
-    `modified_date` long NOT NULL,
+	`creation_date` datetime default current_timestamp,
+    `modified_date` datetime default current_timestamp
+					on update current_timestamp,
     
     primary key(id),
 	UNIQUE pair (customer_id, item_id),

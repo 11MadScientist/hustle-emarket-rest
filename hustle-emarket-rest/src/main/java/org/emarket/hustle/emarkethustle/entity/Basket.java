@@ -37,14 +37,14 @@ public class Basket
 	private int customerId;
 
 	@Column(name = "creation_date", updatable = false)
-	private long creationDate;
+	private String creationDate;
 
 	@Column(name = "modified_date")
-	private long modifiedDate;
+	private String modifiedDate;
 
 	public Basket()
 	{
-		modifiedDate = System.currentTimeMillis();
+
 	}
 
 	public int getId()
@@ -91,22 +91,22 @@ public class Basket
 		this.quantity = quantity;
 	}
 
-	public long getCreationDate()
+	public String getCreationDate()
 	{
 		return creationDate;
 	}
 
-	public void setCreationDate(long creationDate)
+	public void setCreationDate(String creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
-	public long getModifiedDate()
+	public String getModifiedDate()
 	{
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(long modifiedDate)
+	public void setModifiedDate(String modifiedDate)
 	{
 		this.modifiedDate = modifiedDate;
 	}

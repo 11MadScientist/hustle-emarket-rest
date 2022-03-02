@@ -19,8 +19,9 @@ CREATE TABLE item
     delisted boolean DEFAULT false,
     store_id int,
     
-    `creation_date` long NOT NULL,
-    `modified_date` long NOT NULL,
+    `creation_date` datetime default current_timestamp,
+    `modified_date` datetime default current_timestamp
+					on update current_timestamp,
     
     primary key(id),
     FOREIGN KEY(store_id) REFERENCES store(id)

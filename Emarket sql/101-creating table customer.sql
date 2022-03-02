@@ -9,8 +9,9 @@ CREATE TABLE customer
     `password` varchar(77) NOT NULL,
 	customer_detail_id int,
     
-    `creation_date` long NOT NULL,
-    `modified_date` long NOT NULL,
+    `creation_date` datetime default current_timestamp,
+    `modified_date` datetime default current_timestamp
+					on update current_timestamp,
 
     PRIMARY KEY(id),
     FOREIGN KEY (customer_detail_id) REFERENCES customer_detail(id)

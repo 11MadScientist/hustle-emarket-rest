@@ -84,14 +84,14 @@ public class Item
 	private List<ItemImage> itemImage;
 
 	@Column(name = "creation_Date", updatable = false)
-	private long creationDate;
+	private String creationDate;
 
 	@Column(name = "modified_date")
-	private long modifiedDate;
+	private String modifiedDate;
 
 	public Item()
 	{
-		modifiedDate = System.currentTimeMillis();
+
 	}
 
 	public int getId()
@@ -262,22 +262,22 @@ public class Item
 		this.itemImage = itemImage;
 	}
 
-	public long getCreationDate()
+	public String getCreationDate()
 	{
 		return creationDate;
 	}
 
-	public void setCreationDate(long creationDate)
+	public void setCreationDate(String creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
-	public long getModifiedDate()
+	public String getModifiedDate()
 	{
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(long modifiedDate)
+	public void setModifiedDate(String modifiedDate)
 	{
 		this.modifiedDate = modifiedDate;
 	}

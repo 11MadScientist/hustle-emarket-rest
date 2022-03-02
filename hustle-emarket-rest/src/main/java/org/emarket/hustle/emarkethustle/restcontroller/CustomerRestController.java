@@ -93,7 +93,7 @@ public class CustomerRestController
 		 * change id to 0 if exists
 		 */
 		customer.setId(0);
-		customer.setCreationDate(customer.getModifiedDate());
+//		customer.setCreationDate(customer.getModifiedDate());
 
 		/* encrypting password using bcrypt */
 		customer.setPassword(bcrypt.encode(customer.getPassword()));
@@ -125,7 +125,6 @@ public class CustomerRestController
 		}
 
 		customer.setPassword(dbCustomer.getPassword());
-		customer.setCreationDate(dbCustomer.getCreationDate());
 
 		return customerService.saveCustomer(customer);
 
