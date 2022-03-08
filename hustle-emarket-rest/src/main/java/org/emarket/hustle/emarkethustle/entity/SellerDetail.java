@@ -45,6 +45,9 @@ public class SellerDetail
 	@Column(name = "authorized")
 	private boolean authorized;
 
+	@Column(name = "prohibited")
+	private boolean prohibited;
+
 	public SellerDetail()
 	{
 
@@ -128,6 +131,16 @@ public class SellerDetail
 	public void setAuthorized(boolean authorized)
 	{
 		this.authorized = authorized;
+	}
+
+	public boolean isProhibited()
+	{
+		return prohibited;
+	}
+
+	public void setProhibited(boolean prohibited)
+	{
+		this.prohibited = prohibited;
 	}
 
 	@Override

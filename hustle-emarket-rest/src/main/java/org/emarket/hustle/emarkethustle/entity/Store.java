@@ -124,7 +124,7 @@ public class Store
 
 	public double getOverallStockSold()
 	{
-		if(overallStockSold == 0)
+		if(overallStockSold == 0 && items != null)
 		{
 			for (int i = 0; i < items.size(); i++)
 			{

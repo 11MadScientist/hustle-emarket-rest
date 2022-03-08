@@ -9,6 +9,12 @@ public class GetRequestStore
 
 	private String field;
 
+	private boolean authorized;
+
+	private boolean prohibited;
+
+	private String storeAddress;
+
 	private int page;
 
 	private int size;
@@ -17,6 +23,7 @@ public class GetRequestStore
 	{
 		searchPattern = "";
 		field = "storeName";
+		storeAddress = "";
 		page = 0;
 		size = 50;
 	}
@@ -59,6 +66,36 @@ public class GetRequestStore
 	public void setField(String field)
 	{
 		this.field = field;
+	}
+
+	public String getStoreAddress()
+	{
+		return storeAddress;
+	}
+
+	public void setStoreAddress(String storeAddress)
+	{
+		this.storeAddress = storeAddress;
+	}
+
+	public boolean isAuthorized()
+	{
+		return authorized;
+	}
+
+	public void setAuthorized(boolean authorized)
+	{
+		this.authorized = authorized;
+	}
+
+	public boolean isProhibited()
+	{
+		return prohibited;
+	}
+
+	public void setProhibited(boolean prohibited)
+	{
+		this.prohibited = prohibited;
 	}
 
 	public int getPage()

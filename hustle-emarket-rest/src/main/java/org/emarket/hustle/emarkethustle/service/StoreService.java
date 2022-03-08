@@ -19,5 +19,6 @@ public interface StoreService
 
 	public void deleteStoreById(int id);
 
-	public List<Store> getStoreByOverallStockSold();
+	int countStores();
+
 }

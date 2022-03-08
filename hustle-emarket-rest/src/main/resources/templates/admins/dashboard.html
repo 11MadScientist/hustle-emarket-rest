@@ -60,12 +60,12 @@
                   <p class="category">
                     <strong>Requests</strong>
                   </p>
-                  <h3 class="card-title">70,340</h3>
+                  <h3 class="card-title" th:text="${sellerRequestCount}"></h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons text-info">info</i>
-                    <a href="#pablo">View requests</a>
+                    <a th:href="@{/admins/seller-requests?searchField=authorized&field=creationDate}">View requests</a>
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="card-content">
                   <p class="category"><strong>Total Stores</strong></p>
-                  <h3 class="card-title">$23,100</h3>
+                  <h3 class="card-title" th:text="${storeCount}"></h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -173,29 +173,14 @@
       </div>
     </div>
 
-    <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script type="text/javascript" th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/table.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sidebar.js}"></script>
 
-    <script src="js/jquery-3.3.1.slim.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $("#sidebarCollapse").on("click", function () {
-          $("#sidebar").toggleClass("active");
-          $("#content").toggleClass("active");
-        });
-
-        $(".more-button,.body-overlay").on("click", function () {
-          $("#sidebar,.body-overlay").toggleClass("show-nav");
-        });
-      });
-    </script>
+    
   </body>
 </html>

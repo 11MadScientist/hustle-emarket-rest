@@ -9,6 +9,7 @@ public class Algorithms
 //	quick sort
 	public void sortStoreByStockSold(List<Store> stores, int low, int high)
 	{
+
 		if(low < high - 1)
 		{
 			double pivot = stores.get(low).getOverallRating();

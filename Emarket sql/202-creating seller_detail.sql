@@ -12,6 +12,7 @@ CREATE TABLE seller_detail
     phone_number varchar(12) DEFAULT NULL,
     `status` boolean DEFAULT false,
     authorized boolean DEFAULT false,
+    prohibited boolean DEFAULT false,
     
     PRIMARY KEY(id)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

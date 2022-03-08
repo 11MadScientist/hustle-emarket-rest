@@ -9,7 +9,7 @@
         </div>
         <ul class="list-unstyled components">
           <li class="active">
-            <a href="#" class="dashboard"
+            <a th:href="@{/admins/dashboard}" class="dashboard"
               ><i class="material-icons">dashboard</i><span>Dashboard</span></a
             >
           </li>
@@ -60,10 +60,10 @@
             >
             <ul class="collapse list-unstyled menu" id="homeSubmenu1">
               <li>
-                <a href="#">Sellers</a>
+                <a th:href="@{/admins/seller-list?searchField=authorized&field=lastName&authorized=true&prohibited=false}">Sellers</a>
               </li>
               <li>
-                <a href="#">Consumers</a>
+                <a th:href="@{/admins/customer-list?searchField=name&field=lastName}">Consumers</a>
               </li>
               <li>
                 <a href="#">Riders</a>
@@ -82,10 +82,10 @@
             >
             <ul class="collapse list-unstyled menu" id="pageSubmenu2">
               <li>
-                <a href="#">Lapu-Lapu City</a>
+                <a th:href="@{/admins/store-list?searchField=overallStock&storeAddress=Lapu-Lapu&authorized=true&prohibited=false}">Lapu-Lapu City</a>
               </li>
               <li>
-                <a href="#">Mandaue City</a>
+                <a th:href="@{/admins/store-list?searchField=overallStock&storeAddress=Mandaue&authorized=true&prohibited=false}">Mandaue City</a>
               </li>
             </ul>
           </li>
@@ -122,5 +122,6 @@
           </li>
         </ul>
       </nav>
+
 
     <!-- sidebar end -->

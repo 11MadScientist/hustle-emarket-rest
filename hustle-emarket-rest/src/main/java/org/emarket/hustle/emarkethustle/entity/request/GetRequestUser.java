@@ -5,9 +5,13 @@ public class GetRequestUser
 
 	private String searchField;
 
+	private String field;
+
 	private String searchPattern;
 
-	private String field;
+	private boolean authorized;
+
+	private boolean prohibited;
 
 	private int page;
 
@@ -16,7 +20,9 @@ public class GetRequestUser
 	public GetRequestUser()
 	{
 		searchPattern = "";
-		field = "lastName";
+		field = "";
+		authorized = false;
+		prohibited = false;
 		page = 0;
 		size = 50;
 	}
@@ -59,6 +65,26 @@ public class GetRequestUser
 	public void setField(String field)
 	{
 		this.field = field;
+	}
+
+	public boolean isAuthorized()
+	{
+		return authorized;
+	}
+
+	public void setAuthorized(boolean authorize)
+	{
+		authorized = authorize;
+	}
+
+	public boolean isProhibited()
+	{
+		return prohibited;
+	}
+
+	public void setProhibited(boolean prohibited)
+	{
+		this.prohibited = prohibited;
 	}
 
 	public int getPage()

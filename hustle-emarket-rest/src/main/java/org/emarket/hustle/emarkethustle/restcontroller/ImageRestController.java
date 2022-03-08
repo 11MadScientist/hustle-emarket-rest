@@ -31,14 +31,12 @@ public class ImageRestController
 	@PostMapping(value = "/digital-profiles")
 	public ProcessConfirmation saveDigitalProfile(@RequestBody ImageEntity imageEntity)
 	{
-		if(imageEntity.getEntity().equals("customers"))
-		{
-			imageService.saveImage(imageEntity);
-		}
+
+		imageService.saveImage(imageEntity);
 
 		return new ProcessConfirmation("COMPLETE",
 				"IMAGE",
-				"DIGITAL PROFILE SAVED SUCCESSFULLY");
+				imageEntity.getEntity() + " " + "IMAGE SAVED SUCCESSFULLY");
 	}
 
 	@DeleteMapping("/{entity}/{id}")
@@ -48,6 +46,6 @@ public class ImageRestController
 
 		return new ProcessConfirmation("COMPLETE",
 				"IMAGE",
-				"DIGITAL PROFILE DELETED SUCCESSFULLY");
+				entity + " " + "IMAGE DELETED SUCCESSFULLY");
 	}
 }

@@ -20,4 +20,6 @@ public interface SellerService
 	public void deleteSellerById(int id);
 
 	public Seller loginSeller(String username);
+
+	public int countSellerRequest();
 }

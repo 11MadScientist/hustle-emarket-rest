@@ -9,6 +9,7 @@ public class ImageEntity
 	private int id;
 	private String entity;
 	private String base64Image;
+	private String relativePath;
 
 	public ImageEntity()
 	{
@@ -42,6 +43,16 @@ public class ImageEntity
 	public void setBase64Image(String base64Image)
 	{
 		this.base64Image = base64Image;
+	}
+
+	public String getRelativePath()
+	{
+		return relativePath;
+	}
+
+	public void setRelativePath(String relativePath)
+	{
+		this.relativePath = relativePath;
 	}
 
 }

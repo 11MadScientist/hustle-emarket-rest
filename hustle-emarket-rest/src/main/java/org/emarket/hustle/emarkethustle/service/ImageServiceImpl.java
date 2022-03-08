@@ -37,7 +37,7 @@ public class ImageServiceImpl implements ImageService
 	public void deleteImage(String entity, int id)
 	{
 		String fs = FileSystems.getDefault().getSeparator();
-		imageConverter.deleteImage(fs + entity + fs + id);
+		imageConverter.deleteImage(fs + entity + fs + id, entity);
 
 	}
 

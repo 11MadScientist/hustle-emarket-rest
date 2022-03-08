@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.Algorithms;
 import org.emarket.hustle.emarkethustle.dao.StoreRepository;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class StoreServiceImpl implements StoreService
 {
+
+	Logger log = Logger.getLogger(StoreServiceImpl.class.getName());
 
 	@Autowired
 	StoreRepository storeRepository;
@@ -61,6 +64,21 @@ public class StoreServiceImpl implements StoreService
 		{
 			slicedCustomers = storeRepository.findStoreByStoreAddressLike
 					("%"+getRequest.getSearchPattern()+"%", pageable);
+		}
+
+//		get store by overall stock sold
+		else if(getRequest.getSearchField().equals("overallStock"))
+		{
+			List<Store> stores = storeRepository.findStoreByFields(
+					getRequest.isAuthorized(),
+					getRequest.isProhibited(),
+					getRequest.getStoreAddress(),
+					getRequest.getSearchPattern());
+
+//			using quicksort to sort stores
+			algorithms.sortStoreByStockSold(stores, 0, stores.size());
+
+			return stores;
 		}
 
 		List<Store> stores = slicedCustomers.getContent();
@@ -126,18 +144,13 @@ public class StoreServiceImpl implements StoreService
 		}
 	}
 
-//	get store by overall stock sold
 	@Override
-	public List<Store> getStoreByOverallStockSold()
+	public int countStores()
 	{
-		List<Store> stores = storeRepository.findAll();
-
-//		using quicksort to sort stores
-		algorithms.sortStoreByStockSold(stores, 0, stores.size());
-
-		return stores;
-
+		return storeRepository.countStores();
 	}
+
+
 
 
 

@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.dao.SellerRepository;
 import org.emarket.hustle.emarkethustle.entity.Seller;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SellerServiceImpl implements SellerService
 {
+
+	Logger log = Logger.getLogger(SellerServiceImpl.class.getName());
 
 	@Autowired
 	SellerRepository sellerRepository;
@@ -38,6 +41,7 @@ public class SellerServiceImpl implements SellerService
 	@Override
 	public List<Seller> getSeller(GetRequestUser getRequest)
 	{
+
 		// @formatter:off
 		Pageable pageable = PageRequest.of(getRequest.getPage(),
 							getRequest.getSize(),
@@ -60,12 +64,24 @@ public class SellerServiceImpl implements SellerService
 					("%"+getRequest.getSearchPattern()+"%", pageable);
 		}
 
-		List<Seller> sellers = slicedSellers.getContent();
-
-		if(sellers.isEmpty())
+		else if(getRequest.getSearchField().equals("authorized"))
 		{
-			throw new NotFoundException("SELLERS");
+			slicedSellers = sellerRepository.findSellerByFields(
+					getRequest.isAuthorized(),
+					getRequest.isProhibited(),
+					getRequest.getSearchPattern(),
+					pageable);
+
 		}
+
+		List<Seller> sellers = null;
+		if(!slicedSellers.isEmpty())
+		{
+			 sellers = slicedSellers.getContent();
+
+		}
+
+
 
 		return sellers;
 	}
@@ -135,6 +151,12 @@ public class SellerServiceImpl implements SellerService
 		{
 			throw new NotFoundException("SELLER WITH USERNAME: " + username);
 		}
+	}
+
+	@Override
+	public int countSellerRequest()
+	{
+		return sellerRepository.countSellerRequest();
 	}
 
 

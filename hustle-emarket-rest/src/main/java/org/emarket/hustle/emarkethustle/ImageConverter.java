@@ -19,12 +19,14 @@ public class ImageConverter
 {
 	Logger log = Logger.getLogger(ImageConverter.class.getName());
 
+	private final String format = ".png";
+
 	private final Path basePath = FileSystems.getDefault()
 			.getPath(".", "src", "main", "resources", "images");
 
 	public byte [] getImage(String relativePath)
 	{
-		String filePath = basePath.normalize().toAbsolutePath() + relativePath + ".jpg";
+		String filePath = basePath.normalize().toAbsolutePath() + relativePath + format;
 		log.info(basePath.normalize().toAbsolutePath() + relativePath);
 		log.info(FileSystems.getDefault().getSeparator());
 
@@ -44,7 +46,7 @@ public class ImageConverter
 		String fs = FileSystems.getDefault().getSeparator();
 
 		String savePath = basePath.normalize().toAbsolutePath() + fs + imageEntity.getEntity() + fs
-				+ imageEntity.getId() + ".jpg";
+				+ imageEntity.getId() + format;
 
 		byte [] data = Base64.getDecoder().decode(imageEntity.getBase64Image());
 
@@ -56,15 +58,15 @@ public class ImageConverter
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new FailedException("SAVING DIGITAL PROFILE OF CUSTOMER " + imageEntity.getId());
+			throw new FailedException("SAVING " + imageEntity.getEntity() + " " + imageEntity.getId());
 		}
 
 	}
 
-	public void deleteImage(String relativePath)
+	public void deleteImage(String relativePath, String entity)
 	{
 
-		String deletePath = basePath.normalize().toAbsolutePath() + relativePath + ".jpg";
+		String deletePath = basePath.normalize().toAbsolutePath() + relativePath + format;
 
 		try
 		{
@@ -74,7 +76,7 @@ public class ImageConverter
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new FailedException("DELETING DIGITAL PROFILE OF CUSTOMER " + relativePath);
+			throw new FailedException("DELETING " + entity + "IMAGE");
 		}
 
 	}

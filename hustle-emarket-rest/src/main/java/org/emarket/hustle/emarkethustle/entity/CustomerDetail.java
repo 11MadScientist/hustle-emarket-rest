@@ -43,6 +43,9 @@ public class CustomerDetail
 	@Column(name = "status")
 	private boolean status;
 
+	@Column(name = "prohibited")
+	private boolean prohibited;
+
 	public CustomerDetail()
 	{
 
@@ -116,6 +119,16 @@ public class CustomerDetail
 	public void setStatus(boolean status)
 	{
 		this.status = status;
+	}
+
+	public boolean isProhibited()
+	{
+		return prohibited;
+	}
+
+	public void setProhibited(boolean prohibited)
+	{
+		this.prohibited = prohibited;
 	}
 
 	@Override

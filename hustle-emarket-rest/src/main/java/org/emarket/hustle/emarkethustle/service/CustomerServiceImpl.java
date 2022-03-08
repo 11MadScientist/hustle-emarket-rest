@@ -51,9 +51,10 @@ public class CustomerServiceImpl implements CustomerService
 		// @formatter:off
 		if(getRequest.getSearchField().equals("name"))
 		{
-			slicedCustomers = customerRepository.findCustomerByFirstNameLikeOrLastNameLike
-					("%"+getRequest.getSearchPattern()+"%","%"+getRequest.getSearchPattern()+"%"
-							, pageable);
+			slicedCustomers = customerRepository.findCustomerByFields(
+					getRequest.isProhibited(),
+					getRequest.getSearchPattern(),
+					pageable);
 		}
 
 		else if(getRequest.getSearchField().equals("username"))
@@ -61,6 +62,7 @@ public class CustomerServiceImpl implements CustomerService
 			slicedCustomers = customerRepository.findCustomerByUsernameLike
 					("%"+getRequest.getSearchPattern()+"%", pageable);
 		}
+
 
 
 
