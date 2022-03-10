@@ -83,7 +83,7 @@ public class Item
 	@JoinColumn(name = "item_id")
 	private List<ItemImage> itemImage;
 
-	@Column(name = "creation_Date", updatable = false)
+	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
 
 	@Column(name = "modified_date")

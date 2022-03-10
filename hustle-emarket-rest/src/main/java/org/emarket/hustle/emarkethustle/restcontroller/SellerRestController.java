@@ -5,10 +5,10 @@ import java.util.List;
 import org.emarket.hustle.emarkethustle.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
 import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
-import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
 import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
 import org.emarket.hustle.emarkethustle.service.SellerServiceImpl;
@@ -100,7 +100,7 @@ public class SellerRestController
 			/* creating connection from store to seller */
 			seller.getStore().setId(0);
 			seller.getStore().setSeller(seller);
-			seller.getStore().setCreationDate(seller.getModifiedDate());
+//			seller.getStore().setCreationDate(seller.getModifiedDate());
 		}
 		finally
 		{
@@ -177,19 +177,15 @@ public class SellerRestController
 	public Seller loginSeller(@RequestBody Seller seller)
 	{
 
-		Seller dbseller = sellerService.loginSeller(seller.getUsername());
+		Seller dbSeller = sellerService.findSellerByUsername(seller.getUsername());
 
-		if(bcrypt.matches(seller.getPassword(), dbseller.getPassword()))
+		if(bcrypt.matches(seller.getPassword(), dbSeller.getPassword()))
 		{
-			if(seller.getSellerDetail().isAuthorized() == false)
-			{
-				throw new NotPermittedException("ACCESSING UNAUTHORIZED SELLER ACCOUNT");
-			}
-
-			dbseller.getSellerDetail().setStatus(true);
-			return sellerService.saveSeller(dbseller);
+			dbSeller.getSellerDetail().setStatus(true);
+			sellerService.saveSeller(dbSeller);
+			return dbSeller;
 		}
-		throw new ErrorLoginException("SELLER [Email, Password]");
+		throw new ErrorLoginException("SELLER [Username, Password]");
 
 	}
 
@@ -202,10 +198,12 @@ public class SellerRestController
 	@PostMapping("/sellers/logout")
 	public Seller logoutSeller(@RequestBody Seller seller)
 	{
-		seller.getSellerDetail().setStatus(false);
-		sellerService.saveSeller(seller);
 
-		throw new NotPermittedException("USE OF UNSUPPORTED ENDPOINT");
+		Seller dbSeller = sellerService.findSellerByUsername(seller.getUsername());
+
+		dbSeller.getSellerDetail().setStatus(false);
+		sellerService.saveSeller(dbSeller);
+		return dbSeller;
 
 	}
 
@@ -215,17 +213,18 @@ public class SellerRestController
 	 * #######################################
 	 */
 
-	@PutMapping("/sellers/{password}")
-	public Seller changePassword(@PathVariable String password, @RequestBody Seller seller)
+	@PutMapping("/sellers/password")
+	public Seller changePassword(@RequestBody PutRequestChangePassword changePass)
 	{
-		Seller dbSeller = sellerService.getSellerById(seller.getId());
 
-		if(bcrypt.matches(password, dbSeller.getPassword()))
+		Seller dbSeller = sellerService.getSellerById(changePass.getId());
+
+		if(bcrypt.matches(changePass.getPassword(), dbSeller.getPassword()))
 		{
-			seller.setPassword(bcrypt.encode(seller.getPassword()));
+			dbSeller.setPassword(bcrypt.encode(changePass.getNewPassword()));
 
-			sellerService.saveSeller(seller);
-			return seller;
+			sellerService.saveSeller(dbSeller);
+			return dbSeller;
 		}
 
 		throw new FailedException("UPDATING PASSWORD");

@@ -94,7 +94,6 @@ public class CustomerServiceImpl implements CustomerService
 	{
 		try
 		{
-			log.info(customer.getId());
 			return customerRepository.save(customer);
 
 		}
@@ -119,7 +118,7 @@ public class CustomerServiceImpl implements CustomerService
 	}
 
 	@Override
-	public Customer loginCustomer(String username)
+	public Customer findCustomerByUsername(String username)
 	{
 		try
 		{

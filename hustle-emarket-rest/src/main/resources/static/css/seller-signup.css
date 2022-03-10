@@ -140,4 +140,10 @@ input.invalid
 }
 
 
+#instruction
+{
+    color: red;
+    font-size: 13px;
+}
+
 

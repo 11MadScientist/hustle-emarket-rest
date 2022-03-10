@@ -41,6 +41,24 @@ function storeList()
 	search.href += url;
 }
 
+function riderList()
+{
+	var isProhibited = document.getElementById("prohibited").checked;
+
+	var url = "?searchField=authorized&field=lastName&authorized=true&prohibited="
+	+isProhibited+"&searchPattern="+document.getElementById("search-pattern").value;
+	
+	search.href += url;
+}
+
+function riderRequest()
+{
+	var url = "&searchPattern="+document.getElementById("search-pattern").value;
+	
+	search.href += url;
+}
+
+
 function banAction()
 {
 	var prohibitIcon = document.getElementsByClassName("prohibit-icons");

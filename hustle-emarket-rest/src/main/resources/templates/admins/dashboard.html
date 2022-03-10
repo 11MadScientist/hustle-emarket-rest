@@ -58,7 +58,7 @@
                 </div>
                 <div class="card-content">
                   <p class="category">
-                    <strong>Requests</strong>
+                    <strong>Seller Requests</strong>
                   </p>
                   <h3 class="card-title" th:text="${sellerRequestCount}"></h3>
                 </div>
@@ -66,6 +66,27 @@
                   <div class="stats">
                     <i class="material-icons text-info">info</i>
                     <a th:href="@{/admins/seller-requests?searchField=authorized&field=creationDate}">View requests</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header">
+                  <div class="icon icon-warning">
+                    <span class="material-icons">person_add</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <p class="category">
+                    <strong>Rider Requests</strong>
+                  </p>
+                  <h3 class="card-title" th:text="${riderRequestCount}"></h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">info</i>
+                    <a th:href="@{/admins/rider-requests?searchField=authorized&field=creationDate}">View requests</a>
                   </div>
                 </div>
               </div>
@@ -104,26 +125,6 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons">info</i> View all stores
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header">
-                  <div class="icon icon-info">
-                    <span class="material-icons">
-                      people_alt
-                    </span>
-                  </div>
-                </div>
-                <div class="card-content">
-                  <p class="category"><strong>Active Accounts</strong></p>
-                  <h3 class="card-title">+245</h3>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">info</i> View Active Accounts
                   </div>
                 </div>
               </div>

@@ -141,7 +141,7 @@ public class SellerServiceImpl implements SellerService
 	}
 
 	@Override
-	public Seller loginSeller(String username)
+	public Seller findSellerByUsername(String username)
 	{
 		try
 		{

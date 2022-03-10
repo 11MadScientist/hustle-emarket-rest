@@ -1,10 +1,12 @@
 package org.emarket.hustle.emarkethustle.restcontroller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
 import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("${api.basePath}")
 public class CustomerRestController
 {
+	Logger log = Logger.getLogger(CustomerRestController.class.getName());
 
 	// for the bean bCrypt
 	@Autowired
@@ -163,13 +166,33 @@ public class CustomerRestController
 		 * gives data if true, error when false
 		 */
 
-		Customer dbCustomer = customerService.loginCustomer(customer.getUsername());
+		Customer dbCustomer = customerService.findCustomerByUsername(customer.getUsername());
 
 		if(bcrypt.matches(customer.getPassword(), dbCustomer.getPassword()))
 		{
+			dbCustomer.getCustomerDetail().setStatus(true);
+			customerService.saveCustomer(dbCustomer);
 			return dbCustomer;
 		}
-		throw new ErrorLoginException("CUSTOMER [Email, Password]");
+		throw new ErrorLoginException("CUSTOMER [Username, Password]");
+
+	}
+
+	/*
+	 * #######################################
+	 * ########## LOGOUT CUSTOMER #############
+	 * #######################################
+	 */
+
+	@PostMapping("/customers/logout")
+	public Customer logoutCustomer(@RequestBody Customer customer)
+	{
+
+		Customer dbCustomer = customerService.findCustomerByUsername(customer.getUsername());
+
+		dbCustomer.getCustomerDetail().setStatus(false);
+		customerService.saveCustomer(dbCustomer);
+		return dbCustomer;
 
 	}
 
@@ -187,17 +210,18 @@ public class CustomerRestController
 	 * a new mapping
 	 */
 
-	@PutMapping("/customers/{password}")
-	public Customer changePassword(@PathVariable String password, @RequestBody Customer customer)
+	@PutMapping("/customers/password")
+	public Customer changePassword(@RequestBody PutRequestChangePassword changePass)
 	{
-		Customer dbCustomer = customerService.getCustomerById(customer.getId());
 
-		if(bcrypt.matches(password, dbCustomer.getPassword()))
+		Customer dbCustomer = customerService.getCustomerById(changePass.getId());
+
+		if(bcrypt.matches(changePass.getPassword(), dbCustomer.getPassword()))
 		{
-			customer.setPassword(bcrypt.encode(customer.getPassword()));
+			dbCustomer.setPassword(bcrypt.encode(changePass.getNewPassword()));
 
-			customerService.saveCustomer(customer);
-			return customer;
+			customerService.saveCustomer(dbCustomer);
+			return dbCustomer;
 		}
 
 		throw new FailedException("UPDATING PASSWORD");

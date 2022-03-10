@@ -24,11 +24,14 @@ public class CustomerAddress
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "province")
+	private String province;
+
 	@Column(name = "city")
 	private String city;
 
-	@Column(name = "province")
-	private String province;
+	@Column(name = "barangay")
+	private String barangay;
 
 	@Column(name = "zipCode")
 	private int zipCode;
@@ -37,10 +40,10 @@ public class CustomerAddress
 	private String direction;
 
 	@Column(name = "latitude")
-	private long latitude;
+	private double latitude;
 
 	@Column(name = "longitude")
-	private long longitude;
+	private double longitude;
 
 	@Column(name = "customer_id", updatable = false)
 	private int customerId;
@@ -90,6 +93,26 @@ public class CustomerAddress
 		this.province = province;
 	}
 
+	public String getBarangay()
+	{
+		return barangay;
+	}
+
+	public void setBarangay(String barangay)
+	{
+		this.barangay = barangay;
+	}
+
+	public void setLatitude(double latitude)
+	{
+		this.latitude = latitude;
+	}
+
+	public void setLongitude(double longitude)
+	{
+		this.longitude = longitude;
+	}
+
 	public int getZipCode()
 	{
 		return zipCode;
@@ -108,26 +131,6 @@ public class CustomerAddress
 	public void setDirection(String direction)
 	{
 		this.direction = direction;
-	}
-
-	public long getLatitude()
-	{
-		return latitude;
-	}
-
-	public void setLatitude(long latitude)
-	{
-		this.latitude = latitude;
-	}
-
-	public long getLongitude()
-	{
-		return longitude;
-	}
-
-	public void setLongitude(long longitude)
-	{
-		this.longitude = longitude;
 	}
 
 	public int getCustomerId()

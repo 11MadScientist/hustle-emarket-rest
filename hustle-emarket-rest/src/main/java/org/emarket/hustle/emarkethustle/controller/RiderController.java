@@ -6,8 +6,8 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.BcryptSecurity;
-import org.emarket.hustle.emarkethustle.entity.Seller;
-import org.emarket.hustle.emarkethustle.service.SellerService;
+import org.emarket.hustle.emarkethustle.entity.Rider;
+import org.emarket.hustle.emarkethustle.service.RiderService;
 import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/sellers")
-public class SellerController
+@RequestMapping("/riders")
+public class RiderController
 {
-	Logger log = Logger.getLogger(SellerController.class.getName());
+	Logger log = Logger.getLogger(RiderController.class.getName());
 
 	@Autowired
-	private SellerService sellerService;
+	private RiderService riderService;
 
 	@Autowired
 	private ValidationService validationService;
@@ -37,39 +37,34 @@ public class SellerController
 	private BcryptSecurity bcrypt;
 
 	@GetMapping("/signup")
-	public String sellerSignup(Model model)
+	public String riderSignup(Model model)
 	{
-		Seller seller = new Seller();
-		MultipartFile file = null;
-
-		model.addAttribute("file", file);
-		model.addAttribute("seller", seller);
-		return ("sellers/signup");
+		Rider rider = new Rider();
+		model.addAttribute("rider", rider);
+		return ("riders/signup");
 	}
 
 	@RequestMapping(path = "/save",
 			method = RequestMethod.POST,
 			consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public String saveSeller(
+	public String saveRider(
 			@RequestParam("file") MultipartFile file,
-			@ModelAttribute("seller") Seller seller)
+			@ModelAttribute("seller") Rider rider)
 	{
 
-		seller.getStore().setId(0);
-		seller.getStore().setSeller(seller);
-		seller.setPassword(bcrypt.encode(seller.getPassword()));
+		rider.setPassword(bcrypt.encode(rider.getPassword()));
 
-		seller = sellerService.saveSeller(seller);
+		rider = riderService.saveRider(rider);
 
 		String fs = FileSystems.getDefault().getSeparator();
 
 		Path basePath = FileSystems.getDefault()
-				.getPath(".", "src", "main", "resources", "documents", "sellers");
+				.getPath(".", "src", "main", "resources", "documents", "riders");
 
 		String fileName = file.getOriginalFilename();
 
 		String filePath = basePath.normalize().toAbsolutePath()
-				+ fs + seller.getId();
+				+ fs + rider.getId();
 
 		log.info(filePath);
 
@@ -90,7 +85,7 @@ public class SellerController
 			// TODO: handle exception
 		}
 
-		return ("index");
+		return ("redirect:/");
 	}
 
 	@GetMapping("/validation")

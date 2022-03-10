@@ -10,9 +10,9 @@ public interface SellerDetailService
 
 	public SellerDetail getSellerDetailById(int id);
 
-	public void saveSellerDetail(SellerDetail customerDetail);
+	public void saveSellerDetail(SellerDetail sellerDetail);
 
 	public void deleteSellerDetailById(int id);
 
-	public void deleteSellerDetail(SellerDetail customerDetail);
+	public void deleteSellerDetail(SellerDetail sellerDetail);
 }

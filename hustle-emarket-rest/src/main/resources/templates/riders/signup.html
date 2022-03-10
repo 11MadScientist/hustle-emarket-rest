@@ -15,12 +15,12 @@
         <div class="form-container">
 
             <!-- form start -->
-            <form action="#" th:action = "@{/sellers/save}"
-                  th:object = "${seller}" method="post" enctype="multipart/form-data">
+            <form action="#" th:action = "@{/riders/save}"
+                  th:object = "${rider}" method="post" enctype="multipart/form-data">
 
                   <!-- step container start -->
                   <div id="step1" class="step-container">
-                    <h3>Seller Information</h3>
+                    <h3>Rider Information</h3>
 
                     <input type="hidden" th:field = "*{id}">
     
@@ -36,7 +36,7 @@
                     <input type="text" th:field = "*{password}"
                         id="password1" class="form-field" placeholder="Password">
                             
-                    <input type="text"
+                    <input type="text" th:field = "*{password}"
                         id="password2" class="form-field" placeholder="Confirm Password">
 
                     <!-- btn-box div start -->
@@ -51,28 +51,28 @@
 
                   <!-- step container 2 start -->
                   <div id="step2" class="step-container">
-                    <h3>Seller Contact Details</h3>
+                    <h3>Rider Contact Details</h3>
 
-                    <input type="hidden" th:field = "*{sellerDetail.id}">
+                    <input type="hidden" th:field = "*{riderDetail.id}">
     
-                    <input type="email" th:field = "*{sellerDetail.email}"
+                    <input type="email" th:field = "*{riderDetail.email}"
                             class="form-field" placeholder="Email"
                             id="email">
     
-                    <input type="text" th:field = "*{sellerDetail.phoneNumber}"
+                    <input type="text" th:field = "*{riderDetail.phoneNumber}"
                         class="form-field" placeholder="Phone Number">
 
 
-                    <input type="number" th:field = "*{sellerDetail.age}"
+                    <input type="number" th:field = "*{riderDetail.age}"
                         class="form-field" placeholder="Age"
                         id="age">
                     
                         
 
-                    <input type="text" th:field = "*{sellerDetail.gender}"
+                    <input type="text" th:field = "*{riderDetail.gender}"
                         class="form-field" placeholder="Gender">
 
-                    <input type="text" th:field = "*{sellerDetail.dateOfBirth}"
+                    <input type="text" th:field = "*{riderDetail.dateOfBirth}"
                         class="form-field" placeholder="Date of Birth"
                         onfocus="this.type = 'date'" onchange="this.type = 'text'">
 
@@ -90,18 +90,11 @@
 
                   <!-- step container 3 start -->
                   <div id="step3" class="step-container">
-                    <h3>Store Information</h3>
-
-                    <input type="hidden" th:field = "*{store.id}">
+                    <h3>Rider Documents</h3>
     
-                    <input type="text" th:field = "*{store.storeName}"
-                            class="form-field" placeholder="Store Name">
-    
-                    <input type="text" th:field = "*{store.storeAddress}"
-                        class="form-field" placeholder="Store Address">
-                    <p id="instruction">Documents* Scan a valid ID Ex. PhilHealth ID, front and back.
-                        Procure documents that proves your legitimacy as a seller in Lapu-Lapu/Mandaue station. 
-                        Combine the ID and the documents in a single pdf file and send it here.</p>
+                    <p id="instruction">Documents* Scan your Driver's License, front and back.
+                        Scan the registration of your motorcycle, put them in one pdf file and 
+                        send it here.</p>
                     <input type="file" id="file" name="file"
                         class="form-field" placeholder="Documents">
     

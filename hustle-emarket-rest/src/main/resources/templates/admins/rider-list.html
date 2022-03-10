@@ -14,6 +14,7 @@
     <title>Emerkado Administrator</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
 
     
     
@@ -56,14 +57,19 @@
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
-                        <div class="col-sm-8"><h2>Seller <b>Requests</b></h2></div>
+                        <div class="col-sm-4"><h2>Rider <b>List</b></h2></div>
+                          <label class="switch">
+                            <input type="checkbox" id="prohibited" th:checked="${tableSwitch}">
+                            <span class="slider"></span>
+                          </label>
+                          <div class="col-sm-3"><h2>Banned</h2></div>
 
                         <div class="search-box">
                             <!-- <i class="material-icons">&#xE8B6;</i> -->
                             <input th:value="${searchPattern}" id="search-pattern" type="text" class="form-control" placeholder="Search&hellip;">
                         </div>
-                        <a onclick="sellerRequests()" id="search" class="search-button"
-                        th:href="@{/admins/seller-requests?searchField=authorized&field=creationDate}"><i class="material-icons">&#xE8B6;</i></a>
+                        <a onclick="riderList()" id="search" class="search-button"
+                        th:href="@{/admins/rider-list}"><i class="material-icons">&#xE8B6;</i></a>
                     </div>
                 </div>
                 <table class="table table-striped table-hover table-bordered">
@@ -73,24 +79,22 @@
                             <th>Name</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Station</th>
-                            <th>Store Name</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="seller: ${sellers}">
-                          <td th:text="${seller.id}"></td>
-                          <td th:text="${seller.firstName} + ${seller.lastName}"></td>
-                          <td th:text="${seller.username}"></td>
-                          <td th:text="${seller.sellerDetail.email}"></td>
-                          <td th:text="${seller.store.storeAddress}"></td>
-                          <td th:text="${seller.store.storeName}"></td>
+                        <tr th:each="rider: ${riders}">
+                          <td th:text="${rider.id}"></td>
+                          <td th:text="${rider.firstName} + ' ' + ${rider.lastName}"></td>
+                          <td th:text="${rider.username}"></td>
+                          <td th:text="${rider.riderDetail.email}"></td>
+                          <td th:text="${rider.status}"></td>
                           <td>
                               <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                              <a onclick="return confirm('Are you sure you want to Verify this seller?')" 
-                               th:href="@{/admins/verify-seller?sellerId=} + ${seller.id}" class="verify" title="Verify" data-toggle="tooltip"><i class="material-icons">verified</i></a>
-                              <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                              <a id="prohibitAction" onclick="return confirm('Are you sure you wish to proceed?')" 
+                               th:href="@{/admins/prohibit-rider?riderId=} + ${rider.id}" class="prohibit-action" title="Disable" data-toggle="tooltip"><i class="material-icons prohibit-icons">block</i></a>
+                              <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons ">&#xE872;</i></a>
                           </td>
                         </tr>
                               
@@ -121,18 +125,12 @@
       </div>
     </div>
 
-    <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script type="text/javascript" th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
-
-    <script type="text/javascript" th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/table.js}"></script>
-    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/sidebar.js}"></script>
     
   </body>

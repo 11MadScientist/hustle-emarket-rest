@@ -1,20 +1,22 @@
 use emarketdb;
 
-DROP TABLE IF EXISTS item_review;
+DROP TABLE IF EXISTS rider;
 
-CREATE TABLE item_review
+CREATE TABLE rider
 (
 	id int NOT NULL AUTO_INCREMENT,
-    word_tag varchar(111),
-    rating double DEFAULT 0,
-    review varchar(111),
-    item_id int,
+	first_name varchar(77) DEFAULT NULL,
+    last_name varchar(77) NOT NULL,
+    username varchar(77) UNIQUE NOT NULL,
+    `password` varchar(77) NOT NULL,
+    `status` boolean DEFAULT false,
+    rider_detail_id int,
     
    `creation_date` datetime default current_timestamp,
     `modified_date` datetime default current_timestamp
 					on update current_timestamp,
     
     primary key(id),
-    FOREIGN KEY(item_id) REFERENCES item(id)
+    FOREIGN KEY(rider_detail_id) REFERENCES rider_detail(id)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=Latin1;
