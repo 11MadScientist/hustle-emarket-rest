@@ -60,8 +60,16 @@ public class TransactionServiceImpl implements TransactionService
 							getRequest.getSize(),
 							Sort.by(Sort.Direction.DESC, getRequest.getField()));
 
-		Slice<Transaction> slicedTransactions = transactionRepository.findTransactionByCustomerUsernameLikeAndApprovedTimeLike
-				("%"+getRequest.getUsernamePattern()+"%", getRequest.getApprovedTimePattern()+"%", pageable);
+		Slice<Transaction> slicedTransactions = null;
+
+		if(getRequest.getUserProfile() == "Customer")
+		{
+			slicedTransactions = transactionRepository.findByCustomer(getRequest.getUserId(), pageable);
+		}
+		else if(getRequest.getUserProfile() == "Rider")
+		{
+			slicedTransactions = transactionRepository.findByRider(getRequest.getUserId(), pageable);
+		}
 
 		List<Transaction> transactions = slicedTransactions.getContent();
 
@@ -85,30 +93,26 @@ public class TransactionServiceImpl implements TransactionService
 		return transaction.get();
 	}
 
-	// @formatter:on
 	@Override
 	@Transactional
 	public void saveTransaction(List<Transaction> transactions)
 	{
+		log.info("list transaction");
 		try
 		{
 			List<History> histories = new ArrayList<>();
 			for (int i = 0; i < transactions.size(); i++)
 			{
-				transactions.get(i).setCreationDate(transactions.get(i).getModifiedDate());
 				histories = transactions.get(i).getHistories();
 
 				for (int x = 0; x < histories.size(); x++)
 				{
-					History history = histories.get(x);
-
-					history.getItem().updateInStock(-history.getQuantity());
-					itemRepository.save(history.getItem());
+					histories.get(x).setTransaction(transactions.get(i));
 				}
 			}
 
 			transactionRepository.saveAll(transactions);
-			basketRepository.deleteByCustomerId(transactions.get(0).getCustomerId());
+			basketRepository.deleteByCustomerId(transactions.get(0).getCustomer().getId());
 
 		}
 		catch (Exception e)
@@ -123,6 +127,7 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public void saveTransaction(Transaction transaction)
 	{
+		log.info("single transaction");
 		try
 		{
 			transactionRepository.save(transaction);
@@ -194,11 +199,11 @@ public class TransactionServiceImpl implements TransactionService
 				if(basket.getStoreAddress().equals(transactionPlace))
 				{
 					log.info("hello from innerloop " + baskets.size());
-					History history = new History(0, transaction, basket.getStoreId(),
+					History history = new History(0, transaction, basket.getStore(),
 							basket.getItem(), basket.getItem().getName(),
 							basket.getItem().getPrice(), basket.getQuantity());
 
-					transaction.addSubTotal(history.getTotal());
+					transaction.addSubTotal(history.getQuantity() * history.getPrice());
 					transaction.addHistory(history);
 					baskets.remove(i);
 					continue;
@@ -206,9 +211,10 @@ public class TransactionServiceImpl implements TransactionService
 
 				i++;
 			}
+
+
 			transaction.setServiceFee(serviceFee);
 			transaction.setDeliveryFee(deliveryFee);
-			transaction.setPaymentMethod("Cash On Delivery");
 			transaction.setGrandTotal();
 			transactions.add(transaction);
 		}

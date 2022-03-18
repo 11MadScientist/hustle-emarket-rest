@@ -1,7 +1,5 @@
 package org.emarket.hustle.emarkethustle.entity;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,12 +21,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "rider")
+@Table(name = "admin")
 @JsonIdentityInfo(
-		scope = Rider.class,
+		scope = Admin.class,
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class Rider
+public class Admin
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,9 +45,6 @@ public class Rider
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "status")
-	private boolean status;
-
 	@Column(name = "role")
 	private String role;
 
@@ -58,18 +52,13 @@ public class Rider
 	@JoinColumn(name = "rider_detail_id", updatable = false)
 	private RiderDetail riderDetail;
 
-	@OneToMany(
-			cascade = CascadeType.ALL,
-			mappedBy = "rider")
-	private List<Transaction> transactions;
-
 	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
 
 	@Column(name = "modified_date")
 	private String modifiedDate;
 
-	public Rider()
+	public Admin()
 	{
 
 	}
@@ -126,16 +115,6 @@ public class Rider
 		this.password = password;
 	}
 
-	public boolean isStatus()
-	{
-		return status;
-	}
-
-	public void setStatus(boolean status)
-	{
-		this.status = status;
-	}
-
 	public RiderDetail getRiderDetail()
 	{
 		return riderDetail;
@@ -154,16 +133,6 @@ public class Rider
 	public void setRole(String role)
 	{
 		this.role = role;
-	}
-
-	public List<Transaction> getTransactions()
-	{
-		return transactions;
-	}
-
-	public void setTransactions(List<Transaction> transactions)
-	{
-		this.transactions = transactions;
 	}
 
 	public String getCreationDate()

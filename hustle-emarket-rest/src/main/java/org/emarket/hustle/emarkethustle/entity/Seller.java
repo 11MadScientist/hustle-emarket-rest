@@ -53,6 +53,9 @@ public class Seller
 			mappedBy = "seller")
 	private Store store;
 
+	@Column(name = "role")
+	private String role;
+
 	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
 
@@ -134,6 +137,16 @@ public class Seller
 	public void setStore(Store store)
 	{
 		this.store = store;
+	}
+
+	public String getRole()
+	{
+		return role;
+	}
+
+	public void setRole(String role)
+	{
+		this.role = role;
 	}
 
 	public String getCreationDate()

@@ -1,11 +1,10 @@
-use emarketdb;
+-- use emarketdb;
 
 DROP TABLE IF EXISTS store_review;
 
 CREATE TABLE store_review
 (
 	id int NOT NULL AUTO_INCREMENT,
-    word_tag varchar(111) DEFAULT NULL,
     rating double NOT NULL,
     review varchar(111) DEFAULT NULL,
     store_id int,

@@ -14,12 +14,17 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "history")
+@JsonIdentityInfo(
+		scope = History.class,
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class History
 {
 	@Id
@@ -27,13 +32,13 @@ public class History
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "transaction_id", updatable = false)
 	private Transaction transaction;
 
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "store_id", updatable = false)
-	private int storeId;
+	private Store store;
 
 	@OneToOne(cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "item_id", updatable = false)
@@ -48,35 +53,32 @@ public class History
 	@Column(name = "quantity", updatable = false)
 	private double quantity;
 
-	@Column(name = "total")
-	private double total;
-
 	@Column(name = "status")
 	private String status;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "item_review_id")
+	private ItemReview itemReview;
+
 	@Column(name = "creation_date", updatable = false)
-	private long creationDate;
+	private String creationDate;
 
 	@Column(name = "modified_date")
-	private long modifiedDate;
+	private String modifiedDate;
 
 	public History()
 	{
-		modifiedDate = System.currentTimeMillis();
 	}
 
-	public History(int id, Transaction order, int storeId, Item item, String itemName, double price, double quantity)
+	public History(int id, Transaction order, Store store, Item item, String itemName, double price, double quantity)
 	{
 		this.id = id;
 		transaction = order;
-		this.storeId = storeId;
+		this.store = store;
 		this.item = item;
 		this.itemName = itemName;
 		this.price = price;
 		this.quantity = quantity;
-		total = quantity * price;
-		modifiedDate = System.currentTimeMillis();
-		creationDate = modifiedDate;
 	}
 
 	public int getId()
@@ -99,14 +101,24 @@ public class History
 		this.transaction = transaction;
 	}
 
-	public int getStoreId()
+	public Store getStore()
 	{
-		return storeId;
+		return store;
 	}
 
-	public void setStoreId(int storeId)
+	public void setStore(Store store)
 	{
-		this.storeId = storeId;
+		this.store = store;
+	}
+
+	public ItemReview getItemReview()
+	{
+		return itemReview;
+	}
+
+	public void setItemReview(ItemReview itemReview)
+	{
+		this.itemReview = itemReview;
 	}
 
 	public Item getItem()
@@ -149,16 +161,6 @@ public class History
 		this.quantity = quantity;
 	}
 
-	public double getTotal()
-	{
-		return total;
-	}
-
-	public void setTotal(double total)
-	{
-		this.total = total;
-	}
-
 	public String getStatus()
 	{
 		return status;
@@ -169,22 +171,22 @@ public class History
 		this.status = status;
 	}
 
-	public long getCreationDate()
+	public String getCreationDate()
 	{
 		return creationDate;
 	}
 
-	public void setCreationDate(long creationDate)
+	public void setCreationDate(String creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
-	public long getModifiedDate()
+	public String getModifiedDate()
 	{
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(long modifiedDate)
+	public void setModifiedDate(String modifiedDate)
 	{
 		this.modifiedDate = modifiedDate;
 	}

@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer>
 {
-	public Slice<Transaction> findTransactionByCustomerUsernameLikeAndApprovedTimeLike(
-			String searchPattern, String searchPattern2, Pageable pageable);
+	public Slice<Transaction> findByCustomer(
+			int id, Pageable pageable);
+
+	public Slice<Transaction> findByRider(
+			int id, Pageable pageable);
 }

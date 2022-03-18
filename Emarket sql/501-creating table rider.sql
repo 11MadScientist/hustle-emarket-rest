@@ -1,4 +1,4 @@
-use emarketdb;
+-- use emarketdb;
 
 DROP TABLE IF EXISTS rider;
 
@@ -11,6 +11,7 @@ CREATE TABLE rider
     `password` varchar(77) NOT NULL,
     `status` boolean DEFAULT false,
     rider_detail_id int,
+    `role` varchar(11) DEFAULT "RIDER",
     
    `creation_date` datetime default current_timestamp,
     `modified_date` datetime default current_timestamp

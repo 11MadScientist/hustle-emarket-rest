@@ -19,4 +19,6 @@ public interface HistoryService
 
 	public void deleteHistoryById(int id);
 
+	void updateHistoryStatus(String value, int id);
+
 }

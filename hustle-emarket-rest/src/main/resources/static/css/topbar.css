@@ -80,3 +80,14 @@
   transform: translateY(10%);
     
 }
+
+#login
+{
+    padding-right: 20px;
+    float: right;
+}
+
+.fas
+{
+    color: #FFFFFF;
+}

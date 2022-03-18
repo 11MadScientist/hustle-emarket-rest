@@ -1,5 +1,6 @@
 package org.emarket.hustle.emarkethustle;
 
+import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

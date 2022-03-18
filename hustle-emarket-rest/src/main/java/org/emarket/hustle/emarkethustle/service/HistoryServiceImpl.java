@@ -122,4 +122,14 @@ public class HistoryServiceImpl implements HistoryService
 
 	}
 
+	@Override
+	public void updateHistoryStatus(String value, int id)
+	{
+		History history = getHistoryById(id);
+
+		history.setStatus(value);
+		saveHistory(history);
+
+	}
+
 }

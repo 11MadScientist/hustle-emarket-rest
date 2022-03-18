@@ -1,4 +1,4 @@
- USE emarketdb;
+-- USE emarketdb;
 DROP TABLE IF EXISTS rider_detail;
 CREATE TABLE rider_detail
 (

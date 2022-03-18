@@ -3,7 +3,6 @@ package org.emarket.hustle.emarkethustle.restcontroller;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.emarket.hustle.emarkethustle.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
@@ -12,6 +11,7 @@ import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
 import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
+import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.CustomerService;
 import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;

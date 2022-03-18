@@ -3,9 +3,9 @@ package org.emarket.hustle.emarkethustle.entity.request;
 public class GetRequestTransaction
 {
 
-	private String usernamePattern;
+	private String userProfile;
 
-	private String approvedTimePattern;
+	private int userId;
 
 	private String field;
 
@@ -15,31 +15,28 @@ public class GetRequestTransaction
 
 	public GetRequestTransaction()
 	{
-		usernamePattern = "";
-		approvedTimePattern = "";
-		field = "id";
 		page = 0;
 		size = 50;
 	}
 
-	public String getUsernamePattern()
+	public String getUserProfile()
 	{
-		return usernamePattern;
+		return userProfile;
 	}
 
-	public void setUsernamePattern(String usernamePattern)
+	public void setUserProfile(String userProfile)
 	{
-		this.usernamePattern = usernamePattern;
+		this.userProfile = userProfile;
 	}
 
-	public String getApprovedTimePattern()
+	public int getUserId()
 	{
-		return approvedTimePattern;
+		return userId;
 	}
 
-	public void setApprovedTimePattern(String approvedTimePattern)
+	public void setUserId(int userId)
 	{
-		this.approvedTimePattern = approvedTimePattern;
+		this.userId = userId;
 	}
 
 	public String getField()

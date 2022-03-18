@@ -10,4 +10,5 @@ public interface HistoryRepository extends JpaRepository<History, Integer>
 	public Slice<History> findHistoryByStoreId(int id, Pageable pageable);
 
 	public Slice<History> findHistoryByItemId(int id, Pageable pageable);
+
 }

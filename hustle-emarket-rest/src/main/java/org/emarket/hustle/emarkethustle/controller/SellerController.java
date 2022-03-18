@@ -5,8 +5,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import org.emarket.hustle.emarkethustle.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.entity.Seller;
+import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.SellerService;
 import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,6 +8,7 @@ CREATE TABLE customer
     username varchar(77) UNIQUE NOT NULL,
     `password` varchar(77) NOT NULL,
 	customer_detail_id int,
+    `role` varchar(11) DEFAULT "CUSTOMER",
     
     `creation_date` datetime default current_timestamp,
     `modified_date` datetime default current_timestamp

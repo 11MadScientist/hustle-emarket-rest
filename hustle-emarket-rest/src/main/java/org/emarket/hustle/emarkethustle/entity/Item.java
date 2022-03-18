@@ -81,7 +81,7 @@ public class Item
 
 	@OneToMany(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "item_id")
-	private List<ItemImage> itemImage;
+	private List<ItemReview> itemReview;
 
 	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
@@ -252,14 +252,14 @@ public class Item
 		this.store = store;
 	}
 
-	public List<ItemImage> getItemImage()
+	public List<ItemReview> getItemReview()
 	{
-		return itemImage;
+		return itemReview;
 	}
 
-	public void setItemImage(List<ItemImage> itemImage)
+	public void setItemReview(List<ItemReview> itemReview)
 	{
-		this.itemImage = itemImage;
+		this.itemReview = itemReview;
 	}
 
 	public String getCreationDate()
@@ -280,16 +280,6 @@ public class Item
 	public void setModifiedDate(String modifiedDate)
 	{
 		this.modifiedDate = modifiedDate;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "Item [id=" + id + ", category=" + category + ", name=" + name + ", inStock=" + inStock + ", stockSold="
-				+ stockSold + ", price=" + price + ", measurement=" + measurement + ", overallReview=" + overallReview
-				+ ", description=" + description + ", ingredient=" + ingredient + ", direction=" + direction
-				+ ", delisted=" + delisted + ", store=" + store + ", itemImage=" + itemImage + ", creationDate="
-				+ creationDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 
 	/*

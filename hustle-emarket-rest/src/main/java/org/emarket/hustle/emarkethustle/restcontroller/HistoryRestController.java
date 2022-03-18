@@ -100,4 +100,13 @@ public class HistoryRestController
 				"THE HISTORY WITH ID:" + id + " WAS DELETED.");
 	}
 
+	@PostMapping("/histories/status")
+	public ProcessConfirmation updateStatus(
+			@RequestBody History history)
+	{
+		historyService.updateHistoryStatus(history.getStatus(), history.getId());
+		return new ProcessConfirmation("SUCCESS", "HISTORY",
+				"THE HISTORY WITH ID: " + history.getId() + " WAS " + history.getStatus().toUpperCase());
+	}
+
 }

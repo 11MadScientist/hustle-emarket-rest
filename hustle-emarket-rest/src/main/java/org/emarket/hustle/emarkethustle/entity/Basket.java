@@ -131,9 +131,9 @@ public class Basket
 	}
 
 	@JsonIgnore
-	public int getStoreId()
+	public Store getStore()
 	{
-		return item.getStore().getId();
+		return item.getStore();
 	}
 
 }

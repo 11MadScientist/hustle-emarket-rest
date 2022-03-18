@@ -1,13 +1,12 @@
-use emarketdb;
+-- use emarketdb;
 
 DROP TABLE IF EXISTS item_review;
 
 CREATE TABLE item_review
 (
 	id int NOT NULL AUTO_INCREMENT,
-    word_tag varchar(111),
     rating double DEFAULT 0,
-    review varchar(111),
+    review varchar(500),
     item_id int,
     
    `creation_date` datetime default current_timestamp,

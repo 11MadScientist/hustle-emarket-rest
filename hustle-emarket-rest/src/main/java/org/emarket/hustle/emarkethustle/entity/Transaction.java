@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,13 +18,18 @@ import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "transaction")
+@JsonIdentityInfo(
+		scope = Transaction.class,
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Transaction
 {
 	@Id
@@ -30,19 +37,20 @@ public class Transaction
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "customer_id", updatable = false)
-	private int customerId;
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE })
+	@JoinColumn(name = "customer_id", updatable = false)
+	private Customer customer;
 
-	@Column(name = "customer_username", updatable = false)
-	private String customerUsername;
-
-	@Column(name = "customer_address_id", updatable = false)
-	private int customerAddressId;
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE })
+	@JoinColumn(name = "customer_address_id", updatable = false)
+	private CustomerAddress customerAddress;
 
 	@Column(name = "status")
 	private String status;
 
-	@JsonManagedReference
+	@Column(name = "note")
+	private String note;
+
 	@OneToMany(cascade = CascadeType.ALL,
 			mappedBy = "transaction")
 	private List<History> histories;
@@ -56,32 +64,38 @@ public class Transaction
 	@Column(name = "delivery_fee")
 	private double deliveryFee;
 
-	@Column(name = "payment_method")
-	private String paymentMethod;
-
 	@Column(name = "grand_total")
 	private double grandTotal;
 
-	@Column(name = "preferred_time_delivered")
-	private long preferredTimeDelivered;
+	@Column(name = "order_type")
+	private String orderType;
 
-	@Column(name = "approved_time")
-	private long approvedTime;
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "rider_id")
+	private Rider rider;
+
+	@Column(name = "scheduled_time")
+	private String scheduledTime;
 
 	@Column(name = "delivered_time")
-	private long deliveredTime;
+	private String deliveredTime;
 
 	@Column(name = "creation_date")
-	private long creationDate;
+	private String creationDate;
 
 	@Column(name = "modified_date")
-	private long modifiedDate;
+	private String modifiedDate;
 
 	public Transaction()
 	{
 		subTotal = 0;
-		modifiedDate = System.currentTimeMillis();
 	}
+
+	/*
+	 * ####################################################
+	 * ################# CUSTOM METHODS ###################
+	 * ####################################################
+	 */
 
 	public int getId()
 	{
@@ -93,34 +107,24 @@ public class Transaction
 		this.id = id;
 	}
 
-	public int getCustomerId()
+	public Customer getCustomer()
 	{
-		return customerId;
+		return customer;
 	}
 
-	public void setCustomerId(int customerId)
+	public void setCustomer(Customer customer)
 	{
-		this.customerId = customerId;
+		this.customer = customer;
 	}
 
-	public String getCustomerUsername()
+	public CustomerAddress getCustomerAddress()
 	{
-		return customerUsername;
+		return customerAddress;
 	}
 
-	public void setCustomerUsername(String customerUsername)
+	public void setCustomerAddress(CustomerAddress customerAddress)
 	{
-		this.customerUsername = customerUsername;
-	}
-
-	public int getCustomerAddressId()
-	{
-		return customerAddressId;
-	}
-
-	public void setCustomerAddressId(int customerAddressId)
-	{
-		this.customerAddressId = customerAddressId;
+		this.customerAddress = customerAddress;
 	}
 
 	public String getStatus()
@@ -131,6 +135,16 @@ public class Transaction
 	public void setStatus(String status)
 	{
 		this.status = status;
+	}
+
+	public String getNote()
+	{
+		return note;
+	}
+
+	public void setNote(String note)
+	{
+		this.note = note;
 	}
 
 	public List<History> getHistories()
@@ -173,16 +187,6 @@ public class Transaction
 		this.deliveryFee = deliveryFee;
 	}
 
-	public String getPaymentMethod()
-	{
-		return paymentMethod;
-	}
-
-	public void setPaymentMethod(String paymentMethod)
-	{
-		this.paymentMethod = paymentMethod;
-	}
-
 	public double getGrandTotal()
 	{
 		return grandTotal;
@@ -193,61 +197,65 @@ public class Transaction
 		this.grandTotal = grandTotal;
 	}
 
-	public long getPreferredTimeDelivered()
+	public String getOrderType()
 	{
-		return preferredTimeDelivered;
+		return orderType;
 	}
 
-	public void setPreferredTimeDelivered(long preferredTimeDelivered)
+	public void setOrderType(String orderType)
 	{
-		this.preferredTimeDelivered = preferredTimeDelivered;
+		this.orderType = orderType;
 	}
 
-	public long getApprovedTime()
+	public Rider getRider()
 	{
-		return approvedTime;
+		return rider;
 	}
 
-	public void setApprovedTime(long approvedTime)
+	public void setRider(Rider rider)
 	{
-		this.approvedTime = approvedTime;
+		this.rider = rider;
 	}
 
-	public long getDeliveredTime()
+	public String getScheduledTime()
+	{
+		return scheduledTime;
+	}
+
+	public void setScheduledTime(String scheduledTime)
+	{
+		this.scheduledTime = scheduledTime;
+	}
+
+	public String getDeliveredTime()
 	{
 		return deliveredTime;
 	}
 
-	public void setDeliveredTime(long deliveredTime)
+	public void setDeliveredTime(String deliveredTime)
 	{
 		this.deliveredTime = deliveredTime;
 	}
 
-	public long getCreationDate()
+	public String getCreationDate()
 	{
 		return creationDate;
 	}
 
-	public void setCreationDate(long creationDate)
+	public void setCreationDate(String creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
-	public long getModifiedDate()
+	public String getModifiedDate()
 	{
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(long modifiedDate)
+	public void setModifiedDate(String modifiedDate)
 	{
 		this.modifiedDate = modifiedDate;
 	}
-
-	/*
-	 * ####################################################
-	 * ################# CUSTOM METHODS ###################
-	 * ####################################################
-	 */
 
 	@JsonIgnore
 	public void addHistory(History history)

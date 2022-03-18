@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.entity.CustomerAddress;
-import org.emarket.hustle.emarkethustle.entity.request.GetRequestAddress;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
 import org.emarket.hustle.emarkethustle.service.CustomerAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,14 +31,14 @@ public class CustomerAddressRestController
 	 * #######################################
 	 */
 	@GetMapping("/customer-addresses")
-	public List<CustomerAddress> getCustomerAddress(@RequestBody(required = false) GetRequestAddress getRequest)
+	public List<CustomerAddress> getCustomerAddress(@RequestParam(required = false) Integer id)
 	{
-		if(getRequest == null)
+		if(id == null)
 		{
 			return customerAddressService.getCustomerAddress();
 		}
 
-		return customerAddressService.getCustomerAddressByCustomerId(getRequest.getId());
+		return customerAddressService.getCustomerAddressByCustomerId(id);
 	}
 
 	/*

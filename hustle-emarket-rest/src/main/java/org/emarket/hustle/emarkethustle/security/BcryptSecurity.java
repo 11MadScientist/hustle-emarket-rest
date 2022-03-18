@@ -1,4 +1,4 @@
-package org.emarket.hustle.emarkethustle;
+package org.emarket.hustle.emarkethustle.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
