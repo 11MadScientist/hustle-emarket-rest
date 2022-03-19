@@ -17,8 +17,8 @@ import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.micrometer.core.lang.NonNull;
 
@@ -74,7 +74,7 @@ public class Item
 	@Column(name = "delisted")
 	private boolean delisted;
 
-	@JsonBackReference
+	@JsonIgnoreProperties({ "items" })
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "store_id", updatable = false)
 	private Store store;

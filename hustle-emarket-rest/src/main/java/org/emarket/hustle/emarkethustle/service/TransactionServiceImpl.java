@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
+import org.emarket.hustle.emarkethustle.algorithms.RiderSelection;
 import org.emarket.hustle.emarkethustle.dao.BasketRepository;
 import org.emarket.hustle.emarkethustle.dao.ItemRepository;
 import org.emarket.hustle.emarkethustle.dao.TransactionRepository;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionServiceImpl implements TransactionService
 {
+
+	RiderSelection riderSelection = RiderSelection.getInstance();
+
 	Logger log = Logger.getLogger(TransactionServiceImpl.class.getName());
 	@Autowired
 	TransactionRepository transactionRepository;
@@ -221,6 +225,41 @@ public class TransactionServiceImpl implements TransactionService
 
 		log.info(transactions.size() + "");
 		return transactions;
+
+	}
+
+	@Override
+	public Transaction checkTransactionComplete(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+		int declined = 0;
+
+		for(History history:transaction.getHistories())
+		{
+			if(history.getStatus().equals("Pending"))
+			{
+				return transaction;
+			}
+			else if(history.getStatus().equals("Declined"))
+			{
+				declined ++;
+			}
+		}
+
+		if(declined != 0)
+		{
+			// you should recalculate the total cost excluding the declined items
+			// then let the buyer query that updated transaction
+			return transaction;
+		}
+
+		for(History history:transaction.getHistories())
+		{
+			history.setStatus("Preparing");
+		}
+
+		saveTransaction(transaction);
+		return transaction;
 
 	}
 

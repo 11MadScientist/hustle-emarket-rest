@@ -18,7 +18,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -63,7 +62,6 @@ public class Store
 	@OneToMany(
 			cascade = CascadeType.ALL,
 			mappedBy = "store")
-	@JsonManagedReference
 	private List<Item> items;
 
 	@Column(name = "creation_date", updatable = false)

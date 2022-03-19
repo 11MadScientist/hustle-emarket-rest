@@ -23,4 +23,6 @@ public interface TransactionService
 
 	public List<Transaction> checkout(int id);
 
+	public Transaction checkTransactionComplete(int id);
+
 }
