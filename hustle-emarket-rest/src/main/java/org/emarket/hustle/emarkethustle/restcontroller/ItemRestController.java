@@ -1,6 +1,7 @@
 package org.emarket.hustle.emarkethustle.restcontroller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.entity.Item;
 import org.emarket.hustle.emarkethustle.entity.Store;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemRestController
 {
 
+	Logger log = Logger.getLogger(TransactionRestController.class.getName());
+
 	@Autowired
 	private ItemService itemService;
 
@@ -41,6 +44,7 @@ public class ItemRestController
 	{
 		if(getRequest == null)
 		{
+			System.out.println("hello");
 			return itemService.getItem();
 		}
 

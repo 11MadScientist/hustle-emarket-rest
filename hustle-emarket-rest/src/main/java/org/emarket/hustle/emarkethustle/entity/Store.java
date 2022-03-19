@@ -59,6 +59,7 @@ public class Store
 	@JoinColumn(name = "seller_id", updatable = false)
 	private Seller seller;
 
+//	@JsonManagedReference
 	@OneToMany(
 			cascade = CascadeType.ALL,
 			mappedBy = "store")

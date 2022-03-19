@@ -17,8 +17,10 @@ import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import io.micrometer.core.lang.NonNull;
 
@@ -26,6 +28,10 @@ import io.micrometer.core.lang.NonNull;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "item")
+@JsonIdentityInfo(
+		scope = Item.class,
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Item
 {
 	@Id
@@ -74,7 +80,7 @@ public class Item
 	@Column(name = "delisted")
 	private boolean delisted;
 
-	@JsonIgnoreProperties({ "items" })
+	@JsonIdentityReference(alwaysAsId = true)
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "store_id", updatable = false)
 	private Store store;
