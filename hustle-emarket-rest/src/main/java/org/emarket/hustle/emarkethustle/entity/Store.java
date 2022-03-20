@@ -17,17 +17,16 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "store")
-@JsonIdentityInfo(
-		scope = Store.class,
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+//@JsonIdentityInfo(
+//		scope = Store.class,
+//		generator = ObjectIdGenerators.PropertyGenerator.class,
+//		property = "id")
 public class Store
 {
 	@Id
@@ -54,12 +53,13 @@ public class Store
 	@Column(name = "items_added")
 	private int itemsAdded;
 
+	@JsonIgnore
 	@OneToOne(cascade = { CascadeType.DETACH,
 			CascadeType.REFRESH, CascadeType.PERSIST })
 	@JoinColumn(name = "seller_id", updatable = false)
 	private Seller seller;
 
-//	@JsonManagedReference
+	@JsonIgnore
 	@OneToMany(
 			cascade = CascadeType.ALL,
 			mappedBy = "store")

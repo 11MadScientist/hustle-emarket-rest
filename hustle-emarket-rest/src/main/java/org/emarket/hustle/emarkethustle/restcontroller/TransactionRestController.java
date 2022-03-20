@@ -107,9 +107,9 @@ public class TransactionRestController
 	}
 
 	/*
-	 * #######################################
-	 * ############# PREPARE TRANSACTION #####
-	 * #######################################
+	 * #############################################################
+	 * ############# PREPARE TRANSACTION FOR CHECHKOUT #############
+	 * #############################################################
 	 */
 
 	@GetMapping("/checkouts/{id}")
@@ -117,4 +117,41 @@ public class TransactionRestController
 	{
 		return transactionService.checkout(id);
 	}
+
+	/*
+	 * #############################################################
+	 * ########### CHECK IF TRANSACTION IS COMPLETED ##############
+	 * #############################################################
+	 */
+
+	@GetMapping("/status/{id}")
+	public Transaction checkTransactionStatus(@PathVariable int id)
+	{
+		return transactionService.checkTransactionComplete(id);
+	}
+
+	/*
+	 * ###############################################
+	 * ########### CONTINUE TRANSACTION ##############
+	 * ###############################################
+	 */
+
+	@PostMapping("/continue")
+	public Transaction continueTransaction(@RequestBody Transaction transaction)
+	{
+		return transactionService.continueTransaction(transaction);
+	}
+
+	/*
+	 * ###############################################
+	 * ############# CANCEL TRANSACTION ##############
+	 * ###############################################
+	 */
+
+	@PostMapping("/cancel")
+	public Transaction cancelTransaction(@RequestBody Transaction transaction)
+	{
+		return transactionService.cancelTransaction(transaction);
+	}
+
 }

@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.entity.Basket;
 import org.emarket.hustle.emarkethustle.entity.Customer;
-import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
 import org.emarket.hustle.emarkethustle.service.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +25,6 @@ public class BasketRestController
 	private BasketService basketService;
 
 	Logger log = Logger.getLogger(BasketRestController.class.getName());
-
-	/*
-	 * checking if quantity is not greater than instock and quantity not less than 1
-	 */
-	public boolean checkQuantity(Basket basket)
-	{
-
-		if(basket.getItem().getInStock() < basket.getQuantity() || basket.getQuantity() < 1)
-		{
-			log.info(basket.getItem().getInStock() + ":" + basket.getQuantity());
-			throw new NotPermittedException("DECLARING QUANTITY GREATER THAN INSTOCK OR LESS THAN 0");
-
-		}
-		return true;
-	}
 
 	/*
 	 * #######################################
@@ -81,12 +65,7 @@ public class BasketRestController
 	public Basket addBasket(@PathVariable int customerId, @RequestBody Basket basket)
 	{
 
-		checkQuantity(basket);
-
-		basket.setId(0);
-		basket.setCustomerId(customerId);
-
-		basketService.saveBasket(basket);
+		basketService.addBasket(basket, customerId);
 
 		return basket;
 	}
@@ -100,9 +79,7 @@ public class BasketRestController
 	@PutMapping("/baskets")
 	public Basket updateBasket(@RequestBody Basket basket)
 	{
-		checkQuantity(basket);
-
-		basketService.saveBasket(basket);
+		basketService.updateBasket(basket);
 		return basket;
 	}
 

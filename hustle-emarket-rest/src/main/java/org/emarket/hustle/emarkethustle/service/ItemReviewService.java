@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.service;
 
 import java.util.List;
 
+import org.emarket.hustle.emarkethustle.entity.Item;
 import org.emarket.hustle.emarkethustle.entity.ItemReview;
 
 public interface ItemReviewService
@@ -15,4 +16,7 @@ public interface ItemReviewService
 	public ItemReview updateAdmin(ItemReview itemReview);
 
 	public void deleteItemReviewById(int id);
+
+	public List<ItemReview> getItemReviewByItem(Item item);
+
 }

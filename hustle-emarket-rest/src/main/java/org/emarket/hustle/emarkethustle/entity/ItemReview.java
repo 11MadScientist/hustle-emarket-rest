@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -37,9 +38,14 @@ public class ItemReview
 	@Column(name = "review")
 	private String review;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "item_id")
 	private Item item;
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 
 	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
@@ -90,6 +96,16 @@ public class ItemReview
 	public void setItem(Item item)
 	{
 		this.item = item;
+	}
+
+	public Customer getCustomer()
+	{
+		return customer;
+	}
+
+	public void setCustomer(Customer customer)
+	{
+		this.customer = customer;
 	}
 
 	public String getCreationDate()

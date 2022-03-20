@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.emarket.hustle.emarkethustle.dao.ItemReviewRepository;
+import org.emarket.hustle.emarkethustle.entity.Item;
 import org.emarket.hustle.emarkethustle.entity.ItemReview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,12 @@ public class ItemReviewServiceImpl implements ItemReviewService
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<ItemReview> getItemReviewByItem(Item item)
+	{
+		return itemReviewRepository.findByItem(item);
 	}
 
 	@Override

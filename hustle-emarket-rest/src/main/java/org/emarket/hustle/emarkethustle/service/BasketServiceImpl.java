@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
@@ -17,9 +18,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class BasketServiceImpl implements BasketService
 {
+	Logger log = Logger.getLogger(BasketServiceImpl.class.getName());
 
 	@Autowired
 	BasketRepository basketRepository;
+
+	@Autowired
+	ItemService itemService;
+
+	/*
+	 * checking if quantity is not greater than instock and quantity not less than 1
+	 */
+	public boolean checkQuantity(Basket basket)
+	{
+
+		if(basket.getItem().getInStock() < basket.getQuantity() || basket.getQuantity() < 1)
+		{
+			log.info(basket.getItem().getInStock() + ":" + basket.getQuantity());
+			throw new NotPermittedException("DECLARING QUANTITY GREATER THAN INSTOCK OR LESS THAN 0");
+
+		}
+		return true;
+	}
 
 	@Override
 	public List<Basket> getBasket()
@@ -64,10 +84,37 @@ public class BasketServiceImpl implements BasketService
 	}
 
 	@Override
-	public void saveBasket(Basket basket)
+	public void addBasket(Basket basket, int customerId)
 	{
 		try
 		{
+//			dbBasket = item
+			checkQuantity(basket);
+
+			basket.setId(0);
+			basket.setCustomerId(customerId);
+
+			basketRepository.save(basket);
+		}
+		catch (DataIntegrityViolationException e)
+		{
+			e.printStackTrace();
+			throw new NotPermittedException("DUPLICATE ITEM IN BASKET");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new FailedException("SAVING BASKET");
+		}
+
+	}
+
+	@Override
+	public void updateBasket(Basket basket)
+	{
+		try
+		{
+			checkQuantity(basket);
 			basketRepository.save(basket);
 		}
 		catch (DataIntegrityViolationException e)

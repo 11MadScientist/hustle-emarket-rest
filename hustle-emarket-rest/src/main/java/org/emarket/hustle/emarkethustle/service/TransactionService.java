@@ -25,4 +25,8 @@ public interface TransactionService
 
 	public Transaction checkTransactionComplete(int id);
 
+	Transaction continueTransaction(Transaction transaction);
+
+	Transaction cancelTransaction(Transaction transaction);
+
 }

@@ -17,10 +17,7 @@ import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import io.micrometer.core.lang.NonNull;
 
@@ -28,10 +25,10 @@ import io.micrometer.core.lang.NonNull;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "item")
-@JsonIdentityInfo(
-		scope = Item.class,
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+//@JsonIdentityInfo(
+//		scope = Item.class,
+//		generator = ObjectIdGenerators.PropertyGenerator.class,
+//		property = "id")
 public class Item
 {
 	@Id
@@ -61,6 +58,9 @@ public class Item
 	@Column(name = "measurement")
 	private String measurement;
 
+//	increment is how the measurement is incremented
+//	for example, from 1/4 kl to 1/2 to 3/4 to 1
+//  if per piece, increment by 1, 1pc 2pcs 3pcs.
 	@NonNull
 	@Column(name = "increment")
 	private double increment;
@@ -80,11 +80,12 @@ public class Item
 	@Column(name = "delisted")
 	private boolean delisted;
 
-	@JsonIdentityReference(alwaysAsId = true)
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE })
+//	@JsonBackReference
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "store_id", updatable = false)
 	private Store store;
 
+	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "item_id")
 	private List<ItemReview> itemReview;

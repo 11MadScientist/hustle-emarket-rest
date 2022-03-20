@@ -116,6 +116,8 @@ public class TransactionServiceImpl implements TransactionService
 			}
 
 			transactionRepository.saveAll(transactions);
+
+			// i think basket of customer should be delete here
 			basketRepository.deleteByCustomerId(transactions.get(0).getCustomer().getId());
 
 		}
@@ -179,6 +181,11 @@ public class TransactionServiceImpl implements TransactionService
 	@Value("${delivery.fee}")
 	private double deliveryFee;
 
+//	this checkout method will convert basket into histories, stick it to
+//	transaction, prepare the transaction, assign the service fee
+//	and delivery fee calculate the grand total and return the transaction
+//	but the transaction is not yet saved.
+
 	@Override
 	public List<Transaction> checkout(int id)
 	{
@@ -209,7 +216,9 @@ public class TransactionServiceImpl implements TransactionService
 
 					transaction.addSubTotal(history.getQuantity() * history.getPrice());
 					transaction.addHistory(history);
-					baskets.remove(i);
+
+					// i think logically, basket should not be deleted in the checkout method
+//					baskets.remove(i);
 					continue;
 				}
 
@@ -228,6 +237,9 @@ public class TransactionServiceImpl implements TransactionService
 
 	}
 
+	//checkTransactionComplete - the client will request this every 5 sec to update,
+	//if there are buyers who declined
+
 	@Override
 	public Transaction checkTransactionComplete(int id)
 	{
@@ -236,20 +248,16 @@ public class TransactionServiceImpl implements TransactionService
 
 		for(History history:transaction.getHistories())
 		{
-			if(history.getStatus().equals("Pending"))
+			if(history.getStatus().equals("Declined"))
 			{
-				return transaction;
-			}
-			else if(history.getStatus().equals("Declined"))
-			{
+				transaction.setSubTotal(transaction.getSubTotal() - history.getQuantity() * history.getPrice());
 				declined ++;
 			}
 		}
 
 		if(declined != 0)
 		{
-			// you should recalculate the total cost excluding the declined items
-			// then let the buyer query that updated transaction
+			transaction.setGrandTotal();
 			return transaction;
 		}
 
@@ -257,10 +265,42 @@ public class TransactionServiceImpl implements TransactionService
 		{
 			history.setStatus("Preparing");
 		}
+		transaction.setStatus("Preparing");
 
 		saveTransaction(transaction);
 		return transaction;
 
 	}
+
+	@Override
+	public Transaction continueTransaction(Transaction transaction)
+	{
+		for(History history:transaction.getHistories())
+		{
+			if(history.getStatus().equals("Accepted"))
+			{
+				history.setStatus("Preparing");
+			}
+		}
+
+		saveTransaction(transaction);
+		return transaction;
+	}
+
+	@Override
+	public Transaction cancelTransaction(Transaction transaction)
+	{
+		for(History history:transaction.getHistories())
+		{
+			history.setStatus("Cancelled");
+
+		}
+		transaction.setStatus("Cancelled");
+
+		return transaction;
+	}
+
+
+
 
 }

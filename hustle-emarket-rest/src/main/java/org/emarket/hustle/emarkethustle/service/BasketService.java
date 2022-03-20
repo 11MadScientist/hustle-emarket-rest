@@ -12,11 +12,14 @@ public interface BasketService
 
 	public Basket getBasketById(int id);
 
-	public void saveBasket(Basket basket);
+	public void addBasket(Basket basket, int customerId);
+
+	public void updateBasket(Basket basket);
 
 	public void deleteBasket(Basket basket);
 
 	public void deleteBasketById(int id);
 
 	public void deleteBsaketByCustomer(int customerId);
+
 }
