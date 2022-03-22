@@ -1,18 +1,18 @@
 package org.emarket.hustle.emarkethustle.algorithms;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import org.emarket.hustle.emarkethustle.entity.Rider;
-import org.emarket.hustle.emarkethustle.entity.Transaction;
 
 public class RiderSelection
 {
 	private Queue<Rider> riders = new LinkedList<Rider>();
 
-	private List<Transaction> transactions = new ArrayList<>();
+	public boolean isNull()
+	{
+		return riders.isEmpty();
+	}
 
 	public void enqueueRider(Rider rider)
 	{
@@ -29,14 +29,9 @@ public class RiderSelection
 		riders.remove(rider);
 	}
 
-	public void addTransaction(Transaction transaction)
+	public void printRiders()
 	{
-		transactions.add(transaction);
-	}
-
-	public void removeTransaction(Transaction transaction)
-	{
-		transactions.remove(transaction);
+		System.out.println(riders);
 	}
 
 	private static RiderSelection riderSelection;

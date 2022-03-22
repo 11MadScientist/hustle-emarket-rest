@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -61,6 +62,21 @@ public class ItemRestController
 	public Item getItemById(@PathVariable int id)
 	{
 		return itemService.getItemById(id);
+	}
+
+	/*
+	 * #######################################
+	 * ######### GET ITEM BY STORE ###########
+	 * #######################################
+	 */
+
+	@GetMapping("/items/stores")
+	public List<Item> getItemByStore(@RequestParam Integer id)
+	{
+
+		Store store = new Store();
+		store.setId(id);
+		return itemService.getItemByStore(store);
 	}
 
 	/*

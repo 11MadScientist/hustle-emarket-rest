@@ -3,9 +3,11 @@ package org.emarket.hustle.emarkethustle.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.emarket.hustle.emarkethustle.algorithms.RiderSelection;
 import org.emarket.hustle.emarkethustle.dao.RiderRepository;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class RiderServiceImpl implements RiderService
 
 	@Autowired
 	RiderRepository riderRepository;
+
+	RiderSelection riderSeletion = RiderSelection.getInstance();
 
 	@Override
 	public List<Rider> getRiders(GetRequestUser getRequestUser)
@@ -99,11 +103,19 @@ public class RiderServiceImpl implements RiderService
 	{
 		try
 		{
-			return riderRepository.findByUsername(username);
+			Rider rider = riderRepository.findByUsername(username);
+
+			if(rider.getRiderDetail().isAuthorized() == false ||
+					rider.getRiderDetail().isProhibited() == true)
+			{
+				throw new ErrorLoginException("RIDER WITH USERNAME" + username);
+			}
+
+			return rider;
 		}
 		catch (Exception e)
 		{
-			throw new NotFoundException("CUSTOMER WITH USERNAME" + username);
+			throw new NotFoundException("RIDER WITH USERNAME" + username);
 		}
 
 	}
@@ -112,6 +124,16 @@ public class RiderServiceImpl implements RiderService
 	public int countRiderRequest()
 	{
 		return riderRepository.countRiderRequest();
+	}
+
+	@Override
+	public Rider availableRider(Rider rider)
+	{
+		Rider dbRider = getRiderById(rider.getId());
+		dbRider.setStatus("Available");
+		saveRider(dbRider);
+		riderSeletion.enqueueRider(dbRider);
+		return dbRider;
 	}
 
 }

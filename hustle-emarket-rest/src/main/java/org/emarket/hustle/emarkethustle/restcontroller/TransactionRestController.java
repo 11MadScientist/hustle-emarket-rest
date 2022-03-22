@@ -3,6 +3,7 @@ package org.emarket.hustle.emarkethustle.restcontroller;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.emarket.hustle.emarkethustle.entity.Basket;
 import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestTransaction;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
@@ -62,12 +63,13 @@ public class TransactionRestController
 	 */
 
 	@PostMapping("/transactions")
-	public List<Transaction> addTransactions(@RequestBody List<Transaction> transactions)
+	public Transaction addTransactions(@RequestBody Transaction transaction)
 	{
+		log.info("hello from transactions");
 
-		transactionService.saveTransaction(transactions);
+		transactionService.saveTransaction(transaction);
 
-		return transactions;
+		return transaction;
 	}
 
 	/*
@@ -112,10 +114,10 @@ public class TransactionRestController
 	 * #############################################################
 	 */
 
-	@GetMapping("/checkouts/{id}")
-	public List<Transaction> checkout(@PathVariable int id)
+	@PutMapping("/transactions/checkouts")
+	public List<Transaction> checkout(@RequestBody List<Basket> baskets)
 	{
-		return transactionService.checkout(id);
+		return transactionService.checkout(baskets);
 	}
 
 	/*
@@ -124,7 +126,7 @@ public class TransactionRestController
 	 * #############################################################
 	 */
 
-	@GetMapping("/status/{id}")
+	@GetMapping("/transactions/status/{id}")
 	public Transaction checkTransactionStatus(@PathVariable int id)
 	{
 		return transactionService.checkTransactionComplete(id);
@@ -136,7 +138,7 @@ public class TransactionRestController
 	 * ###############################################
 	 */
 
-	@PostMapping("/continue")
+	@PostMapping("/transactions/continue")
 	public Transaction continueTransaction(@RequestBody Transaction transaction)
 	{
 		return transactionService.continueTransaction(transaction);
@@ -148,10 +150,40 @@ public class TransactionRestController
 	 * ###############################################
 	 */
 
-	@PostMapping("/cancel")
+	@PostMapping("/transactions/cancel")
 	public Transaction cancelTransaction(@RequestBody Transaction transaction)
 	{
 		return transactionService.cancelTransaction(transaction);
+	}
+
+	/*
+	 * ###############################################
+	 * ################ ASSIGN RIDER #################
+	 * ###############################################
+	 */
+
+	@GetMapping("/transactions/riders/{id}")
+	public Transaction assignRider(@PathVariable int id)
+	{
+		return transactionService.assignRider(id);
+	}
+
+	@GetMapping("/transactions/riders/deliver/{id}")
+	public Transaction onDelivery(@PathVariable int id)
+	{
+		return transactionService.onDelivery(id);
+	}
+
+	@GetMapping("/transactions/riders/arrive/{id}")
+	public Transaction arrived(@PathVariable int id)
+	{
+		return transactionService.arrived(id);
+	}
+
+	@GetMapping("/transactions/riders/complete/{id}")
+	public Transaction completed(@PathVariable int id)
+	{
+		return transactionService.completed(id);
 	}
 
 }

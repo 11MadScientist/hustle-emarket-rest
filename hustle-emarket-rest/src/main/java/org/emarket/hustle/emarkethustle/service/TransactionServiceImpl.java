@@ -13,6 +13,7 @@ import org.emarket.hustle.emarkethustle.dao.ItemRepository;
 import org.emarket.hustle.emarkethustle.dao.TransactionRepository;
 import org.emarket.hustle.emarkethustle.entity.Basket;
 import org.emarket.hustle.emarkethustle.entity.History;
+import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestTransaction;
 import org.emarket.hustle.emarkethustle.response.FailedException;
@@ -40,6 +41,9 @@ public class TransactionServiceImpl implements TransactionService
 
 	@Autowired
 	ItemRepository itemRepository;
+
+	@Autowired
+	RiderService riderService;
 
 	@Override
 	public List<Transaction> getTransaction()
@@ -111,6 +115,7 @@ public class TransactionServiceImpl implements TransactionService
 
 				for (int x = 0; x < histories.size(); x++)
 				{
+
 					histories.get(x).setTransaction(transactions.get(i));
 				}
 			}
@@ -187,12 +192,9 @@ public class TransactionServiceImpl implements TransactionService
 //	but the transaction is not yet saved.
 
 	@Override
-	public List<Transaction> checkout(int id)
+	public List<Transaction> checkout(List<Basket> baskets)
 	{
-		log.info(id + "from checkout");
-
-		// recover customer basket from the database
-		List<Basket> baskets = basketRepository.findByCustomerId(id);
+		log.info("from checkout");
 
 		List<Transaction> transactions = new ArrayList<>();
 
@@ -217,11 +219,10 @@ public class TransactionServiceImpl implements TransactionService
 					transaction.addSubTotal(history.getQuantity() * history.getPrice());
 					transaction.addHistory(history);
 
-					// i think logically, basket should not be deleted in the checkout method
-//					baskets.remove(i);
-					continue;
+					basketRepository.save(basket);
+					baskets.remove(i);
 				}
-
+				log.info(i+"increment");
 				i++;
 			}
 
@@ -243,11 +244,20 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public Transaction checkTransactionComplete(int id)
 	{
+		log.info("hello from the checkTransactionComplete");
 		Transaction transaction = getTransactionById(id);
 		int declined = 0;
 
 		for(History history:transaction.getHistories())
 		{
+			if(history.getStatus().equals("Pending"))
+			{
+				return transaction;
+			}
+		}
+		for(History history:transaction.getHistories())
+		{
+
 			if(history.getStatus().equals("Declined"))
 			{
 				transaction.setSubTotal(transaction.getSubTotal() - history.getQuantity() * history.getPrice());
@@ -261,6 +271,7 @@ public class TransactionServiceImpl implements TransactionService
 			return transaction;
 		}
 
+		log.info("hello, no Pending, or declined");
 		for(History history:transaction.getHistories())
 		{
 			history.setStatus("Preparing");
@@ -299,6 +310,66 @@ public class TransactionServiceImpl implements TransactionService
 
 		return transaction;
 	}
+
+
+	//request for rider to pickup their order
+	@Override
+	public Transaction assignRider(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+		if(riderSelection.isNull())
+		{
+			System.out.println("it was null");
+			return null;
+		}
+
+		System.out.print("before assignment: " );
+		riderSelection.printRiders();
+
+//		you need to implement notification for the rider here.
+		Rider rider = riderSelection.dequeueRider();
+		rider.setStatus("Occupied");
+		riderService.saveRider(rider);
+
+		transaction.setRider(rider);
+		saveTransaction(transaction);
+		System.out.print("after assignment: " );
+		riderSelection.printRiders();
+		return transaction;
+
+	}
+
+	@Override
+	public Transaction onDelivery(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+
+		transaction.setStatus("On Delivery");
+		saveTransaction(transaction);
+		return transaction;
+	}
+
+	@Override
+	public Transaction arrived(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+
+		transaction.setStatus("Arrived");
+		saveTransaction(transaction);
+		return transaction;
+	}
+
+	@Override
+	public Transaction completed(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+
+		transaction.setStatus("Completed");
+		saveTransaction(transaction);
+		return transaction;
+	}
+
+
 
 
 

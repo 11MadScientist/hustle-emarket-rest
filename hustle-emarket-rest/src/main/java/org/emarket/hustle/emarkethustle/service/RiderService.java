@@ -21,8 +21,10 @@ public interface RiderService
 
 	public Rider loginRider(String username);
 
-	Rider findRiderByUsername(String username);
+	public Rider findRiderByUsername(String username);
 
-	int countRiderRequest();
+	public int countRiderRequest();
+
+	public Rider availableRider(Rider rider);
 
 }

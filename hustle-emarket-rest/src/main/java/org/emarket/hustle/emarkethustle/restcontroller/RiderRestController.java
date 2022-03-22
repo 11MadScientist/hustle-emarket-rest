@@ -149,7 +149,6 @@ public class RiderRestController
 
 		if(bcrypt.matches(rider.getPassword(), dbRider.getPassword()))
 		{
-			dbRider.setStatus(true);
 			riderService.saveRider(dbRider);
 			return dbRider;
 		}
@@ -159,7 +158,18 @@ public class RiderRestController
 
 	/*
 	 * #######################################
-	 * ########## SELLER LOGOUT ##############
+	 * ######### RIDER AVAILABLE #############
+	 * #######################################
+	 */
+	@PostMapping("/riders/available")
+	public Rider availableRider(@RequestBody Rider rider)
+	{
+		return riderService.availableRider(rider);
+	}
+
+	/*
+	 * #######################################
+	 * ########### RIDER LOGOUT ##############
 	 * #######################################
 	 */
 
@@ -169,7 +179,7 @@ public class RiderRestController
 
 		Rider dbRider = riderService.findRiderByUsername(rider.getUsername());
 
-		dbRider.setStatus(false);
+		dbRider.setStatus("Offline");
 		riderService.saveRider(dbRider);
 		return dbRider;
 

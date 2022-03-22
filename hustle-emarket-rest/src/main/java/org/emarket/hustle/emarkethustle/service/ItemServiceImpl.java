@@ -8,13 +8,13 @@ import javax.transaction.Transactional;
 import org.emarket.hustle.emarkethustle.dao.BasketRepository;
 import org.emarket.hustle.emarkethustle.dao.ItemRepository;
 import org.emarket.hustle.emarkethustle.entity.Item;
+import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestItem;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +41,12 @@ public class ItemServiceImpl implements ItemService
 	}
 
 	@Override
+	public List<Item> getItemByDelisted(boolean delisted)
+	{
+		return itemRepository.findByDelisted(delisted);
+	}
+
+	@Override
 	@Transactional
 	public List<Item> getItem(GetRequestItem getRequest)
 	{
@@ -51,12 +57,11 @@ public class ItemServiceImpl implements ItemService
 							Sort.by(Sort.Direction.DESC, getRequest.getField()));
 
 		// @formatter:off
-		Slice<Item> slicedItems = getRequest.getCategory() == null ?
-								  itemRepository.findByDelistedFalse(pageable)
+		List<Item> items = getRequest.getCategory() == null ?
+								  itemRepository.findByDelisted(false)
 								  : itemRepository.findByCategory(getRequest.getCategory(),
 							      "%" + getRequest.getName() + "%", pageable);
 
-		List<Item> items = slicedItems.getContent();
 
 		if(items.isEmpty())
 		{
@@ -78,6 +83,13 @@ public class ItemServiceImpl implements ItemService
 		return item.get();
 
 	}
+
+	@Override
+	public List<Item> getItemByStore(Store store)
+	{
+		return itemRepository.findByStore(store);
+	}
+
 
 	@Override
 	@Transactional

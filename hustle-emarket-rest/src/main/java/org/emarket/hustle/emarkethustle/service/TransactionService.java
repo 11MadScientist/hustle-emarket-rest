@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.service;
 
 import java.util.List;
 
+import org.emarket.hustle.emarkethustle.entity.Basket;
 import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestTransaction;
 
@@ -21,12 +22,20 @@ public interface TransactionService
 
 	public void deleteTransactionById(int id);
 
-	public List<Transaction> checkout(int id);
+	public List<Transaction> checkout(List<Basket> baskets);
 
 	public Transaction checkTransactionComplete(int id);
 
-	Transaction continueTransaction(Transaction transaction);
+	public Transaction continueTransaction(Transaction transaction);
 
-	Transaction cancelTransaction(Transaction transaction);
+	public Transaction cancelTransaction(Transaction transaction);
+
+	public Transaction assignRider(int id);
+
+	public Transaction onDelivery(int id);
+
+	public Transaction arrived(int id);
+
+	public Transaction completed(int id);
 
 }

@@ -9,7 +9,7 @@ CREATE TABLE rider
     last_name varchar(77) NOT NULL,
     username varchar(77) UNIQUE NOT NULL,
     `password` varchar(77) NOT NULL,
-    `status` boolean DEFAULT false,
+    `status` varchar(22) DEFAULT "Offline",
     rider_detail_id int,
     `role` varchar(11) DEFAULT "RIDER",
     
