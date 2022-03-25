@@ -36,6 +36,8 @@ public interface TransactionService
 
 	public Transaction arrived(int id);
 
+	public Transaction toRate(int id);
+
 	public Transaction completed(int id);
 
 }

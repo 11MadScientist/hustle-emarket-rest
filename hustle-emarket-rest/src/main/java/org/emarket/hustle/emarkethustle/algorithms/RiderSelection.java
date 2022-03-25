@@ -1,5 +1,6 @@
 package org.emarket.hustle.emarkethustle.algorithms;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -7,31 +8,47 @@ import org.emarket.hustle.emarkethustle.entity.Rider;
 
 public class RiderSelection
 {
-	private Queue<Rider> riders = new LinkedList<Rider>();
+	HashMap<String, Queue<Rider>> riderStations = new HashMap<String, Queue<Rider>>();
 
-	public boolean isNull()
+//	private Queue<Rider> riders = new LinkedList<Rider>();
+
+	public boolean isStationNull(String station)
 	{
-		return riders.isEmpty();
+		System.out.println("Station: " + station);
+		System.out.println(riderStations.containsKey(station));
+		return !riderStations.containsKey(station);
 	}
 
 	public void enqueueRider(Rider rider)
 	{
-		riders.add(rider);
+		String station = rider.getRiderDetail().getStation();
+		if(!riderStations.containsKey(station))
+		{
+			riderStations.put(station, new LinkedList<Rider>());
+		}
+
+		riderStations.get(station).add(rider);
+
 	}
 
-	public Rider dequeueRider()
+	public Rider dequeueRider(String station)
 	{
-		return riders.poll();
+		return riderStations.get(station).poll();
 	}
 
 	public void removeRider(Rider rider)
 	{
-		riders.remove(rider);
+		String station = rider.getRiderDetail().getStation();
+		riderStations.get(station).remove(rider);
 	}
 
 	public void printRiders()
 	{
-		System.out.println(riders);
+		for (String key : riderStations.keySet())
+		{
+			System.out.println(key + ": ");
+			System.out.println(riderStations.get(key));
+		}
 	}
 
 	private static RiderSelection riderSelection;

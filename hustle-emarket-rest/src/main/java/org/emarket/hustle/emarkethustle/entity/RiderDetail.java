@@ -39,6 +39,9 @@ public class RiderDetail
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
+	@Column(name = "station")
+	private String station;
+
 	@Column(name = "documents")
 	private String documents;
 
@@ -111,6 +114,16 @@ public class RiderDetail
 	public void setPhoneNumber(String phoneNumber)
 	{
 		this.phoneNumber = phoneNumber;
+	}
+
+	public String getStation()
+	{
+		return station;
+	}
+
+	public void setStation(String station)
+	{
+		this.station = station;
 	}
 
 	public String getDocuments()

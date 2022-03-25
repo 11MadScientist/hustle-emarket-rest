@@ -59,8 +59,6 @@ public class SellerController
 		seller.getStore().setSeller(seller);
 		seller.setPassword(bcrypt.encode(seller.getPassword()));
 
-		seller = sellerService.saveSeller(seller);
-
 		String fs = FileSystems.getDefault().getSeparator();
 
 		Path basePath = FileSystems.getDefault()
@@ -84,6 +82,8 @@ public class SellerController
 		{
 
 			file.transferTo(new File(filePath + fs + fileName + ".pdf"));
+			seller.getStore().setDocuments(fileName);
+			seller = sellerService.saveSeller(seller);
 		}
 		catch (Exception e)
 		{

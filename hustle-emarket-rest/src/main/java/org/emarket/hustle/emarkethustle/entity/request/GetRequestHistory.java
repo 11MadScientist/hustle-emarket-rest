@@ -15,9 +15,10 @@ public class GetRequestHistory
 
 	public GetRequestHistory()
 	{
+		user = "Store";
 		field = "id";
 		page = 0;
-		size = 50;
+		size = 100;
 	}
 
 	public String getUser()

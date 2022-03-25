@@ -4,7 +4,6 @@ import java.util.List;
 
 public class GetRequestItem
 {
-
 	private String name;
 
 	private List<Integer> category;

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.emarket.hustle.emarkethustle.dao.NotificationRepository;
 import org.emarket.hustle.emarkethustle.entity.Notification;
+import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,27 @@ public class NotificationServiceImpl implements NotificationService
 	@Override
 	public List<Notification> getNotificationByUserAndRole(int id, String role)
 	{
-		return notificationRepository.findByUserAndRole(id, role);
+		try
+		{
+			return notificationRepository.findByUserAndRole(id, role);
+		}
+		catch (Exception e)
+		{
+			throw new NotFoundException("NOTIFICATIONS");
+		}
 	}
 
 	@Override
 	public List<Notification> getNotifications()
 	{
-		return notificationRepository.findAll();
+		try
+		{
+			return notificationRepository.findAll();
+		}
+		catch (Exception e)
+		{
+			throw new NotFoundException("NOTIFICATIONS");
+		}
 	}
 
 	@Override

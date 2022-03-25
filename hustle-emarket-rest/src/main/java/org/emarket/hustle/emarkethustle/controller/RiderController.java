@@ -54,8 +54,6 @@ public class RiderController
 
 		rider.setPassword(bcrypt.encode(rider.getPassword()));
 
-		rider = riderService.saveRider(rider);
-
 		String fs = FileSystems.getDefault().getSeparator();
 
 		Path basePath = FileSystems.getDefault()
@@ -79,6 +77,8 @@ public class RiderController
 		{
 
 			file.transferTo(new File(filePath + fs + fileName + ".pdf"));
+			rider.getRiderDetail().setDocuments(fileName);
+			rider = riderService.saveRider(rider);
 		}
 		catch (Exception e)
 		{

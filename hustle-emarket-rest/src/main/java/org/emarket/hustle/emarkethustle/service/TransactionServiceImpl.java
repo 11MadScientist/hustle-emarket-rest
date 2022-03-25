@@ -226,7 +226,7 @@ public class TransactionServiceImpl implements TransactionService
 				i++;
 			}
 
-
+			transaction.setStation(transactionPlace);
 			transaction.setServiceFee(serviceFee);
 			transaction.setDeliveryFee(deliveryFee);
 			transaction.setGrandTotal();
@@ -317,7 +317,7 @@ public class TransactionServiceImpl implements TransactionService
 	public Transaction assignRider(int id)
 	{
 		Transaction transaction = getTransactionById(id);
-		if(riderSelection.isNull())
+		if(riderSelection.isStationNull(transaction.getStation()))
 		{
 			System.out.println("it was null");
 			return null;
@@ -327,7 +327,7 @@ public class TransactionServiceImpl implements TransactionService
 		riderSelection.printRiders();
 
 //		you need to implement notification for the rider here.
-		Rider rider = riderSelection.dequeueRider();
+		Rider rider = riderSelection.dequeueRider(transaction.getStation());
 		rider.setStatus("Occupied");
 		riderService.saveRider(rider);
 
@@ -355,6 +355,16 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("Arrived");
+		saveTransaction(transaction);
+		return transaction;
+	}
+
+	@Override
+	public Transaction toRate(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+
+		transaction.setStatus("To Rate");
 		saveTransaction(transaction);
 		return transaction;
 	}

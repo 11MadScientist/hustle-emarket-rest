@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping("${api.basePath}")
 public class ImageRestController
 {
 	@Autowired
 	private ImageService imageService;
 
-	@GetMapping(value = "/{entity}/{id}",
+	@GetMapping(value = "/images/{entity}/{id}",
 			produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody byte [] getDigitalProfile(@PathVariable String entity, @PathVariable int id)
 	{
 		return imageService.getImage(entity, id);
 	}
 
-	@PostMapping(value = "/digital-profiles")
+	@PostMapping(value = "/images/digital-profiles")
 	public ProcessConfirmation saveDigitalProfile(@RequestBody ImageEntity imageEntity)
 	{
 
@@ -39,7 +39,7 @@ public class ImageRestController
 				imageEntity.getEntity() + " " + "IMAGE SAVED SUCCESSFULLY");
 	}
 
-	@DeleteMapping("/{entity}/{id}")
+	@DeleteMapping("/images/{entity}/{id}")
 	public ProcessConfirmation deleteDigitalProfile(@PathVariable String entity, @PathVariable int id)
 	{
 		imageService.deleteImage(entity, id);

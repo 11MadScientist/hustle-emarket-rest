@@ -41,13 +41,22 @@ public class ItemRestController
 	 */
 
 	@GetMapping("/items")
-	public List<Item> getItem(@RequestBody(required = false) GetRequestItem getRequest)
+	public List<Item> getItem(
+			@RequestParam(name = "custom", defaultValue = "false") boolean custom,
+			@RequestParam(name = "name", defaultValue = "") String name,
+			@RequestParam(name = "field", defaultValue = "price") String field,
+			@RequestParam(name = "categories", required = false) List<Integer> categories)
 	{
-		if(getRequest == null)
+		if(custom == false)
 		{
 			System.out.println("hello");
 			return itemService.getItem();
 		}
+		GetRequestItem getRequest = new GetRequestItem();
+		getRequest.setName(name);
+		getRequest.setField(field);
+		getRequest.setCategory(categories);
+		System.out.println(categories);
 
 		return itemService.getItem(getRequest);
 	}

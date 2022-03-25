@@ -168,11 +168,23 @@ public class TransactionRestController
 		return transactionService.assignRider(id);
 	}
 
+	/*
+	 * ###############################################
+	 * ############## TO DELIVER RIDER ###############
+	 * ###############################################
+	 */
+
 	@GetMapping("/transactions/riders/deliver/{id}")
 	public Transaction onDelivery(@PathVariable int id)
 	{
 		return transactionService.onDelivery(id);
 	}
+
+	/*
+	 * ###############################################
+	 * ############### ARRIVED RIDER #################
+	 * ###############################################
+	 */
 
 	@GetMapping("/transactions/riders/arrive/{id}")
 	public Transaction arrived(@PathVariable int id)
@@ -180,7 +192,24 @@ public class TransactionRestController
 		return transactionService.arrived(id);
 	}
 
-	@GetMapping("/transactions/riders/complete/{id}")
+	/*
+	 * ###############################################
+	 * ############# TO RATE CUSTOMER ################
+	 * ###############################################
+	 */
+	@GetMapping("/transactions/customers/rate/{id}")
+	public Transaction toRate(@PathVariable int id)
+	{
+		return transactionService.toRate(id);
+	}
+
+	/*
+	 * ###############################################
+	 * ############# COMPLETED CUSTOMER ##############
+	 * ###############################################
+	 */
+
+	@GetMapping("/transactions/customer/complete/{id}")
 	public Transaction completed(@PathVariable int id)
 	{
 		return transactionService.completed(id);

@@ -51,18 +51,18 @@ public class StoreServiceImpl implements StoreService
 							Sort.by(Sort.Direction.ASC, getRequest.getField()));
 
 
-		Slice<Store> slicedCustomers = null;
+		Slice<Store> slicedStores = null;
 
 		// @formatter:off
 		if(getRequest.getSearchField().equals("storeName"))
 		{
-			slicedCustomers = storeRepository.findStoreByStoreNameLike
+			slicedStores = storeRepository.findStoreByStoreNameLike
 					("%"+getRequest.getSearchPattern()+"%", pageable);
 		}
 
 		else if(getRequest.getSearchField().equals("storeAddress"))
 		{
-			slicedCustomers = storeRepository.findStoreByStoreAddressLike
+			slicedStores = storeRepository.findStoreByStoreAddressLike
 					("%"+getRequest.getSearchPattern()+"%", pageable);
 		}
 
@@ -81,14 +81,15 @@ public class StoreServiceImpl implements StoreService
 			return stores;
 		}
 
-		List<Store> stores = slicedCustomers.getContent();
 
-		if(stores.isEmpty())
+		if(!slicedStores.isEmpty())
 		{
-			throw new NotFoundException("STORE");
-		}
+			return slicedStores.getContent();
 
-		return stores;
+		}
+		throw new NotFoundException("STORE");
+
+
 	}
 
 	@Override

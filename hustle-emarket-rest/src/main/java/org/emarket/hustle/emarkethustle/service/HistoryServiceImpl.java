@@ -46,7 +46,8 @@ public class HistoryServiceImpl implements HistoryService
 
 		if(getRequest.getUser().equals("Store"))
 		{
-			slicedHistories = historyRepository.findHistoryByStoreId(getRequest.getId(), pageable);
+			System.out.println(getRequest.getId());
+			return historyRepository.findHistoryByStoreIdOrderByIdDesc(getRequest.getId());
 		}
 		else
 		{

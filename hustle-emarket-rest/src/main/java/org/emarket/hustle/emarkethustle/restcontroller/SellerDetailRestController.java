@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping("/emarket-hustle")
+@RequestMapping("${api.basePath}")
 public class SellerDetailRestController
 {
 

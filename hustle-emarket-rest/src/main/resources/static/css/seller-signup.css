@@ -146,4 +146,15 @@ input.invalid
     font-size: 13px;
 }
 
+/* select tag */
+#station
+{
+    text-align: left;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    float: left;
+    color: #757575;
+}
+
 

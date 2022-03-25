@@ -54,7 +54,7 @@ public class NotificationRestController
 
 	/*
 	 * #######################################
-	 * ######### ADD NOTIFICATION ############
+	 * ####### UPDATE NOTIFICATION ###########
 	 * #######################################
 	 */
 
@@ -64,6 +64,12 @@ public class NotificationRestController
 		notificationService.updateNotification(notification);
 		return notification;
 	}
+
+	/*
+	 * #######################################
+	 * ####### DELETE NOTIFICATION ###########
+	 * #######################################
+	 */
 
 	@DeleteMapping("/notifications")
 	public ProcessConfirmation deleteNotification(@RequestBody Notification notification)

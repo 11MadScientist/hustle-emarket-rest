@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,12 +31,21 @@ public class HistoryRestController
 	 */
 
 	@GetMapping("/histories")
-	public List<History> getOrder(@RequestBody(required = false) GetRequestHistory getRequest)
+	public List<History> getHistory(
+			@RequestParam(name = "id", required = false) Integer id,
+			@RequestParam(name = "user", defaultValue = "Store") String user,
+			@RequestParam(name = "page", defaultValue = "1") Integer page)
 	{
-		if(getRequest == null)
+
+		if(id == null)
 		{
+			System.out.println("hello");
 			return historyService.getHistory();
 		}
+		GetRequestHistory getRequest = new GetRequestHistory();
+		getRequest.setId(id);
+		getRequest.setUser(user);
+		getRequest.setPage(page);
 
 		return historyService.getHistory(getRequest);
 	}
@@ -47,7 +57,7 @@ public class HistoryRestController
 	 */
 
 	@GetMapping("/histories/{id}")
-	public History getOrderById(@PathVariable int id)
+	public History getHistoryById(@PathVariable int id)
 	{
 		return historyService.getHistoryById(id);
 	}

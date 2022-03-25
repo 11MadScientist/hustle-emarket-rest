@@ -96,9 +96,18 @@
     
                     <input type="text" th:field = "*{store.storeName}"
                             class="form-field" placeholder="Store Name">
-    
-                    <input type="text" th:field = "*{store.storeAddress}"
-                        class="form-field" placeholder="Store Address">
+
+                    <div id="station"> 
+                        <label for="storeAddress">Choose Store Location:</label>
+                        <select name="storeAddress"
+                            th:field = "*{store.storeAddress}"
+                            class="form-field">
+                        <option value="Mandaue">Mandaue</option>
+                        <option value="Lapu-Lapu">Lapu-Lapu</option>
+                        </select>
+                        <hr>
+                    </div>
+
                     <p id="instruction">Documents* Scan a valid ID Ex. PhilHealth ID, front and back.
                         Procure documents that proves your legitimacy as a seller in Lapu-Lapu/Mandaue station. 
                         Combine the ID and the documents in a single pdf file and send it here.</p>

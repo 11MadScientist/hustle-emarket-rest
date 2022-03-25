@@ -45,6 +45,9 @@ public class Transaction
 	@JoinColumn(name = "customer_address_id", updatable = false)
 	private CustomerAddress customerAddress;
 
+	@Column(name = "station")
+	private String station;
+
 	@Column(name = "status")
 	private String status;
 
@@ -125,6 +128,16 @@ public class Transaction
 	public void setCustomerAddress(CustomerAddress customerAddress)
 	{
 		this.customerAddress = customerAddress;
+	}
+
+	public String getStation()
+	{
+		return station;
+	}
+
+	public void setStation(String station)
+	{
+		this.station = station;
 	}
 
 	public String getStatus()

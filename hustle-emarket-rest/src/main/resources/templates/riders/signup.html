@@ -90,7 +90,17 @@
 
                   <!-- step container 3 start -->
                   <div id="step3" class="step-container">
-                    <h3>Rider Documents</h3>
+                    <h3>Rider Assignment</h3>
+                    <div id="station"> 
+                        <label for="storeAddress">Location Assignment:</label>
+                        <select name="station"
+                            th:field = "*{riderDetail.station}"
+                            class="form-field">
+                        <option value="Mandaue">Mandaue</option>
+                        <option value="Lapu-Lapu">Lapu-Lapu</option>
+                        </select>
+                        <hr>
+                    </div>
     
                     <p id="instruction">Documents* Scan your Driver's License, front and back.
                         Scan the registration of your motorcycle, put them in one pdf file and 
