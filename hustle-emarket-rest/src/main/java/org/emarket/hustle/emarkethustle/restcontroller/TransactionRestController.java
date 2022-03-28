@@ -63,13 +63,13 @@ public class TransactionRestController
 	 */
 
 	@PostMapping("/transactions")
-	public Transaction addTransactions(@RequestBody Transaction transaction)
+	public List<Transaction> addTransactions(@RequestBody List<Transaction> transactions)
 	{
 		log.info("hello from transactions");
 
-		transactionService.saveTransaction(transaction);
+		transactionService.addTransaction(transactions);
 
-		return transaction;
+		return transactions;
 	}
 
 	/*
@@ -81,7 +81,7 @@ public class TransactionRestController
 	@PutMapping("/transactions")
 	public Transaction updateTransaction(@RequestBody Transaction transaction)
 	{
-		transactionService.saveTransaction(transaction);
+		transactionService.updateTransaction(transaction);
 		return transaction;
 	}
 

@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionServiceImpl implements TransactionService
 {
-
 	RiderSelection riderSelection = RiderSelection.getInstance();
 
 	Logger log = Logger.getLogger(TransactionServiceImpl.class.getName());
@@ -103,20 +102,21 @@ public class TransactionServiceImpl implements TransactionService
 
 	@Override
 	@Transactional
-	public void saveTransaction(List<Transaction> transactions)
+	public void addTransaction(List<Transaction> transactions)
 	{
-		log.info("list transaction");
+		log.info("multiple save transaction here");
 		try
 		{
 			List<History> histories = new ArrayList<>();
-			for (int i = 0; i < transactions.size(); i++)
+			for (Transaction transaction:transactions)
 			{
-				histories = transactions.get(i).getHistories();
+				transaction.setId(0);
+				histories = transaction.getHistories();
 
-				for (int x = 0; x < histories.size(); x++)
+				for (History history:histories)
 				{
-
-					histories.get(x).setTransaction(transactions.get(i));
+					history.setId(0);
+					history.setTransaction(transaction);
 				}
 			}
 
@@ -135,21 +135,43 @@ public class TransactionServiceImpl implements TransactionService
 
 	}
 
+
 	@Override
-	public void saveTransaction(Transaction transaction)
+	public void addTransaction(Transaction transaction)
 	{
 		log.info("single transaction");
+		try
+		{
+			for(History history:transaction.getHistories())
+			{
+				history.setTransaction(transaction);
+				history.setId(0);
+			}
+			transaction.setId(0);
+
+			transactionRepository.save(transaction);
+			basketRepository.deleteByCustomerId(transaction.getCustomer().getId());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new FailedException("ADDING TRANSACTIONS");
+
+		}
+
+	}
+
+	@Override
+	public void updateTransaction(Transaction transaction)
+	{
 		try
 		{
 			transactionRepository.save(transaction);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			throw new FailedException("SAVING TRANSACTIONS");
-
+			throw new FailedException("UPDATING TRANSACTIONS");
 		}
-
 	}
 
 	@Override
@@ -195,26 +217,29 @@ public class TransactionServiceImpl implements TransactionService
 	public List<Transaction> checkout(List<Basket> baskets)
 	{
 		log.info("from checkout");
+//		log.info(baskets.get(0).getStoreAddress().equals(baskets.get(1).getStoreAddress()) + "");
 
+		int transactionCount = 0;
+		int historyCount = 0;
 		List<Transaction> transactions = new ArrayList<>();
 
 		while (!baskets.isEmpty())
 		{
 			Transaction transaction = new Transaction();
+			transaction.setId(transactionCount++);
 			String transactionPlace = baskets.get(0).getStoreAddress();
-
 			int i = 0;
 
 			while (i < baskets.size())
 			{
 				Basket basket = baskets.get(i);
-				log.info(basket.getStoreAddress().equals(transactionPlace) + "");
 				if(basket.getStoreAddress().equals(transactionPlace))
 				{
-					log.info("hello from innerloop " + baskets.size());
 					History history = new History(0, transaction, basket.getStore(),
 							basket.getItem(), basket.getItem().getName(),
 							basket.getItem().getPrice(), basket.getQuantity());
+
+					history.setId(historyCount++);
 
 					transaction.addSubTotal(history.getQuantity() * history.getPrice());
 					transaction.addHistory(history);
@@ -222,10 +247,13 @@ public class TransactionServiceImpl implements TransactionService
 					basketRepository.save(basket);
 					baskets.remove(i);
 				}
-				log.info(i+"increment");
-				i++;
+				else
+				{
+					log.info(i+"increment");
+					i++;
+				}
 			}
-
+			log.info("transactions count: " + transactions.size());
 			transaction.setStation(transactionPlace);
 			transaction.setServiceFee(serviceFee);
 			transaction.setDeliveryFee(deliveryFee);
@@ -278,7 +306,7 @@ public class TransactionServiceImpl implements TransactionService
 		}
 		transaction.setStatus("Preparing");
 
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		return transaction;
 
 	}
@@ -294,7 +322,7 @@ public class TransactionServiceImpl implements TransactionService
 			}
 		}
 
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		return transaction;
 	}
 
@@ -332,7 +360,7 @@ public class TransactionServiceImpl implements TransactionService
 		riderService.saveRider(rider);
 
 		transaction.setRider(rider);
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		System.out.print("after assignment: " );
 		riderSelection.printRiders();
 		return transaction;
@@ -345,7 +373,7 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("On Delivery");
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		return transaction;
 	}
 
@@ -355,7 +383,7 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("Arrived");
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		return transaction;
 	}
 
@@ -365,7 +393,7 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("To Rate");
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		return transaction;
 	}
 
@@ -375,7 +403,7 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("Completed");
-		saveTransaction(transaction);
+		updateTransaction(transaction);
 		return transaction;
 	}
 

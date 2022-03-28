@@ -1,4 +1,4 @@
- use emarketdb;
+--  use emarketdb;
 
 DROP TABLE IF EXISTS item_review;
 

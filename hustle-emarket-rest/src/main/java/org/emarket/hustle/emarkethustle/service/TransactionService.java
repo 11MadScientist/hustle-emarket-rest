@@ -14,11 +14,13 @@ public interface TransactionService
 
 	public Transaction getTransactionById(int id);
 
-	public void saveTransaction(List<Transaction> order);
+	public void addTransaction(List<Transaction> order);
 
-	public void saveTransaction(Transaction order);
+	public void addTransaction(Transaction transaction);
 
-	public void deleteTransaction(Transaction order);
+	public void updateTransaction(Transaction transaction);
+
+	public void deleteTransaction(Transaction transaction);
 
 	public void deleteTransactionById(int id);
 
