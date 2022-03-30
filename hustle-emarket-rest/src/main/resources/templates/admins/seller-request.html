@@ -87,10 +87,10 @@
                           <td th:text="${seller.store.storeAddress}"></td>
                           <td th:text="${seller.store.storeName}"></td>
                           <td>
-                              <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                              <a th:target="_blank" th:href="@{/admins/documents?entity=sellers&id=}+${seller.id}+@{&fileName=}+${seller.store.documents}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
                               <a onclick="return confirm('Are you sure you want to Verify this seller?')" 
                                th:href="@{/admins/verify-seller?sellerId=} + ${seller.id}" class="verify" title="Verify" data-toggle="tooltip"><i class="material-icons">verified</i></a>
-                              <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                              <a th:href="@{/admins/delete?entity=sellers&id=} + ${seller.id}" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                           </td>
                         </tr>
                               

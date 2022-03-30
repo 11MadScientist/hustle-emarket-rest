@@ -26,4 +26,6 @@ public interface ItemService
 
 	List<Item> getItemByDelisted(boolean delisted);
 
+	public void updateItemStock(int id, double d);
+
 }

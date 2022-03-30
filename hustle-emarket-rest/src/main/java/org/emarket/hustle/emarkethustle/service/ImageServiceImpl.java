@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
-import org.emarket.hustle.emarkethustle.ImageConverter;
+import org.emarket.hustle.emarkethustle.algorithms.ImageConverter;
 import org.emarket.hustle.emarkethustle.entity.ImageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

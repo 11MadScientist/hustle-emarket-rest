@@ -1,4 +1,4 @@
-package org.emarket.hustle.emarkethustle;
+package org.emarket.hustle.emarkethustle.algorithms;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 
 import org.emarket.hustle.emarkethustle.algorithms.RiderSelection;
 import org.emarket.hustle.emarkethustle.dao.BasketRepository;
-import org.emarket.hustle.emarkethustle.dao.ItemRepository;
 import org.emarket.hustle.emarkethustle.dao.TransactionRepository;
 import org.emarket.hustle.emarkethustle.entity.Basket;
 import org.emarket.hustle.emarkethustle.entity.History;
@@ -39,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService
 	BasketRepository basketRepository;
 
 	@Autowired
-	ItemRepository itemRepository;
+	ItemService itemService;
 
 	@Autowired
 	RiderService riderService;
@@ -393,6 +392,15 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("To Rate");
+
+//		updating the instock of the item by decrementing it with quantity
+		for(History history:transaction.getHistories())
+		{
+			itemService.updateItemStock(
+					history.getItem().getId(),
+					 (- history.getQuantity()));
+		}
+
 		updateTransaction(transaction);
 		return transaction;
 	}

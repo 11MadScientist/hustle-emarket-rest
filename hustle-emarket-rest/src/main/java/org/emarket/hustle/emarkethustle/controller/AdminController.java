@@ -1,9 +1,11 @@
 package org.emarket.hustle.emarkethustle.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.Seller;
@@ -15,11 +17,13 @@ import org.emarket.hustle.emarkethustle.service.RiderService;
 import org.emarket.hustle.emarkethustle.service.SellerService;
 import org.emarket.hustle.emarkethustle.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/admins")
@@ -38,6 +42,9 @@ public class AdminController
 
 	@Autowired
 	RiderService riderService;
+
+	@Autowired
+	DocumentConverter documentConverter;
 
 	/*
 	 * #######################################
@@ -431,4 +438,38 @@ public class AdminController
 		model.addAttribute("riders", riders);
 		return ("admins/rider-list");
 	}
+
+	@GetMapping(value = "documents",
+			produces = MediaType.APPLICATION_PDF_VALUE)
+	public @ResponseBody byte [] pdf(
+			@RequestParam(value = "entity") String entity,
+			@RequestParam(value = "id") int id,
+			@RequestParam(value = "fileName") String fileName) throws IOException
+	{
+		return documentConverter.getDocument(entity, fileName, id);
+
+	}
+
+	/*
+	 * #######################################
+	 * ########## DELETE SELLER ##############
+	 * #######################################
+	 */
+
+	@GetMapping("/delete")
+	public String deleteSeller(
+			@RequestParam("id") int id,
+			@RequestParam("entity") String entity)
+	{
+		documentConverter.deleteDocument(entity, id);
+		if(entity.equals("sellers"))
+		{
+			sellerService.deleteSellerById(id);
+			return "redirect:/admins/seller-requests?searchField=authorized&field=creationDate";
+		}
+
+		riderService.deleteRiderById(id);
+		return "redirect:/admins/rider-requests?searchField=authorized&field=creationDate";
+	}
+
 }

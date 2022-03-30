@@ -1,10 +1,10 @@
 package org.emarket.hustle.emarkethustle.controller;
 
-import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.RiderService;
@@ -31,6 +31,9 @@ public class RiderController
 	private RiderService riderService;
 
 	@Autowired
+	DocumentConverter documentConverter;
+
+	@Autowired
 	private ValidationService validationService;
 
 	@Autowired
@@ -49,41 +52,26 @@ public class RiderController
 			consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public String saveRider(
 			@RequestParam("file") MultipartFile file,
-			@ModelAttribute("seller") Rider rider)
+			@ModelAttribute("rider") Rider rider)
 	{
+		String fileName = file.getOriginalFilename();
 
+		rider.setId(0);
 		rider.setPassword(bcrypt.encode(rider.getPassword()));
+		rider.getRiderDetail().setDocuments(fileName);
+		rider = riderService.saveRider(rider);
 
 		String fs = FileSystems.getDefault().getSeparator();
 
 		Path basePath = FileSystems.getDefault()
 				.getPath(".", "src", "main", "resources", "documents", "riders");
 
-		String fileName = file.getOriginalFilename();
-
 		String filePath = basePath.normalize().toAbsolutePath()
 				+ fs + rider.getId();
 
 		log.info(filePath);
 
-		File directory = new File(filePath);
-
-		if(!directory.exists())
-		{
-			directory.mkdir();
-		}
-
-		try
-		{
-
-			file.transferTo(new File(filePath + fs + fileName + ".pdf"));
-			rider.getRiderDetail().setDocuments(fileName);
-			rider = riderService.saveRider(rider);
-		}
-		catch (Exception e)
-		{
-			// TODO: handle exception
-		}
+		documentConverter.saveDocument(filePath, fileName, file);
 
 		return ("redirect:/");
 	}

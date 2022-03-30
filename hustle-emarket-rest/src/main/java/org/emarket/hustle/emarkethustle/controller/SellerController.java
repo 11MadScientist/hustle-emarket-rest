@@ -1,10 +1,10 @@
 package org.emarket.hustle.emarkethustle.controller;
 
-import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.SellerService;
@@ -31,6 +31,9 @@ public class SellerController
 	private SellerService sellerService;
 
 	@Autowired
+	DocumentConverter documentConverter;
+
+	@Autowired
 	private ValidationService validationService;
 
 	@Autowired
@@ -51,46 +54,32 @@ public class SellerController
 			method = RequestMethod.POST,
 			consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public String saveSeller(
-			@RequestParam("file") MultipartFile file,
-			@ModelAttribute("seller") Seller seller)
+			@ModelAttribute("seller") Seller seller,
+			@RequestParam("file") MultipartFile file)
 	{
+		String fileName = file.getOriginalFilename();
 
+		System.out.println(fileName);
+		seller.setId(0);
 		seller.getStore().setId(0);
 		seller.getStore().setSeller(seller);
 		seller.setPassword(bcrypt.encode(seller.getPassword()));
+		seller.getStore().setDocuments(fileName);
+		seller = sellerService.saveSeller(seller);
 
 		String fs = FileSystems.getDefault().getSeparator();
 
 		Path basePath = FileSystems.getDefault()
 				.getPath(".", "src", "main", "resources", "documents", "sellers");
 
-		String fileName = file.getOriginalFilename();
-
 		String filePath = basePath.normalize().toAbsolutePath()
 				+ fs + seller.getId();
 
 		log.info(filePath);
 
-		File directory = new File(filePath);
+		documentConverter.saveDocument(filePath, fileName, file);
 
-		if(!directory.exists())
-		{
-			directory.mkdir();
-		}
-
-		try
-		{
-
-			file.transferTo(new File(filePath + fs + fileName + ".pdf"));
-			seller.getStore().setDocuments(fileName);
-			seller = sellerService.saveSeller(seller);
-		}
-		catch (Exception e)
-		{
-			// TODO: handle exception
-		}
-
-		return ("index");
+		return ("redirect:/");
 	}
 
 	@GetMapping("/validation")

@@ -92,7 +92,6 @@ public class ItemServiceImpl implements ItemService
 
 
 	@Override
-	@Transactional
 	public void saveItem(Item item)
 	{
 		try
@@ -142,7 +141,6 @@ public class ItemServiceImpl implements ItemService
 	}
 
 	@Override
-	@Transactional
 	public void deleteItemByStore(int id)
 	{
 		try
@@ -154,6 +152,15 @@ public class ItemServiceImpl implements ItemService
 			throw new FailedException("DELETING ITEMS IN STORE: " + id);
 		}
 
+	}
+
+	@Override
+	public void updateItemStock(int id, double value)
+	{
+		Item item = getItemById(id);
+
+		item.updateInStock(value);
+		saveItem(item);
 	}
 
 }

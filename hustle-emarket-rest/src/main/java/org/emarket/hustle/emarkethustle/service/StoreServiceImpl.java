@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import org.emarket.hustle.emarkethustle.Algorithms;
+import org.emarket.hustle.emarkethustle.algorithms.QuickSort;
 import org.emarket.hustle.emarkethustle.dao.StoreRepository;
 import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestStore;
@@ -27,7 +27,7 @@ public class StoreServiceImpl implements StoreService
 	StoreRepository storeRepository;
 
 	@Autowired
-	Algorithms algorithms;
+	QuickSort algorithms;
 
 	@Override
 	public List<Store> getStore()

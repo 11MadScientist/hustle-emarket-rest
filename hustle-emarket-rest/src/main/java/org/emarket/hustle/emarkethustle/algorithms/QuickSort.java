@@ -1,10 +1,10 @@
-package org.emarket.hustle.emarkethustle;
+package org.emarket.hustle.emarkethustle.algorithms;
 
 import java.util.List;
 
 import org.emarket.hustle.emarkethustle.entity.Store;
 
-public class Algorithms
+public class QuickSort
 {
 //	quick sort
 	public void sortStoreByStockSold(List<Store> stores, int low, int high)
