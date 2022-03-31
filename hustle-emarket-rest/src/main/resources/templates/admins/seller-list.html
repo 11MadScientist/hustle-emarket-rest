@@ -93,7 +93,7 @@
                           <td th:text="${seller.store.storeAddress}"></td>
                           <td th:text="${seller.store.storeName}"></td>
                           <td>
-                              <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                              <a th:target="_blank" th:href="@{/admins/documents?entity=sellers&id=}+${seller.id}+@{&fileName=}+${seller.store.documents}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
                               <a id="prohibitAction" onclick="return confirm('Are you sure you wish to proceed?')" 
                                th:href="@{/admins/prohibit-seller?sellerId=} + ${seller.id}" class="prohibit-action" title="Disable" data-toggle="tooltip"><i class="material-icons prohibit-icons">block</i></a>
                               <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons ">&#xE872;</i></a>
