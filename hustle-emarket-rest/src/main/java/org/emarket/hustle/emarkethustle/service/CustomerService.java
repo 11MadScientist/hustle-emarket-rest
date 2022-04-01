@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
 
 public interface CustomerService
 {
@@ -13,10 +14,18 @@ public interface CustomerService
 
 	public Customer getCustomerById(int id);
 
-	public Customer saveCustomer(Customer customer);
+	Customer addCustomer(Customer customer);
+
+	Customer updateCustomer(Customer customer);
 
 	public void deleteCustomerById(int id);
 
 	Customer findCustomerByUsername(String username);
+
+	Customer loginCustomer(Customer customer);
+
+	Customer logoutCustomer(Customer customer);
+
+	Customer changePass(PutRequestChangePassword request);
 
 }

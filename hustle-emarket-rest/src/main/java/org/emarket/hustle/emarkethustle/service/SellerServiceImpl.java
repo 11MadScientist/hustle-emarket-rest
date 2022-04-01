@@ -7,8 +7,12 @@ import java.util.logging.Logger;
 import org.emarket.hustle.emarkethustle.dao.SellerRepository;
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
+import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
+import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +28,12 @@ public class SellerServiceImpl implements SellerService
 
 	@Autowired
 	SellerRepository sellerRepository;
+
+	@Autowired
+	private ValidationService validationService;
+
+	@Autowired
+	private BcryptSecurity bcrypt;
 
 	@Override
 	public List<Seller> getSeller()
@@ -100,16 +110,75 @@ public class SellerServiceImpl implements SellerService
 	}
 
 	@Override
-	public Seller saveSeller(Seller seller)
+	public Seller addSeller(Seller seller)
 	{
+		// check if the username is already taken and if the email is taken
+
+		if(!validationService.isEmailNotTaken(seller.getSellerDetail().getEmail()))
+		{
+			throw new UniqueErrorException("Email ");
+		}
+
+		if(!validationService.isUsernameNotTaken(seller.getUsername()))
+		{
+			throw new UniqueErrorException("Username ");
+		}
+
+		/*
+		 * set seller id to 0 to invoke insert function
+		 * not update
+		 *
+		 * then instantiate creation date
+		 *
+		 * then encrypt password
+		 */
+
+		seller.setId(0);
+
 		try
 		{
-			return sellerRepository.save(seller);
+			/* creating connection from store to seller */
+			seller.getStore().setId(0);
+			seller.getStore().setSeller(seller);
 		}
-		catch (Exception e)
+		finally
 		{
-			throw new FailedException("SAVING SELLER");
+			seller.setPassword(bcrypt.encode(seller.getPassword()));
 		}
+
+
+		return sellerRepository.save(seller);
+	}
+
+	@Override
+	public Seller updateSeller(Seller seller)
+	{
+		/*
+		 * Getting the password from the database and injecting it to the
+		 * current seller
+		 * passing the creation date to remain unchanged
+		 * updating the modifiedDate
+		 */
+
+		Seller dbseller = getSellerById(seller.getId());
+
+		if(dbseller == null)
+		{
+			throw new NotFoundException("SELLER WITH ID: " + seller.getId());
+		}
+
+		seller.setPassword(dbseller.getPassword());
+
+		if(dbseller.getStore() == null)
+		{
+			/* creating connection from store to seller */
+			seller.getStore().setId(0);
+		}
+		seller.getStore().setSeller(seller);
+
+
+		return sellerRepository.save(seller);
+
 	}
 
 	@Override
@@ -157,6 +226,54 @@ public class SellerServiceImpl implements SellerService
 	public int countSellerRequest()
 	{
 		return sellerRepository.countSellerRequest();
+	}
+
+	@Override
+	public Seller loginSeller(Seller seller)
+	{
+		Seller dbSeller = findSellerByUsername(seller.getUsername());
+
+		if(bcrypt.matches(seller.getPassword(), dbSeller.getPassword()))
+		{
+			if(dbSeller.getSellerDetail().isAuthorized() &&
+					!dbSeller.getSellerDetail().isProhibited())
+			{
+				dbSeller.getSellerDetail().setStatus(true);
+				sellerRepository.save(dbSeller);
+				return dbSeller;
+			}
+			else
+			{
+				throw new FailedException("LOGIN");
+			}
+		}
+		throw new ErrorLoginException("SELLER [Username, Password]");
+	}
+
+	@Override
+	public Seller logoutSeller(Seller seller)
+	{
+		Seller dbSeller = findSellerByUsername(seller.getUsername());
+
+		dbSeller.getSellerDetail().setStatus(false);
+		sellerRepository.save(dbSeller);
+		return dbSeller;
+	}
+
+	@Override
+	public Seller changePass(PutRequestChangePassword changePass)
+	{
+		Seller dbSeller = getSellerById(changePass.getId());
+
+		if(bcrypt.matches(changePass.getPassword(), dbSeller.getPassword()))
+		{
+			dbSeller.setPassword(bcrypt.encode(changePass.getNewPassword()));
+
+			sellerRepository.save(dbSeller);
+			return dbSeller;
+		}
+
+		throw new FailedException("UPDATING PASSWORD");
 	}
 
 

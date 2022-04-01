@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
 
 public interface SellerService
 {
@@ -13,7 +14,9 @@ public interface SellerService
 
 	public Seller getSellerById(int id);
 
-	public Seller saveSeller(Seller seller);
+	public Seller addSeller(Seller seller);
+
+	public Seller updateSeller(Seller seller);
 
 	public void deleteSeller(Seller seller);
 
@@ -22,4 +25,11 @@ public interface SellerService
 	public Seller findSellerByUsername(String username);
 
 	public int countSellerRequest();
+
+	Seller loginSeller(Seller seller);
+
+	Seller logoutSeller(Seller seller);
+
+	Seller changePass(PutRequestChangePassword request);
+
 }

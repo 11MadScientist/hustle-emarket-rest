@@ -7,15 +7,29 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter
 {
+//	@Autowired
+//	UserDetailServiceImpl userDetailService;
+
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception
+//	{
+//		auth.userDetailsService(userDetailService);
+//	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception
 	{
+
+//		http.authorizeRequests()
+//				.antMatchers("/admins/**").hasRole("ADMIN")
+//				.antMatchers("/", "resources/**").permitAll()
+//				.and().formLogin()
+//				.loginPage("/login.html");
+
 		http.csrf()
 				.disable()
 				.authorizeRequests()
-
-				.antMatchers("/", "/public/**", "/resources/**", "/resources/public/**")
+				.antMatchers("/**")
 				.permitAll();
 
 	}

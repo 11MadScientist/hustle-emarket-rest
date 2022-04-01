@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Rider;
-import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.RiderService;
 import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class RiderController
 	@Autowired
 	private ValidationService validationService;
 
-	@Autowired
-	private BcryptSecurity bcrypt;
-
 	@GetMapping("/signup")
 	public String riderSignup(Model model)
 	{
@@ -56,10 +52,9 @@ public class RiderController
 	{
 		String fileName = file.getOriginalFilename();
 
-		rider.setId(0);
-		rider.setPassword(bcrypt.encode(rider.getPassword()));
+		log.info(rider.getPassword());
 		rider.getRiderDetail().setDocuments(fileName);
-		rider = riderService.saveRider(rider);
+		rider = riderService.addRider(rider);
 
 		String fs = FileSystems.getDefault().getSeparator();
 

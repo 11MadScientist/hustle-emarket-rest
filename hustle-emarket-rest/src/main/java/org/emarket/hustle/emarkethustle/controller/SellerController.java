@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Seller;
-import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.SellerService;
 import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class SellerController
 	@Autowired
 	private ValidationService validationService;
 
-	@Autowired
-	private BcryptSecurity bcrypt;
-
 	@GetMapping("/signup")
 	public String sellerSignup(Model model)
 	{
@@ -60,12 +56,8 @@ public class SellerController
 		String fileName = file.getOriginalFilename();
 
 		System.out.println(fileName);
-		seller.setId(0);
-		seller.getStore().setId(0);
-		seller.getStore().setSeller(seller);
-		seller.setPassword(bcrypt.encode(seller.getPassword()));
 		seller.getStore().setDocuments(fileName);
-		seller = sellerService.saveSeller(seller);
+		seller = sellerService.addSeller(seller);
 
 		String fs = FileSystems.getDefault().getSeparator();
 

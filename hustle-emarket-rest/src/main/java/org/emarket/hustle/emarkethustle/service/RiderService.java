@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
 
 public interface RiderService
 {
@@ -13,18 +14,24 @@ public interface RiderService
 
 	public Rider getRiderById(int id);
 
-	public Rider saveRider(Rider rider);
+	public Rider addRider(Rider rider);
+
+	public Rider updateRider(Rider rider);
 
 	public void deleteRider(Rider rider);
 
 	public void deleteRiderById(int id);
-
-	public Rider loginRider(String username);
 
 	public Rider findRiderByUsername(String username);
 
 	public int countRiderRequest();
 
 	public Rider availableRider(Rider rider);
+
+	Rider loginRider(Rider rider);
+
+	Rider logoutRider(Rider rider);
+
+	Rider changePass(PutRequestChangePassword request);
 
 }

@@ -5,14 +5,9 @@ import java.util.List;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
-import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
-import org.emarket.hustle.emarkethustle.response.FailedException;
-import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
-import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
-import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.emarket.hustle.emarkethustle.service.RiderService;
-import org.emarket.hustle.emarkethustle.service.ValidationService;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RiderRestController
 {
 
+	Logger log = Logger.getLogger(RiderRestController.class);
 	// for the bean bCrypt
-	@Autowired
-	private BcryptSecurity bcrypt;
-
-//	for duplicate validation
-	@Autowired
-	private ValidationService validationService;
 
 	@Autowired
 	private RiderService riderService;
@@ -76,23 +66,7 @@ public class RiderRestController
 	@PostMapping("/riders")
 	public Rider addRider(@RequestBody Rider rider)
 	{
-		// check if the username is already taken and if the email is taken
-
-		if(!validationService.isEmailNotTaken(rider.getRiderDetail().getEmail()))
-		{
-			throw new UniqueErrorException("Email ");
-		}
-
-		if(!validationService.isUsernameNotTaken(rider.getUsername()))
-		{
-			throw new UniqueErrorException("Username ");
-		}
-
-		rider.setId(0);
-
-		/* encrypting password using bcrypt */
-		rider.setPassword(bcrypt.encode(rider.getPassword()));
-		return riderService.saveRider(rider);
+		return riderService.addRider(rider);
 
 	}
 
@@ -106,16 +80,7 @@ public class RiderRestController
 	public Rider updateRider(@RequestBody Rider rider)
 	{
 
-		Rider dbRider = riderService.getRiderById(rider.getId());
-
-		if(dbRider == null)
-		{
-			throw new NotFoundException("CUSTOMER WITH ID: " + rider.getId());
-		}
-
-		rider.setPassword(dbRider.getPassword());
-
-		return riderService.saveRider(rider);
+		return riderService.updateRider(rider);
 
 	}
 
@@ -137,27 +102,6 @@ public class RiderRestController
 
 	/*
 	 * #######################################
-	 * ########### RIDERS LOGIN ##############
-	 * #######################################
-	 */
-
-	@PostMapping("/riders/login")
-	public Rider loginRider(@RequestBody Rider rider)
-	{
-
-		Rider dbRider = riderService.findRiderByUsername(rider.getUsername());
-
-		if(bcrypt.matches(rider.getPassword(), dbRider.getPassword()))
-		{
-			riderService.saveRider(dbRider);
-			return dbRider;
-		}
-		throw new ErrorLoginException("RIDER [Username, Password]");
-
-	}
-
-	/*
-	 * #######################################
 	 * ######### RIDER AVAILABLE #############
 	 * #######################################
 	 */
@@ -169,6 +113,20 @@ public class RiderRestController
 
 	/*
 	 * #######################################
+	 * ########### RIDERS LOGIN ##############
+	 * #######################################
+	 */
+
+	@PostMapping("/riders/login")
+	public Rider loginRider(@RequestBody Rider rider)
+	{
+
+		return riderService.loginRider(rider);
+
+	}
+
+	/*
+	 * #######################################
 	 * ########### RIDER LOGOUT ##############
 	 * #######################################
 	 */
@@ -176,13 +134,7 @@ public class RiderRestController
 	@PostMapping("/riders/logout")
 	public Rider logoutRider(@RequestBody Rider rider)
 	{
-
-		Rider dbRider = riderService.findRiderByUsername(rider.getUsername());
-
-		dbRider.setStatus("Offline");
-		riderService.saveRider(dbRider);
-		return dbRider;
-
+		return riderService.loginRider(rider);
 	}
 
 	/*
@@ -194,19 +146,7 @@ public class RiderRestController
 	@PutMapping("/riders/password")
 	public Rider changePassword(@RequestBody PutRequestChangePassword changePass)
 	{
-
-		Rider dbRider = riderService.getRiderById(changePass.getId());
-
-		if(bcrypt.matches(changePass.getPassword(), dbRider.getPassword()))
-		{
-			dbRider.setPassword(bcrypt.encode(changePass.getNewPassword()));
-
-			riderService.saveRider(dbRider);
-			return dbRider;
-		}
-
-		throw new FailedException("UPDATING PASSWORD");
-
+		return riderService.changePass(changePass);
 	}
 
 }

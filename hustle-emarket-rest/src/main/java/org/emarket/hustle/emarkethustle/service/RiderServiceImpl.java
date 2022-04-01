@@ -7,18 +7,32 @@ import org.emarket.hustle.emarkethustle.algorithms.RiderSelection;
 import org.emarket.hustle.emarkethustle.dao.RiderRepository;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
 import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.emarket.hustle.emarkethustle.response.NotPermittedException;
+import org.emarket.hustle.emarkethustle.response.UniqueErrorException;
+import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RiderServiceImpl implements RiderService
 {
+	Logger log = Logger.getLogger(RiderServiceImpl.class);
+
+//	for duplicate validation
+	@Autowired
+	private ValidationService validationService;
 
 	@Autowired
 	RiderRepository riderRepository;
+
+	// for the bean bCrypt
+	@Autowired
+	private BcryptSecurity bcrypt;
 
 	RiderSelection riderSeletion = RiderSelection.getInstance();
 
@@ -57,16 +71,41 @@ public class RiderServiceImpl implements RiderService
 	}
 
 	@Override
-	public Rider saveRider(Rider rider)
+	public Rider addRider(Rider rider)
 	{
-		try
+		// check if the username is already taken and if the email is taken
+
+		if(!validationService.isEmailNotTaken(rider.getRiderDetail().getEmail()))
 		{
-			return riderRepository.save(rider);
+			throw new UniqueErrorException("Email ");
 		}
-		catch (Exception e)
+
+		if(!validationService.isUsernameNotTaken(rider.getUsername()))
 		{
-			throw new FailedException("SAVING RIDER");
+			throw new UniqueErrorException("Username ");
 		}
+
+		rider.setId(0);
+
+		/* encrypting password using bcrypt */
+		rider.setPassword(bcrypt.encode(rider.getPassword()));
+		return riderRepository.save(rider);
+
+	}
+
+	@Override
+	public Rider updateRider(Rider rider)
+	{
+		Rider dbRider = getRiderById(rider.getId());
+
+		if(dbRider == null)
+		{
+			throw new NotFoundException("RIDER WITH ID: " + rider.getId());
+		}
+
+		rider.setPassword(dbRider.getPassword());
+
+		return riderRepository.save(rider);
 
 	}
 
@@ -99,28 +138,6 @@ public class RiderServiceImpl implements RiderService
 	}
 
 	@Override
-	public Rider loginRider(String username)
-	{
-		try
-		{
-			Rider rider = riderRepository.findByUsername(username);
-
-			if(rider.getRiderDetail().isAuthorized() == false ||
-					rider.getRiderDetail().isProhibited() == true)
-			{
-				throw new ErrorLoginException("RIDER WITH USERNAME" + username);
-			}
-
-			return rider;
-		}
-		catch (Exception e)
-		{
-			throw new NotFoundException("RIDER WITH USERNAME" + username);
-		}
-
-	}
-
-	@Override
 	public int countRiderRequest()
 	{
 		return riderRepository.countRiderRequest();
@@ -131,9 +148,64 @@ public class RiderServiceImpl implements RiderService
 	{
 		Rider dbRider = getRiderById(rider.getId());
 		dbRider.setStatus("Available");
-		saveRider(dbRider);
+		riderRepository.save(dbRider);
 		riderSeletion.enqueueRider(dbRider);
 		return dbRider;
+	}
+
+	@Override
+	public Rider loginRider(Rider rider)
+	{
+
+		Rider dbrider;
+		try
+		{
+			dbrider = riderRepository.findByUsername(rider.getUsername());
+		}
+		catch (Exception e)
+		{
+			throw new NotFoundException("RIDER WITH USERNAME" + rider.getUsername());
+		}
+
+		if(dbrider.getRiderDetail().isAuthorized() == false ||
+				dbrider.getRiderDetail().isProhibited() == true)
+		{
+			throw new NotPermittedException("RIDER WITH USERNAME " + rider.getUsername());
+		}
+
+		else if(bcrypt.matches(rider.getPassword(), dbrider.getPassword()))
+		{
+			riderRepository.save(dbrider);
+			return dbrider;
+		}
+		throw new ErrorLoginException("RIDER [Username, Password]");
+
+	}
+
+	@Override
+	public Rider logoutRider(Rider rider)
+	{
+		Rider dbRider = findRiderByUsername(rider.getUsername());
+
+		dbRider.setStatus("Offline");
+		riderRepository.save(dbRider);
+		return dbRider;
+	}
+
+	@Override
+	public Rider changePass(PutRequestChangePassword changePass)
+	{
+		Rider dbRider = getRiderById(changePass.getId());
+
+		if(bcrypt.matches(changePass.getPassword(), dbRider.getPassword()))
+		{
+			dbRider.setPassword(bcrypt.encode(changePass.getNewPassword()));
+
+			riderRepository.save(dbRider);
+			return dbRider;
+		}
+
+		throw new FailedException("UPDATING PASSWORD");
 	}
 
 }

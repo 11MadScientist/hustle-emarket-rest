@@ -356,7 +356,7 @@ public class TransactionServiceImpl implements TransactionService
 //		you need to implement notification for the rider here.
 		Rider rider = riderSelection.dequeueRider(transaction.getStation());
 		rider.setStatus("Occupied");
-		riderService.saveRider(rider);
+		riderService.updateRider(rider);
 
 		transaction.setRider(rider);
 		updateTransaction(transaction);

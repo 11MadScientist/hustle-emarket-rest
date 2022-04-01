@@ -139,7 +139,7 @@ public class AdminController
 
 		Seller seller = sellerService.getSellerById(id);
 		seller.getSellerDetail().setAuthorized(true);
-		sellerService.saveSeller(seller);
+		sellerService.updateSeller(seller);
 
 		return "redirect:/admins/seller-requests?searchField=authorized&field=creationDate";
 	}
@@ -158,7 +158,7 @@ public class AdminController
 
 		Seller seller = sellerService.getSellerById(id);
 		seller.getSellerDetail().setProhibited(!seller.getSellerDetail().isProhibited());
-		sellerService.saveSeller(seller);
+		sellerService.updateSeller(seller);
 
 		return "redirect:/admins/seller-list?searchField=authorized&field=lastName"
 				+ "&authorized=true&prohibited=" + !seller.getSellerDetail().isProhibited();
@@ -261,7 +261,7 @@ public class AdminController
 
 		Customer customer = customerService.getCustomerById(id);
 		customer.getCustomerDetail().setProhibited(!customer.getCustomerDetail().isProhibited());
-		customerService.saveCustomer(customer);
+		customerService.updateCustomer(customer);
 
 		return "redirect:/admins/customer-list?searchField=name&field=lastName&prohibited="
 				+ !customer.getCustomerDetail().isProhibited();
@@ -371,7 +371,7 @@ public class AdminController
 
 		Rider rider = riderService.getRiderById(id);
 		rider.getRiderDetail().setAuthorized(true);
-		riderService.saveRider(rider);
+		riderService.updateRider(rider);
 
 		return "redirect:/admins/rider-requests?searchField=authorized&field=creationDate";
 	}
@@ -390,7 +390,7 @@ public class AdminController
 
 		Rider rider = riderService.getRiderById(id);
 		rider.getRiderDetail().setProhibited(!rider.getRiderDetail().isProhibited());
-		riderService.saveRider(rider);
+		riderService.updateRider(rider);
 
 		return "redirect:/admins/rider-list?searchField=authorized&field=lastName"
 				+ "&authorized=true&prohibited=" + !rider.getRiderDetail().isProhibited();
