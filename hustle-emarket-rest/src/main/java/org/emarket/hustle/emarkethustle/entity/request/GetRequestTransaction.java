@@ -15,6 +15,7 @@ public class GetRequestTransaction
 
 	public GetRequestTransaction()
 	{
+		field = "id";
 		page = 0;
 		size = 50;
 	}
@@ -67,6 +68,13 @@ public class GetRequestTransaction
 	public void setSize(int size)
 	{
 		this.size = size;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "GetRequestTransaction [userProfile=" + userProfile + ", userId=" + userId + ", field=" + field
+				+ ", page=" + page + ", size=" + size + "]";
 	}
 
 }

@@ -1,13 +1,10 @@
 package org.emarket.hustle.emarkethustle.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -26,7 +23,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		scope = Admin.class,
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class Admin
+public class Admin extends User
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +45,6 @@ public class Admin
 	@Column(name = "role")
 	private String role;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "rider_detail_id", updatable = false)
-	private RiderDetail riderDetail;
-
 	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
 
@@ -63,73 +56,75 @@ public class Admin
 
 	}
 
+	@Override
 	public int getId()
 	{
 		return id;
 	}
 
+	@Override
 	public void setId(int id)
 	{
 		this.id = id;
 	}
 
+	@Override
 	public String getFirstName()
 	{
 		return firstName;
 	}
 
+	@Override
 	public void setFirstName(String firstName)
 	{
 		this.firstName = firstName;
 	}
 
+	@Override
 	public String getLastName()
 	{
 		return lastName;
 	}
 
+	@Override
 	public void setLastName(String lastName)
 	{
 		this.lastName = lastName;
 	}
 
+	@Override
 	public String getUsername()
 	{
 		return username;
 	}
 
+	@Override
 	public void setUsername(String username)
 	{
 		this.username = username;
 	}
 
+	@Override
 	@JsonIgnore
 	public String getPassword()
 	{
 		return password;
 	}
 
+	@Override
 	@JsonProperty
 	public void setPassword(String password)
 	{
 		this.password = password;
 	}
 
-	public RiderDetail getRiderDetail()
-	{
-		return riderDetail;
-	}
-
-	public void setRiderDetail(RiderDetail riderDetail)
-	{
-		this.riderDetail = riderDetail;
-	}
-
+	@Override
 	public String getRole()
 	{
 		return role;
 	}
 
+	@Override
 	public void setRole(String role)
 	{
 		this.role = role;
@@ -158,9 +153,9 @@ public class Admin
 	@Override
 	public String toString()
 	{
-		return "Rider [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
-				+ ", password=" + password + ", riderDetail=" + riderDetail + ", creationDate=" + creationDate
-				+ ", modifiedDate=" + modifiedDate + "]";
+		return "Admin [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
+				+ ", password=" + password + ", role=" + role + ", creationDate=" + creationDate + ", modifiedDate="
+				+ modifiedDate + "]";
 	}
 
 }

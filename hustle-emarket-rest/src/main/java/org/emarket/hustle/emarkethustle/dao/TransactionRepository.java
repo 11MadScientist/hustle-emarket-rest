@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer>
 {
-	public Slice<Transaction> findByCustomer(
+	public Slice<Transaction> findByCustomerId(
 			int id, Pageable pageable);
 
-	public Slice<Transaction> findByRider(
+	public Slice<Transaction> findByRiderId(
 			int id, Pageable pageable);
+
+	public Transaction findByRiderIdAndStatus(int id, String status);
 }

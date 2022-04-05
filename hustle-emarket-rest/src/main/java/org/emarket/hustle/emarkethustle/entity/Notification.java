@@ -24,6 +24,15 @@ public class Notification
 	@Column(name = "user_id", updatable = false)
 	private int userId;
 
+	@Column(name = "link")
+	private String link;
+
+	@Column(name = "notif_type")
+	private String notifType;
+
+	@Column(name = "isread")
+	private boolean isRead;
+
 	@Column(name = "role", updatable = false)
 	private String role;
 
@@ -54,6 +63,36 @@ public class Notification
 	public void setUserId(int userId)
 	{
 		this.userId = userId;
+	}
+
+	public String getLink()
+	{
+		return link;
+	}
+
+	public void setLink(String link)
+	{
+		this.link = link;
+	}
+
+	public String getNotifType()
+	{
+		return notifType;
+	}
+
+	public void setNotifType(String notifType)
+	{
+		this.notifType = notifType;
+	}
+
+	public boolean isRead()
+	{
+		return isRead;
+	}
+
+	public void setRead(boolean isRead)
+	{
+		this.isRead = isRead;
 	}
 
 	public String getRole()
@@ -99,8 +138,9 @@ public class Notification
 	@Override
 	public String toString()
 	{
-		return "Notification [id=" + id + ", userId=" + userId + ", role=" + role + ", message=" + message
-				+ ", creationDate=" + creationDate + ", readDate=" + readDate + "]";
+		return "Notification [id=" + id + ", userId=" + userId + ", link=" + link + ", notifType=" + notifType
+				+ ", isRead=" + isRead + ", role=" + role + ", message=" + message + ", creationDate=" + creationDate
+				+ ", readDate=" + readDate + "]";
 	}
 
 }

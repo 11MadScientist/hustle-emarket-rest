@@ -61,6 +61,10 @@ public class Transaction
 	@Column(name = "sub_total")
 	private double subTotal;
 
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE })
+	@JoinColumn(name = "promotion", updatable = false)
+	private Promotion promotion;
+
 	@Column(name = "service_fee")
 	private double serviceFee;
 
@@ -178,6 +182,16 @@ public class Transaction
 	public void setSubTotal(double subTotal)
 	{
 		this.subTotal = subTotal;
+	}
+
+	public Promotion getPromotion()
+	{
+		return promotion;
+	}
+
+	public void setPromotion(Promotion promotion)
+	{
+		this.promotion = promotion;
 	}
 
 	public double getServiceFee()

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		scope = Rider.class,
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class Rider
+public class Rider extends User
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,31 +74,37 @@ public class Rider
 
 	}
 
+	@Override
 	public int getId()
 	{
 		return id;
 	}
 
+	@Override
 	public void setId(int id)
 	{
 		this.id = id;
 	}
 
+	@Override
 	public String getFirstName()
 	{
 		return firstName;
 	}
 
+	@Override
 	public void setFirstName(String firstName)
 	{
 		this.firstName = firstName;
 	}
 
+	@Override
 	public String getLastName()
 	{
 		return lastName;
 	}
 
+	@Override
 	public void setLastName(String lastName)
 	{
 		this.lastName = lastName;
@@ -146,11 +152,13 @@ public class Rider
 		this.riderDetail = riderDetail;
 	}
 
+	@Override
 	public String getRole()
 	{
 		return role;
 	}
 
+	@Override
 	public void setRole(String role)
 	{
 		this.role = role;

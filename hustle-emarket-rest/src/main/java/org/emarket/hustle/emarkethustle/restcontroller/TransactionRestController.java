@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,13 +35,24 @@ public class TransactionRestController
 	 */
 
 	@GetMapping("/transactions")
-	public List<Transaction> getTransaction(@RequestBody(required = false) GetRequestTransaction getRequest)
+	public List<Transaction> getTransaction(
+			@RequestParam(name = "user", required = false) String userProfile,
+			@RequestParam(name = "id", required = false) int id,
+			@RequestParam(name = "page", required = false) Integer page)
 	{
-		if(getRequest == null)
+		if(userProfile == null)
 		{
 			return transactionService.getTransaction();
 		}
-
+		GetRequestTransaction getRequest = new GetRequestTransaction();
+		System.out.println(userProfile);
+		getRequest.setUserProfile(userProfile);
+		getRequest.setUserId(id);
+		if(page != null)
+		{
+			getRequest.setPage(page);
+		}
+		System.out.println(getRequest);
 		return transactionService.getTransaction(getRequest);
 	}
 
@@ -162,10 +174,22 @@ public class TransactionRestController
 	 * ###############################################
 	 */
 
-	@GetMapping("/transactions/riders/{id}")
+	@GetMapping("/transactions/customers/assign/{id}")
 	public Transaction assignRider(@PathVariable int id)
 	{
 		return transactionService.assignRider(id);
+	}
+
+	/*
+	 * ###############################################
+	 * ########### GET ASSIGNMENT RIDER ##############
+	 * ###############################################
+	 */
+
+	@GetMapping("/transactions/riders/assign/{id}")
+	public Transaction getAssignment(@PathVariable int id)
+	{
+		return transactionService.getRiderAssignment(id);
 	}
 
 	/*

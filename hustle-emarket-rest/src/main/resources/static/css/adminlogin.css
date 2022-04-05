@@ -7,15 +7,17 @@
 }
 
 body{
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Intr', sans-serif;
     overflow: hidden;
-	background-image: linear-gradient(to right, #000000,#4f5051);
+	background-color: #ffffff;
+	/* background-image: linear-gradient(to right,#b2b1b1, #fffdfd); */
 }
 
 .logo{
+
 	/* background-image: linear-gradient(to right, #000000,#ffffff); */
-	/* background-color: #000000;	 */
-	padding-top: 60px;
+	/* background-color: #d9d9d9;	 */
+	/* padding-top: 50px; */
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -25,6 +27,11 @@ body{
 	height: 100%;
 	width: 54%;
 	z-index: -1;
+}
+.logo img
+{
+	height: 550px;
+	width: 550px;
 }
 
 
@@ -181,7 +188,7 @@ a:hover{
 	border-radius: 25px;
 	outline: none;
 	border: none;
-	background-image: linear-gradient(to right, #009bc2, #00b593, #bed2c9);
+	background-image: linear-gradient(to right, #bed2c9, #00b593, #bed2c9);
 	background-size: 200%;
 	font-size: 1.2rem;
 	color: #fff;

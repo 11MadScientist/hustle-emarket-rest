@@ -13,6 +13,7 @@ CREATE TABLE `transaction`
     sub_total double NOT NULL,
     service_fee double DEFAULT 0,
     delivery_fee double DEFAULT 0,
+    promotion int,
     grand_total double NOT NULL,
     order_type varchar(17),    
     rider_id int,
@@ -26,6 +27,7 @@ CREATE TABLE `transaction`
     primary key(id),
     FOREIGN KEY(customer_id) REFERENCES customer(id),
 	FOREIGN KEY(customer_address_id) REFERENCES customer_address(id),
+    FOREIGN KEY(promotion) REFERENCES promotion(id),
     FOREIGN KEY(rider_id) REFERENCES rider(id)
     ON DELETE NO ACTION ON UPDATE NO ACTION
 

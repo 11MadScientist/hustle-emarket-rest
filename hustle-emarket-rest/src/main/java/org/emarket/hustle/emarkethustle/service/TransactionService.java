@@ -34,6 +34,8 @@ public interface TransactionService
 
 	public Transaction assignRider(int id);
 
+	public Transaction getRiderAssignment(int id);
+
 	public Transaction onDelivery(int id);
 
 	public Transaction arrived(int id);

@@ -66,7 +66,64 @@ function banAction()
 	
 	
 	
-	if(isProhibited.checked == true)
+	if(isProhibited != null)
+	{
+		if(isProhibited.checked == true)
+	{
+		var prohibitAction = document.getElementsByClassName("prohibit-action");
+		for(var i = 0; i<prohibitAction.length; i++)
+		{
+			prohibitAction[i].className += " verify";
+			prohibitAction[i].title = "enable";
+			prohibitIcon[i].textContent = "done_all";
+		}
+
+	}
+	else
+	{
+		var prohibitAction = document.getElementsByClassName("prohibit-action");
+		for(var i = 0; i<prohibitAction.length; i++)
+		{
+			prohibitAction[i].className += " disable";
+			prohibitAction[i].title = "disable";
+			prohibitIcon[i].textContent = "block";
+		}
+		
+	}
+	}
+}
+banAction();
+
+
+// promotions functions
+
+var isDisabled = document.getElementById("disabled");
+
+isDisabled.onchange = function()
+{
+	console.log("hello");
+    document.getElementById('search').click();
+}
+
+isDisabled.onch
+
+function promotionList()
+{
+	var isDisabled = document.getElementById("disabled").checked;
+
+	var url = "?disabled="+isDisabled;
+	
+	search.href += url;
+}
+
+function disabledAction()
+{
+	var prohibitIcon = document.getElementsByClassName("prohibit-icons");
+	var isDisabled = document.getElementById("disabled");
+	
+	
+	
+	if(isDisabled.checked == true)
 	{
 		var prohibitAction = document.getElementsByClassName("prohibit-action");
 		for(var i = 0; i<prohibitAction.length; i++)
@@ -89,5 +146,5 @@ function banAction()
 		
 	}
 }
-banAction();
+disabledAction();
 

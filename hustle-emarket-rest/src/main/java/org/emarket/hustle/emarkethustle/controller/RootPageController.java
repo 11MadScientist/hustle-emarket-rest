@@ -1,8 +1,6 @@
 package org.emarket.hustle.emarkethustle.controller;
 
-import org.emarket.hustle.emarkethustle.entity.Admin;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -15,11 +13,15 @@ public class RootPageController
 	}
 
 	@GetMapping("/login")
-	public String login(Model model)
+	public String login()
 	{
-		Admin admin = new Admin();
-		model.addAttribute("admin", admin);
 		return ("login");
+	}
+
+	@GetMapping("/logout")
+	public String logout()
+	{
+		return ("logout");
 	}
 
 }

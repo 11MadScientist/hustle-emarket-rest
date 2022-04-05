@@ -7,12 +7,14 @@ import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Customer;
+import org.emarket.hustle.emarkethustle.entity.Promotion;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestStore;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.service.CustomerService;
+import org.emarket.hustle.emarkethustle.service.PromotionService;
 import org.emarket.hustle.emarkethustle.service.RiderService;
 import org.emarket.hustle.emarkethustle.service.SellerService;
 import org.emarket.hustle.emarkethustle.service.StoreService;
@@ -21,6 +23,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +44,9 @@ public class AdminController
 
 	@Autowired
 	CustomerService customerService;
+
+	@Autowired
+	PromotionService promotionService;
 
 	@Autowired
 	RiderService riderService;
@@ -470,6 +478,53 @@ public class AdminController
 
 		riderService.deleteRiderById(id);
 		return "redirect:/admins/rider-requests?searchField=authorized&field=creationDate";
+	}
+
+	/*
+	 * #######################################
+	 * ########## GET PROMOTION ##############
+	 * #######################################
+	 */
+
+	@GetMapping("/promotions")
+	public String getPromotions(
+			Model model,
+			@RequestParam boolean disabled)
+	{
+		Promotion promotion = new Promotion();
+		List<Promotion> promotions = promotionService.getPromotionsDisabled(disabled);
+
+		model.addAttribute("tableSwitch", disabled);
+		model.addAttribute("promotion", promotion);
+		model.addAttribute("promotions", promotions);
+
+		return "admins/promotions";
+	}
+
+	/*
+	 * #######################################
+	 * ########## ADD PROMOTION ##############
+	 * #######################################
+	 */
+
+	@PostMapping("/promotions")
+	public String addPromotion(
+			@ModelAttribute("promotion") Promotion promotion)
+	{
+		promotionService.addPromotion(promotion);
+
+		return "redirect:promotions?disabled=" + false;
+	}
+
+	@GetMapping("/promotions/disable/{id}")
+	public String deletePromotion(
+			@PathVariable int id)
+	{
+		Promotion promotion = promotionService.getPromotionById(id);
+
+		promotion.setDisabled(!promotion.isDisabled());
+		promotionService.updatePromotion(promotion);
+		return "redirect:/admins/promotions?disabled=" + !promotion.isDisabled();
 	}
 
 }

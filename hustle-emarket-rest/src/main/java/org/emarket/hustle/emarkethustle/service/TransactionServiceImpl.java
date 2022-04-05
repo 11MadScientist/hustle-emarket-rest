@@ -68,13 +68,15 @@ public class TransactionServiceImpl implements TransactionService
 
 		Slice<Transaction> slicedTransactions = null;
 
-		if(getRequest.getUserProfile() == "Customer")
+		System.out.println(getRequest.getUserProfile());
+		if(getRequest.getUserProfile().equals("CUSTOMER"))
 		{
-			slicedTransactions = transactionRepository.findByCustomer(getRequest.getUserId(), pageable);
+			System.out.println("hello");
+			slicedTransactions = transactionRepository.findByCustomerId(getRequest.getUserId(), pageable);
 		}
-		else if(getRequest.getUserProfile() == "Rider")
+		else if(getRequest.getUserProfile().equals("RIDER"))
 		{
-			slicedTransactions = transactionRepository.findByRider(getRequest.getUserId(), pageable);
+			slicedTransactions = transactionRepository.findByRiderId(getRequest.getUserId(), pageable);
 		}
 
 		List<Transaction> transactions = slicedTransactions.getContent();
@@ -298,7 +300,7 @@ public class TransactionServiceImpl implements TransactionService
 			return transaction;
 		}
 
-		log.info("hello, no Pending, or declined");
+		log.info("hello, no Pending, and declined");
 		for(History history:transaction.getHistories())
 		{
 			history.setStatus("Preparing");
@@ -344,6 +346,12 @@ public class TransactionServiceImpl implements TransactionService
 	public Transaction assignRider(int id)
 	{
 		Transaction transaction = getTransactionById(id);
+
+		if(transaction.getOrderType().equals("Pick Up"))
+		{
+			throw new FailedException("Pick Up CANNOT ASSIGN RIDER");
+		}
+
 		if(riderSelection.isStationNull(transaction.getStation()))
 		{
 			System.out.println("it was null");
@@ -364,6 +372,12 @@ public class TransactionServiceImpl implements TransactionService
 		riderSelection.printRiders();
 		return transaction;
 
+	}
+
+	@Override
+	public Transaction getRiderAssignment(int id)
+	{
+		return transactionRepository.findByRiderIdAndStatus(id, "Preparing");
 	}
 
 	@Override

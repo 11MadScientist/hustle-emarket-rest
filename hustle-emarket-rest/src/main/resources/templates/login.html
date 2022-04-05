@@ -3,14 +3,21 @@
 <head>
 	<title> Admin Login</title>
 	<link rel="stylesheet" th:href="@{css/adminlogin.css}">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Intr:600&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Please sign in</title>
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+
 </head>
 <body>
 	<div class="logo">
-        <img id="logo1"  th:src="@{emarket-page/logo.png}">
-        <img id="logo2" th:src="@{emarket-page/logoname.png}">
+        <img id="logo1"  th:src="@{emarket-page/logo2.svg}">
     </div>
 	<div class="container">
 		<div class="img">
@@ -20,7 +27,7 @@
 		<div class="login-content">
 
 			<!-- action="admin.html" -->
-			<form  th:action="@{/admins/dashboard}" method="post" th:object="${admin}" enctype="multipart/form-data">
+			<form  method="post" action="/login">
 				<img th:src="@{emarket-page/user.svg}" class="filter-red">
 				<h2 class="title">LOGIN</h2>
            		
@@ -30,7 +37,7 @@
            		   </div>
            		   <div class="div">
            		   		<h5>Username</h5>
-           		   		<input type="text" required th:field="*{username}" class="input">
+           		   		<input type="text" id="username" name="username" required="" class="input">
            		   </div>
            		</div>
 
@@ -40,11 +47,11 @@
            		   </div>
            		   <div class="div">
            		    	<h5>Password</h5>
-           		    	<input type="password" required th:field="*{password}" class="input">
+           		    	<input type="password" id="password" name="password" required="" class="input">
             	   </div>
             	</div>
 
-            	<a href="#">Forgot Password?</a>
+				<input name="_csrf" type="hidden" value="68c307eb-f6b8-4d91-92c0-d54cefcf60df">
             	<input type="submit" class="btn" value="Login">
             </form>
 

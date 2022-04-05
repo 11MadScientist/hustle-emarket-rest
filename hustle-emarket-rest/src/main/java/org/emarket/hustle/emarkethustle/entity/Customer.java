@@ -25,7 +25,7 @@ import io.micrometer.core.lang.NonNull;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "customer")
-public class Customer
+public class Customer extends User
 {
 	// customer fields
 	@Id
@@ -61,7 +61,7 @@ public class Customer
 	@JoinColumn(name = "customer_id")
 	private List<Basket> basket;
 
-	@Column(name = "role")
+	@Column(name = "role", updatable = false)
 	private String role;
 
 	@Column(name = "creation_date", updatable = false)
@@ -75,52 +75,62 @@ public class Customer
 
 	}
 
+	@Override
 	public int getId()
 	{
 		return id;
 	}
 
+	@Override
 	public void setId(int id)
 	{
 		this.id = id;
 	}
 
+	@Override
 	public String getFirstName()
 	{
 		return firstName;
 	}
 
+	@Override
 	public void setFirstName(String firstName)
 	{
 		this.firstName = firstName;
 	}
 
+	@Override
 	public String getLastName()
 	{
 		return lastName;
 	}
 
+	@Override
 	public void setLastName(String lastName)
 	{
 		this.lastName = lastName;
 	}
 
+	@Override
 	public String getUsername()
 	{
 		return username;
 	}
 
+	@Override
 	public void setUsername(String username)
 	{
 		this.username = username;
 	}
 
+	@Override
 	@JsonIgnore
 	public String getPassword()
 	{
 		return password;
 	}
 
+	@Override
 	@JsonProperty
 	public void setPassword(String password)
 	{
@@ -160,11 +170,13 @@ public class Customer
 		this.basket = basket;
 	}
 
+	@Override
 	public String getRole()
 	{
 		return role;
 	}
 
+	@Override
 	public void setRole(String role)
 	{
 		this.role = role;
