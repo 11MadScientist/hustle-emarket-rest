@@ -3,11 +3,13 @@ package org.emarket.hustle.emarkethustle.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
 import org.emarket.hustle.emarkethustle.dao.HistoryRepository;
 import org.emarket.hustle.emarkethustle.entity.History;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestHistory;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.emarket.hustle.emarkethustle.response.NotificationMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,12 @@ public class HistoryServiceImpl implements HistoryService
 {
 	@Autowired
 	HistoryRepository historyRepository;
+
+	@Autowired
+	RecallibrateRatings recallibrateRatings;
+
+	@Autowired
+	NotificationService notificationService;
 
 	@Override
 	public List<History> getHistory()
@@ -131,6 +139,15 @@ public class HistoryServiceImpl implements HistoryService
 		history.setStatus(value);
 		saveHistory(history);
 
+	}
+
+	@Override
+	public History rateHistory(History history)
+	{
+		saveHistory(history);
+		notificationService.addNotification(NotificationMessages.itemRated(history));
+		recallibrateRatings.recalibrateOverallRating(history.getItem());
+		return history;
 	}
 
 }

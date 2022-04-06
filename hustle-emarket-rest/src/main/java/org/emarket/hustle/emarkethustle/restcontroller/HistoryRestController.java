@@ -119,4 +119,13 @@ public class HistoryRestController
 				"THE HISTORY WITH ID: " + history.getId() + " WAS " + history.getStatus().toUpperCase());
 	}
 
+	@PostMapping("/histories/rate")
+	public ProcessConfirmation rateHistory(
+			@RequestBody History history)
+	{
+		historyService.rateHistory(history);
+		return new ProcessConfirmation("SUCCESS", "HISTORY",
+				"THE ITEM WITH ID: " + history.getItem().getId() + " WAS " + "RATED SUCCESSFULLY");
+	}
+
 }

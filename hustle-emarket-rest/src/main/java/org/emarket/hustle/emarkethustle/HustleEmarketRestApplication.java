@@ -3,6 +3,7 @@ package org.emarket.hustle.emarkethustle;
 import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.algorithms.ImageConverter;
 import org.emarket.hustle.emarkethustle.algorithms.QuickSort;
+import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
 import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,6 +41,12 @@ public class HustleEmarketRestApplication
 	public DocumentConverter documentConverter()
 	{
 		return new DocumentConverter();
+	}
+
+	@Bean
+	public RecallibrateRatings recallibrateRatings()
+	{
+		return new RecallibrateRatings();
 	}
 
 }

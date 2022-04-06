@@ -17,6 +17,7 @@ import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestTransaction;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.emarket.hustle.emarkethustle.response.NotificationMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +43,9 @@ public class TransactionServiceImpl implements TransactionService
 
 	@Autowired
 	RiderService riderService;
+
+	@Autowired
+	NotificationService notificationService;
 
 	@Override
 	public List<Transaction> getTransaction()
@@ -296,6 +300,9 @@ public class TransactionServiceImpl implements TransactionService
 
 		if(declined != 0)
 		{
+//			notification when one/more seller declines
+			notificationService.addNotification(NotificationMessages.sellerDeclines(transaction));
+
 			transaction.setGrandTotal();
 			return transaction;
 		}
@@ -304,10 +311,17 @@ public class TransactionServiceImpl implements TransactionService
 		for(History history:transaction.getHistories())
 		{
 			history.setStatus("Preparing");
+
+//			notification for the sellers that the transaction has continued
+			notificationService.addNotification(NotificationMessages.customerContinues(history));
+
 		}
 		transaction.setStatus("Preparing");
 
 		updateTransaction(transaction);
+
+//		notification when transaction has been continued
+		notificationService.addNotification(NotificationMessages.transactionPreparing(transaction));
 		return transaction;
 
 	}
@@ -320,6 +334,10 @@ public class TransactionServiceImpl implements TransactionService
 			if(history.getStatus().equals("Accepted"))
 			{
 				history.setStatus("Preparing");
+
+//				notification that the transaction continues, sent to those sellers
+//				who accepted the order
+				notificationService.addNotification(NotificationMessages.customerContinues(history));
 			}
 		}
 
@@ -333,6 +351,7 @@ public class TransactionServiceImpl implements TransactionService
 		for(History history:transaction.getHistories())
 		{
 			history.setStatus("Cancelled");
+			notificationService.addNotification(NotificationMessages.customerCancels(history));
 
 		}
 		transaction.setStatus("Cancelled");
@@ -387,6 +406,9 @@ public class TransactionServiceImpl implements TransactionService
 
 		transaction.setStatus("On Delivery");
 		updateTransaction(transaction);
+//		notification to inform customer that the order is on the way
+		notificationService.addNotification(NotificationMessages.transactionDelivering(transaction));
+
 		return transaction;
 	}
 
@@ -397,6 +419,7 @@ public class TransactionServiceImpl implements TransactionService
 
 		transaction.setStatus("Arrived");
 		updateTransaction(transaction);
+		notificationService.addNotification(NotificationMessages.transactionArrived(transaction));
 		return transaction;
 	}
 
@@ -413,9 +436,15 @@ public class TransactionServiceImpl implements TransactionService
 			itemService.updateItemStock(
 					history.getItem().getId(),
 					 (- history.getQuantity()));
+
+//			notification for the sellers that the transaction was completed
+			notificationService.addNotification(NotificationMessages.sellerTransactionComplete(history));
 		}
 
 		updateTransaction(transaction);
+
+//		notification for the customer that the transaction was completed
+		notificationService.addNotification(NotificationMessages.customerTransactionComplete(transaction));
 		return transaction;
 	}
 

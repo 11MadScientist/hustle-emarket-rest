@@ -21,4 +21,6 @@ public interface HistoryService
 
 	void updateHistoryStatus(String value, int id);
 
+	History rateHistory(History history);
+
 }
