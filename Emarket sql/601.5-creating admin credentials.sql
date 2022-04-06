@@ -1,4 +1,4 @@
-USE emarketdb;
+-- USE emarketdb;
 insert into admin
 (first_name, last_name, username, `password`, `role`)
 Values
