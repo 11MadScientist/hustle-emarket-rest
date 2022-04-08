@@ -13,7 +13,9 @@ import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestStore;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
+import org.emarket.hustle.emarkethustle.response.EmailMessages;
 import org.emarket.hustle.emarkethustle.service.CustomerService;
+import org.emarket.hustle.emarkethustle.service.EmailSenderService;
 import org.emarket.hustle.emarkethustle.service.PromotionService;
 import org.emarket.hustle.emarkethustle.service.RiderService;
 import org.emarket.hustle.emarkethustle.service.SellerService;
@@ -53,6 +55,9 @@ public class AdminController
 
 	@Autowired
 	DocumentConverter documentConverter;
+
+	@Autowired
+	EmailSenderService emailSender;
 
 	/*
 	 * #######################################
@@ -148,6 +153,9 @@ public class AdminController
 		Seller seller = sellerService.getSellerById(id);
 		seller.getSellerDetail().setAuthorized(true);
 		sellerService.updateSeller(seller);
+		emailSender.sendEmail(seller.getSellerDetail().getEmail(),
+				"Approved Seller Application",
+				EmailMessages.applicationApproved("SELLER"));
 
 		return "redirect:/admins/seller-requests?searchField=authorized&field=creationDate";
 	}
@@ -167,6 +175,10 @@ public class AdminController
 		Seller seller = sellerService.getSellerById(id);
 		seller.getSellerDetail().setProhibited(!seller.getSellerDetail().isProhibited());
 		sellerService.updateSeller(seller);
+
+		emailSender.sendEmail(seller.getSellerDetail().getEmail(),
+				"Account Prohibition",
+				EmailMessages.prohibitedMessage(seller.getSellerDetail().isProhibited()));
 
 		return "redirect:/admins/seller-list?searchField=authorized&field=lastName"
 				+ "&authorized=true&prohibited=" + !seller.getSellerDetail().isProhibited();
@@ -270,6 +282,10 @@ public class AdminController
 		Customer customer = customerService.getCustomerById(id);
 		customer.getCustomerDetail().setProhibited(!customer.getCustomerDetail().isProhibited());
 		customerService.updateCustomer(customer);
+
+		emailSender.sendEmail(customer.getCustomerDetail().getEmail(),
+				"Account Prohibition",
+				EmailMessages.prohibitedMessage(customer.getCustomerDetail().isProhibited()));
 
 		return "redirect:/admins/customer-list?searchField=name&field=lastName&prohibited="
 				+ !customer.getCustomerDetail().isProhibited();
@@ -380,6 +396,9 @@ public class AdminController
 		Rider rider = riderService.getRiderById(id);
 		rider.getRiderDetail().setAuthorized(true);
 		riderService.updateRider(rider);
+		emailSender.sendEmail(rider.getRiderDetail().getEmail(),
+				"Approved Seller Application",
+				EmailMessages.applicationApproved("RIDER"));
 
 		return "redirect:/admins/rider-requests?searchField=authorized&field=creationDate";
 	}
@@ -399,6 +418,10 @@ public class AdminController
 		Rider rider = riderService.getRiderById(id);
 		rider.getRiderDetail().setProhibited(!rider.getRiderDetail().isProhibited());
 		riderService.updateRider(rider);
+
+		emailSender.sendEmail(rider.getRiderDetail().getEmail(),
+				"Account Prohibition",
+				EmailMessages.prohibitedMessage(rider.getRiderDetail().isProhibited()));
 
 		return "redirect:/admins/rider-list?searchField=authorized&field=lastName"
 				+ "&authorized=true&prohibited=" + !rider.getRiderDetail().isProhibited();

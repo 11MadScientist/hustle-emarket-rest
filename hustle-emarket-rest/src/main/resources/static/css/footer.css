@@ -1,13 +1,22 @@
 #footer
 {
     height: 50px;
-
+    background-color: #ffffff;
 }
 #footer .footer-content
 {
     display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
-    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    color: #00b761;
     
 }
+.left
+{
+    float: left;
+}
+.right
+{
+    float: right;
+}
+

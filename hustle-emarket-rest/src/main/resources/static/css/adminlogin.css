@@ -9,12 +9,12 @@
 body{
     font-family: 'Intr', sans-serif;
     overflow: hidden;
-	background-color: #ffffff;
-	/* background-image: linear-gradient(to right,#b2b1b1, #fffdfd); */
+	background-color: #f4f4f4;
+	/* background-image: linear-gradient(to top left, #005fa0, #00b572); */
 }
 
 .logo{
-
+	background-image: linear-gradient(to top left, #033150, #04b474);
 	/* background-image: linear-gradient(to right, #000000,#ffffff); */
 	/* background-color: #d9d9d9;	 */
 	/* padding-top: 50px; */

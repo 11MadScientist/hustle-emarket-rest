@@ -7,6 +7,7 @@ import org.emarket.hustle.emarkethustle.dao.CustomerRepository;
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
+import org.emarket.hustle.emarkethustle.response.EmailMessages;
 import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
@@ -27,6 +28,9 @@ public class CustomerServiceImpl implements CustomerService
 
 	@Autowired
 	private CustomerRepository customerRepository;
+
+	@Autowired
+	private EmailSenderService emailSender;
 
 //	for duplicate validation
 	@Autowired
@@ -126,7 +130,14 @@ public class CustomerServiceImpl implements CustomerService
 
 		/* encrypting password using bcrypt */
 		customer.setPassword(bcrypt.encode(customer.getPassword()));
-		return customerRepository.save(customer);
+
+		customerRepository.save(customer);
+
+		emailSender.sendEmail(customer.getCustomerDetail().getEmail(),
+				"Emarket Customer Registration",
+				EmailMessages.registrationMessage("RIDER"));
+
+		return customer;
 
 
 	}

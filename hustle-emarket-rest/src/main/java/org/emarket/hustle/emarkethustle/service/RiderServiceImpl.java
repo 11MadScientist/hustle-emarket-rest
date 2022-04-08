@@ -8,6 +8,7 @@ import org.emarket.hustle.emarkethustle.dao.RiderRepository;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
+import org.emarket.hustle.emarkethustle.response.EmailMessages;
 import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
@@ -29,6 +30,9 @@ public class RiderServiceImpl implements RiderService
 
 	@Autowired
 	RiderRepository riderRepository;
+
+	@Autowired
+	EmailSenderService emailSender;
 
 	// for the bean bCrypt
 	@Autowired
@@ -89,7 +93,11 @@ public class RiderServiceImpl implements RiderService
 
 		/* encrypting password using bcrypt */
 		rider.setPassword(bcrypt.encode(rider.getPassword()));
-		return riderRepository.save(rider);
+		riderRepository.save(rider);
+		emailSender.sendEmail(rider.getRiderDetail().getEmail(),
+				"Emarket Rider Registration",
+				EmailMessages.registrationMessage("RIDER"));
+		return rider;
 
 	}
 
@@ -105,7 +113,9 @@ public class RiderServiceImpl implements RiderService
 
 		rider.setPassword(dbRider.getPassword());
 
-		return riderRepository.save(rider);
+		riderRepository.save(rider);
+
+		return rider;
 
 	}
 

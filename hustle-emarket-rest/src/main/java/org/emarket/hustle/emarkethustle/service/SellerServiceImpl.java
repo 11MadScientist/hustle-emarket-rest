@@ -8,6 +8,7 @@ import org.emarket.hustle.emarkethustle.dao.SellerRepository;
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.entity.request.PutRequestChangePassword;
+import org.emarket.hustle.emarkethustle.response.EmailMessages;
 import org.emarket.hustle.emarkethustle.response.ErrorLoginException;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
@@ -34,6 +35,9 @@ public class SellerServiceImpl implements SellerService
 
 	@Autowired
 	private BcryptSecurity bcrypt;
+
+	@Autowired
+	private EmailSenderService emailSender;
 
 	@Override
 	public List<Seller> getSeller()
@@ -146,8 +150,11 @@ public class SellerServiceImpl implements SellerService
 			seller.setPassword(bcrypt.encode(seller.getPassword()));
 		}
 
-
-		return sellerRepository.save(seller);
+			sellerRepository.save(seller);
+			emailSender.sendEmail(seller.getSellerDetail().getEmail(),
+					"Emarket Seller Registration",
+					EmailMessages.registrationMessage("SELLER"));
+			return seller;
 	}
 
 	@Override

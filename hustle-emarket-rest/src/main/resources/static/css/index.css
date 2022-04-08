@@ -3,7 +3,8 @@ body
     margin: 0;
     padding: 0;
     font-family: 'inter';
-    background-color: #242526;
+    /* background-color: #e0dfdf; */
+    background-color: #f5f5f9;
     
 }
 
@@ -11,9 +12,11 @@ body
 /* IMAGE SLIDESHOW  */
 .slider
 {
+    
+    /* background-image: linear-gradient(to top left, #005fa1, #00b572); */
     margin: auto;
-    width: 1000px;
-    height: 500px;
+    width: 1200px;
+    height: 550px;
     overflow: hidden;
     border-radius: 5px;
     
@@ -33,19 +36,22 @@ body
 {
     width: 20%;
     transition: 2s;
+    padding-top: 1%;
 }
 .slide img
 {
-    width: 1000px;
-    height: 500px;
+    display: block;
+    margin: auto;
+    width: 1100px;
+    height: 450px;
 }
 
 /* css for manual slide navigation */
 .navigation-manual
 {
     position: absolute;
-    width: 1000px;
-    margin-top: -40px;
+    width: 1200px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
 }
@@ -99,9 +105,9 @@ body
 {
     position: absolute;
     display: flex;
-    width: 1000px;
+    width: 1200px;
     justify-content: center;
-    margin-top: 460px;
+    margin-top: 520px;
 }
 
 .navigation-auto div
@@ -145,10 +151,14 @@ body
 /* about section */
 #about
 {
-    margin: auto;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    align: center;
     text-align: center;
-    width: 800px;
-    color: #FFFFFF;
+    width: 850px;
+    color: #00b761;
     
 }
 #about img
@@ -158,10 +168,25 @@ body
     width: 350px;
 }
 
-#about p
+.about-sentence
 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
     font-weight: thin 100;
     font-weight: lighter;
+    width: 500px;
+    line-height: 25px;
+
+}
+
+.video-pitch iframe
+{
+    padding: auto;
+    margin-bottom: 50px;
+    height: 500px;
+    width: 850px;
 }
 
 /* links section */
@@ -184,7 +209,7 @@ body
     display: inline-block; 
     margin-left: 40px;
     margin-right: 40px;
-    background-color: #00C46F;
+    background-image: linear-gradient(to top left, #005fa1, #00b572);
     border-radius: 5px;
 }
 
