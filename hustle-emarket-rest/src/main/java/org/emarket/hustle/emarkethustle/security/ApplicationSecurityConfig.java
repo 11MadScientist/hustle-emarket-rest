@@ -63,7 +63,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter
 
 //			joint urls
 					.antMatchers("/api/transactions/**").hasAnyRole("ADMIN", "CUSTOMER", "RIDER")
-					.antMatchers("/api/images/**").hasAnyRole("ADMIN", "CUSTOMER", "RIDER")
+					.antMatchers("/api/images/**").hasAnyRole("ADMIN", "CUSTOMER", "RIDER", "SELLER")
 					.antMatchers("/api/**").permitAll()
 					.and()
 					.httpBasic();
