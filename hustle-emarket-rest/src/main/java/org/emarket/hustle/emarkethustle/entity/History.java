@@ -14,17 +14,16 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "history")
-@JsonIdentityInfo(
-		scope = History.class,
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+//@JsonIdentityInfo(
+//		scope = History.class,
+//		generator = ObjectIdGenerators.PropertyGenerator.class,
+//		property = "id")
 public class History
 {
 	@Id
@@ -32,6 +31,7 @@ public class History
 	@Column(name = "id", updatable = false)
 	private int id;
 
+	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
 	@JoinColumn(name = "transaction_id", updatable = false)
 	private Transaction transaction;
