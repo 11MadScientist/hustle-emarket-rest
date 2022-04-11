@@ -9,12 +9,18 @@
 		
     </head>
     <body>
-        <!--topbar start-->
-		<!-- <div th:replace="topbar :: topbar"></div> -->
-		<!-- topbar end -->
+        <!-- custom topbar start -->
+        <div id="topbar" th:fragment = "topbar">
+			<a href="/">
+				<img id="logo" th:src="@{/emarket-page/indexlogo.svg}"/>
+			</a>
+		</div>
+        <!-- customer topbar end -->
+        
 
         <!-- form-container start -->
         <div class="form-container">
+            
 
             <!-- form start -->
             <form action="#" th:action = "@{/riders/save}"
@@ -139,11 +145,6 @@
 
         </div>
         <!-- form-container end -->
-
-
-        <!-- footer start -->
-		   <!-- <div th:replace="footer :: footer"></div> -->
-		<!-- footer end -->
 
           <script type="text/javascript" th:src="@{/js/signup.js}"></script>
     </body>
