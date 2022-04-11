@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Rider SignUp Form</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" th:href="@{/css/topbar.css}" />
 		<link rel="stylesheet" th:href="@{/css/footer.css}" />
@@ -9,7 +10,7 @@
     </head>
     <body>
         <!--topbar start-->
-		<div th:replace="topbar :: topbar"></div>
+		<!-- <div th:replace="topbar :: topbar"></div> -->
 		<!-- topbar end -->
 
         <!-- form-container start -->
@@ -141,7 +142,7 @@
 
 
         <!-- footer start -->
-		   <div th:replace="footer :: footer"></div>
+		   <!-- <div th:replace="footer :: footer"></div> -->
 		<!-- footer end -->
 
           <script type="text/javascript" th:src="@{/js/seller-signup.js}"></script>
