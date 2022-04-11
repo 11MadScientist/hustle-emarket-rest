@@ -1,7 +1,8 @@
 #footer
 {
-    height: 50px;
+    min-height: 50px;
     background-color: #ffffff;
+    display: block;
 }
 #footer .footer-content
 {
@@ -18,5 +19,30 @@
 .right
 {
     float: right;
+}
+
+/* for the tablet */
+@media only screen and (min-width:470px) and (max-width:1143px)
+{
+    #footer .right
+    {
+        display: none;
+    }
+
+}
+
+/* for the mobile */
+@media only screen and (max-width:570px)
+{
+
+    #footer .right
+    {
+        display: none;
+    }
+
+    #footer .company
+    {
+        display: none;
+    }
 }
 

@@ -15,8 +15,8 @@ body
     
     /* background-image: linear-gradient(to top left, #005fa1, #00b572); */
     margin: auto;
-    width: 1200px;
-    height: 550px;
+    width: 90%;
+    height: 50vw;
     overflow: hidden;
     border-radius: 5px;
     
@@ -42,18 +42,21 @@ body
 {
     display: block;
     margin: auto;
-    width: 1100px;
-    height: 450px;
+    /* width: 1100px;
+    height: 450px; */
+    width: 75%;
+    height: 35vw;
 }
 
 /* css for manual slide navigation */
 .navigation-manual
 {
-    position: absolute;
+    display: none;
+    /* position: absolute;
     width: 1200px;
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: center; */
 }
 
 .manual-btn
@@ -103,11 +106,12 @@ body
 
 .navigation-auto
 {
-    position: absolute;
+    display: none;
+    /* position: absolute;
     display: flex;
     width: 1200px;
     justify-content: center;
-    margin-top: 520px;
+    margin-top: 520px; */
 }
 
 .navigation-auto div
@@ -157,7 +161,8 @@ body
     margin-bottom: auto;
     align: center;
     text-align: center;
-    width: 850px;
+    width: 80%;
+    max-width: 850px;
     color: #00b761;
     
 }
@@ -176,26 +181,31 @@ body
     margin-right: auto;
     font-weight: thin 100;
     font-weight: lighter;
-    width: 500px;
-    line-height: 25px;
+    width: 100%;
+    line-height: 35px;
+    font-size: large;
 
 }
+
 
 .video-pitch iframe
 {
     padding: auto;
     margin-bottom: 50px;
-    height: 500px;
-    width: 850px;
+    width: 100%;
+    height: 35vw;
 }
 
 /* links section */
 #links
 {
+    display: block;
+    padding: 10px, auto, 10px;
     margin: auto;
     margin-bottom: 20px;
-    height: 50px;
-    width: 800px;
+    min-height: 50px;
+    max-width: 800px;
+    width: 90%;
     text-align: center;
     
 
@@ -204,6 +214,8 @@ body
 
 #links .link-box
 {
+    margin-top: 10px;
+    margin-bottom: 10px;
     width: 250px;
     height: 40px;
     display: inline-block; 
@@ -227,4 +239,36 @@ body
     color: #FFFFFF;
     
 }
+/* for the tablet */
+@media only screen and (min-width:470px) and (max-width:820px)
+{  
+    #login
+    {
+        display: none;
+    }
+
+    .options-section .contact
+    {
+        display: none;
+    }
+    #footer .fa-envelope
+    {
+        display: none;
+    }
+
+}
+
+/* for the mobile */
+/* @media only screen and (max-width:470px)
+{
+    body
+    {
+       
+    }    
+
+    /* #topbar
+    {
+        display: none;
+    } */
+} */
 

@@ -99,3 +99,13 @@
 {
     color: #FFFFFF;
 }
+
+@media only screen and (max-width:470px)
+{  
+
+    .options-section
+    {
+        display: none;
+    }
+
+}
