@@ -65,7 +65,8 @@ next2.onclick = function()
 {
 
     email.blur();
-    if(isEmailValid)
+    var isPassValid = (isNotNull() && isEmailValid);
+    if(isPassValid)
     {
         currentTab +=1;
         step2.style.left = "-450px";
