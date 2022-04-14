@@ -24,6 +24,9 @@ public class HistoryServiceImpl implements HistoryService
 	HistoryRepository historyRepository;
 
 	@Autowired
+	TransactionService transactionService;
+
+	@Autowired
 	RecallibrateRatings recallibrateRatings;
 
 	@Autowired
@@ -135,9 +138,17 @@ public class HistoryServiceImpl implements HistoryService
 	public void updateHistoryStatus(String value, int id)
 	{
 		History history = getHistoryById(id);
-
 		history.setStatus(value);
 		saveHistory(history);
+
+		for (History hist : history.getTransaction().getHistories())
+		{
+			if(!hist.getStatus().equals(""))
+			{
+				return;
+			}
+			history.getTransaction().setStatus("Ready");
+		}
 
 	}
 

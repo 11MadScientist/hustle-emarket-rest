@@ -8,7 +8,6 @@ import org.emarket.hustle.emarkethustle.dao.RiderRepository;
 import org.emarket.hustle.emarkethustle.dao.SellerRepository;
 import org.emarket.hustle.emarkethustle.entity.User;
 import org.emarket.hustle.emarkethustle.entity.UserDetailsImpl;
-import org.emarket.hustle.emarkethustle.restcontroller.BasketRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService
 {
-	Logger log = Logger.getLogger(BasketRestController.class.getName());
+	Logger log = Logger.getLogger(UserDetailServiceImpl.class.getName());
 	@Autowired
 	CustomerRepository customerRepository;
 

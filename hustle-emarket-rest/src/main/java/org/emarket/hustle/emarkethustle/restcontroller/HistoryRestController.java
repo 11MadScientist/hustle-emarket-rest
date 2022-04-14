@@ -110,6 +110,12 @@ public class HistoryRestController
 				"THE HISTORY WITH ID:" + id + " WAS DELETED.");
 	}
 
+	/*
+	 * #######################################
+	 * ###### UPDATE HISTORY STATUS ##########
+	 * #######################################
+	 */
+
 	@PostMapping("/histories/status")
 	public ProcessConfirmation updateStatus(
 			@RequestBody History history)
