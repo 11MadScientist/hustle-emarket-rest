@@ -141,13 +141,19 @@ public class HistoryServiceImpl implements HistoryService
 		history.setStatus(value);
 		saveHistory(history);
 
-		for (History hist : history.getTransaction().getHistories())
+		if(history.getTransaction().getOrderType().equals("Pick Up")
+				&& value.equals("Ready"))
 		{
-			if(!hist.getStatus().equals(""))
+			for (History hist : history.getTransaction().getHistories())
 			{
-				return;
+				if(!hist.getStatus().equals("Ready"))
+				{
+					return;
+				}
 			}
 			history.getTransaction().setStatus("Ready");
+			transactionService.updateTransaction(history.getTransaction());
+			notificationService.addNotification(NotificationMessages.readyForPickup(history.getTransaction()));
 		}
 
 	}

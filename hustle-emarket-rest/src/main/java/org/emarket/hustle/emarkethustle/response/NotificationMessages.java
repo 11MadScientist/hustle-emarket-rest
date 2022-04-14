@@ -81,6 +81,20 @@ public class NotificationMessages
 		return notification;
 	}
 
+//	pickup ready for customer
+	public static Notification readyForPickup(Transaction transaction)
+	{
+		Notification notification = new Notification();
+		notification.setUserId(transaction.getCustomer().getId());
+		notification.setNotifType("Ready For Pickup");
+//		notification.setLink(null);
+		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+				+ String.format("%08d", transaction.getId())
+				+ "&lt;/b>&lt;/font> is ready for Pick Up."
+				+ "Looking forward to arrival!");
+		return notification;
+	}
+
 	/* seller notifications */
 //	customer cancels
 	public static Notification customerCancels(History history)
