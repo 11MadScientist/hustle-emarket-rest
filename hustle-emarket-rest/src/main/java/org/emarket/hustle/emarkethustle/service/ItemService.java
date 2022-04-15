@@ -28,4 +28,8 @@ public interface ItemService
 
 	public void updateItemStock(int id, double d);
 
+	Item delistItem(int id);
+
+	Item enlistItem(int id);
+
 }

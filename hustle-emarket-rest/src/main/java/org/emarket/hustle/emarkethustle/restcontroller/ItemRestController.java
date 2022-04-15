@@ -135,6 +135,29 @@ public class ItemRestController
 
 	/*
 	 * #######################################
+	 * ############ DELIST ITEM ##############
+	 * #######################################
+	 */
+	@PutMapping("/items/delist")
+	public Item delistItem(@RequestParam int id)
+	{
+		return itemService.delistItem(id);
+	}
+
+	/*
+	 * #######################################
+	 * ############ ENLIST ITEM ##############
+	 * #######################################
+	 */
+
+	@PutMapping("/items/enlist")
+	public Item enlistItem(@RequestParam int id)
+	{
+		return itemService.enlistItem(id);
+	}
+
+	/*
+	 * #######################################
 	 * ######### DELETE ITEM BY ID ###########
 	 * #######################################
 	 */

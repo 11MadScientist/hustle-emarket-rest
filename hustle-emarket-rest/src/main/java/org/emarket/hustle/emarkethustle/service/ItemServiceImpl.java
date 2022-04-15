@@ -113,6 +113,25 @@ public class ItemServiceImpl implements ItemService
 	}
 
 	@Override
+	public Item delistItem(int id)
+	{
+		Item item = getItemById(id);
+
+		item.setDelisted(true);
+
+		return itemRepository.save(item);
+	}
+
+	@Override
+	public Item enlistItem(int id)
+	{
+		Item item = getItemById(id);
+
+		item.setDelisted(false);
+		return itemRepository.save(item);
+	}
+
+	@Override
 	public void deleteItem(Item item)
 	{
 		try
