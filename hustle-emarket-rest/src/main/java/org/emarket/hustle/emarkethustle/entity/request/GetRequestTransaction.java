@@ -17,7 +17,7 @@ public class GetRequestTransaction
 	{
 		field = "id";
 		page = 0;
-		size = 50;
+		size = 1000;
 	}
 
 	public String getUserProfile()

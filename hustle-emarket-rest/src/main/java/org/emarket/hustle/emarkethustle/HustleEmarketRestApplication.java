@@ -1,10 +1,9 @@
 package org.emarket.hustle.emarkethustle;
 
-import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
-import org.emarket.hustle.emarkethustle.algorithms.ImageConverter;
 import org.emarket.hustle.emarkethustle.algorithms.QuickSort;
 import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
 import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
+import org.emarket.hustle.emarkethustle.service.DocumentService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -26,21 +25,15 @@ public class HustleEmarketRestApplication
 	}
 
 	@Bean
-	public ImageConverter imageConverter()
-	{
-		return new ImageConverter();
-	}
-
-	@Bean
 	public QuickSort quickSort()
 	{
 		return new QuickSort();
 	}
 
 	@Bean
-	public DocumentConverter documentConverter()
+	public DocumentService documentConverter()
 	{
-		return new DocumentConverter();
+		return new DocumentService();
 	}
 
 	@Bean

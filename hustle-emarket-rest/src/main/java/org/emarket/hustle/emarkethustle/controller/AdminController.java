@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.Promotion;
 import org.emarket.hustle.emarkethustle.entity.Rider;
@@ -15,6 +14,7 @@ import org.emarket.hustle.emarkethustle.entity.request.GetRequestStore;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.response.EmailMessages;
 import org.emarket.hustle.emarkethustle.service.CustomerService;
+import org.emarket.hustle.emarkethustle.service.DocumentService;
 import org.emarket.hustle.emarkethustle.service.EmailSenderService;
 import org.emarket.hustle.emarkethustle.service.PromotionService;
 import org.emarket.hustle.emarkethustle.service.RiderService;
@@ -54,7 +54,7 @@ public class AdminController
 	RiderService riderService;
 
 	@Autowired
-	DocumentConverter documentConverter;
+	DocumentService documentConverter;
 
 	@Autowired
 	EmailSenderService emailSender;
@@ -473,11 +473,9 @@ public class AdminController
 	@GetMapping(value = "documents",
 			produces = MediaType.APPLICATION_PDF_VALUE)
 	public @ResponseBody byte [] pdf(
-			@RequestParam(value = "entity") String entity,
-			@RequestParam(value = "id") int id,
 			@RequestParam(value = "fileName") String fileName) throws IOException
 	{
-		return documentConverter.getDocument(entity, fileName, id);
+		return documentConverter.getDocument(fileName);
 
 	}
 
@@ -488,11 +486,12 @@ public class AdminController
 	 */
 
 	@GetMapping("/delete")
-	public String deleteSeller(
+	public String delete(
 			@RequestParam("id") int id,
 			@RequestParam("entity") String entity)
 	{
-		documentConverter.deleteDocument(entity, id);
+
+		documentConverter.deleteDocument(id, entity);
 		if(entity.equals("sellers"))
 		{
 			sellerService.deleteSellerById(id);

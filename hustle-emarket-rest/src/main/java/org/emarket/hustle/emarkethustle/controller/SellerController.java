@@ -1,11 +1,9 @@
 package org.emarket.hustle.emarkethustle.controller;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import org.emarket.hustle.emarkethustle.algorithms.DocumentConverter;
 import org.emarket.hustle.emarkethustle.entity.Seller;
+import org.emarket.hustle.emarkethustle.service.DocumentService;
 import org.emarket.hustle.emarkethustle.service.SellerService;
 import org.emarket.hustle.emarkethustle.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ public class SellerController
 	private SellerService sellerService;
 
 	@Autowired
-	DocumentConverter documentConverter;
+	DocumentService documentConverter;
 
 	@Autowired
 	private ValidationService validationService;
@@ -53,24 +51,12 @@ public class SellerController
 			@ModelAttribute("seller") Seller seller,
 			@RequestParam("file") MultipartFile file)
 	{
-		String fileName = file.getOriginalFilename();
-
-		System.out.println(fileName);
-		seller.getStore().setDocuments(fileName);
 		seller = sellerService.addSeller(seller);
+		String basePath = "documents/sellers/" + seller.getId();
+		seller.getStore().setDocuments(basePath);
+		seller = sellerService.updateSeller(seller);
 
-		String fs = FileSystems.getDefault().getSeparator();
-
-		Path basePath = FileSystems.getDefault()
-				.getPath(".", "src", "main", "resources", "documents", "sellers");
-
-		String filePath = basePath.normalize().toAbsolutePath()
-				+ fs + seller.getId();
-
-		log.info(filePath);
-
-		documentConverter.saveDocument(filePath, fileName, file);
-
+		documentConverter.saveDocument(file, basePath);
 		return ("redirect:/");
 	}
 
