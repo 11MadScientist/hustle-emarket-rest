@@ -3,6 +3,7 @@ package org.emarket.hustle.emarkethustle.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.emarket.hustle.emarkethustle.algorithms.ChildTransactionHistoryRemover;
 import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
 import org.emarket.hustle.emarkethustle.dao.HistoryRepository;
 import org.emarket.hustle.emarkethustle.entity.History;
@@ -58,7 +59,8 @@ public class HistoryServiceImpl implements HistoryService
 		if(getRequest.getUser().equals("Store"))
 		{
 			System.out.println(getRequest.getId());
-			return historyRepository.findHistoryByStoreIdOrderByIdDesc(getRequest.getId());
+			return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(
+					historyRepository.findHistoryByStoreIdOrderByIdDesc(getRequest.getId()));
 		}
 		else
 		{
@@ -72,7 +74,8 @@ public class HistoryServiceImpl implements HistoryService
 			throw new NotFoundException("ITEMS");
 		}
 
-		return histories;
+		return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(histories);
+
 	}
 
 	@Override
@@ -84,7 +87,8 @@ public class HistoryServiceImpl implements HistoryService
 		{
 			throw new NotFoundException("HISTORY WITH ID: " + id);
 		}
-		return history.get();
+
+		return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(history.get());
 	}
 
 	@Override
