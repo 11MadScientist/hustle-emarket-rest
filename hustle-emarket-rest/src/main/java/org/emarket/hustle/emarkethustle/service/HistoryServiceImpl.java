@@ -59,8 +59,7 @@ public class HistoryServiceImpl implements HistoryService
 		if(getRequest.getUser().equals("Store"))
 		{
 			System.out.println(getRequest.getId());
-			return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(
-					historyRepository.findHistoryByStoreIdOrderByIdDesc(getRequest.getId()));
+			return historyRepository.findHistoryByStoreIdOrderByIdDesc(getRequest.getId());
 		}
 		else
 		{
@@ -74,7 +73,7 @@ public class HistoryServiceImpl implements HistoryService
 			throw new NotFoundException("ITEMS");
 		}
 
-		return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(histories);
+		return histories;
 
 	}
 

@@ -14,17 +14,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "history")
-@JsonIdentityInfo(
-		scope = History.class,
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+//@JsonIdentityInfo(
+//		scope = History.class,
+//		generator = ObjectIdGenerators.PropertyGenerator.class,
+//		property = "id")
 public class History
 {
 	@Id

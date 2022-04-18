@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.restcontroller;
 
 import java.util.List;
 
+import org.emarket.hustle.emarkethustle.algorithms.ChildTransactionHistoryRemover;
 import org.emarket.hustle.emarkethustle.entity.History;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestHistory;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
@@ -40,14 +41,14 @@ public class HistoryRestController
 		if(id == null)
 		{
 			System.out.println("hello");
-			return historyService.getHistory();
+			return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(historyService.getHistory());
 		}
 		GetRequestHistory getRequest = new GetRequestHistory();
 		getRequest.setId(id);
 		getRequest.setUser(user);
 		getRequest.setPage(page);
 
-		return historyService.getHistory(getRequest);
+		return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(historyService.getHistory(getRequest));
 	}
 
 	/*
@@ -59,7 +60,7 @@ public class HistoryRestController
 	@GetMapping("/histories/{id}")
 	public History getHistoryById(@PathVariable int id)
 	{
-		return historyService.getHistoryById(id);
+		return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(historyService.getHistoryById(id));
 	}
 
 	/*
