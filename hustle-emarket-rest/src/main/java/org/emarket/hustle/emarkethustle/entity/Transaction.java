@@ -19,6 +19,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @DynamicInsert
@@ -52,7 +53,7 @@ public class Transaction
 	@Column(name = "note")
 	private String note;
 
-//	@JsonManagedReference
+	@JsonManagedReference
 	@OneToMany(cascade = CascadeType.ALL,
 			mappedBy = "transaction")
 	private List<History> histories;
