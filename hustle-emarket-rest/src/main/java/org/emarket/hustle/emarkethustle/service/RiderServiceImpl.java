@@ -196,7 +196,7 @@ public class RiderServiceImpl implements RiderService
 	public Rider logoutRider(Rider rider)
 	{
 		Rider dbRider = findRiderByUsername(rider.getUsername());
-
+		riderSeletion.removeRider(dbRider);
 		dbRider.setStatus("Offline");
 		riderRepository.save(dbRider);
 		return dbRider;
