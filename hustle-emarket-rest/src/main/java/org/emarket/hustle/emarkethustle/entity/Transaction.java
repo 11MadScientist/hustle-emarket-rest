@@ -18,17 +18,18 @@ import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "transaction")
-//@JsonIdentityInfo(
-//		scope = Transaction.class,
-//		generator = ObjectIdGenerators.PropertyGenerator.class,
-//		property = "id")
+@JsonIdentityInfo(
+		scope = Transaction.class,
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Transaction
 {
 	@Id
@@ -53,7 +54,7 @@ public class Transaction
 	@Column(name = "note")
 	private String note;
 
-	@JsonManagedReference
+//	@JsonManagedReference
 	@OneToMany(cascade = CascadeType.ALL,
 			mappedBy = "transaction")
 	private List<History> histories;
