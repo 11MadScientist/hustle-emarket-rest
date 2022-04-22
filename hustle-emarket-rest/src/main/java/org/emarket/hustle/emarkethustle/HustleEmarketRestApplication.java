@@ -1,5 +1,6 @@
 package org.emarket.hustle.emarkethustle;
 
+import org.emarket.hustle.emarkethustle.algorithms.LocalFileImpl;
 import org.emarket.hustle.emarkethustle.algorithms.QuickSort;
 import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
 import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
@@ -40,6 +41,12 @@ public class HustleEmarketRestApplication
 	public RecallibrateRatings recallibrateRatings()
 	{
 		return new RecallibrateRatings();
+	}
+
+	@Bean
+	public LocalFileImpl localFile()
+	{
+		return new LocalFileImpl();
 	}
 
 }
