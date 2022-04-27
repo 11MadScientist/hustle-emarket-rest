@@ -34,13 +34,13 @@ public class Store
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "store_name")
+	@Column(name = "storename")
 	private String storeName;
 
-	@Column(name = "store_address")
+	@Column(name = "storeaddress")
 	private String storeAddress;
 
-	@Column(name = "overall_rating")
+	@Column(name = "overallrating")
 	private double overallRating;
 
 //	statistical data
@@ -50,13 +50,13 @@ public class Store
 	@Column(name = "documents")
 	private String documents;
 
-	@Column(name = "items_added")
+	@Column(name = "itemsadded")
 	private int itemsAdded;
 
 	@JsonIgnore
 	@OneToOne(cascade = { CascadeType.DETACH,
 			CascadeType.REFRESH, CascadeType.PERSIST })
-	@JoinColumn(name = "seller_id", updatable = false)
+	@JoinColumn(name = "sellerid", updatable = false)
 	private Seller seller;
 
 	@JsonIgnore
@@ -65,10 +65,10 @@ public class Store
 			mappedBy = "store")
 	private List<Item> items;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date", updatable = false)
+	@Column(name = "modifieddate", updatable = false)
 	private String modifiedDate;
 
 	public Store()

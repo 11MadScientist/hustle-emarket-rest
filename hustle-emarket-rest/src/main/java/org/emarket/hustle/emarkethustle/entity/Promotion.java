@@ -22,7 +22,7 @@ public class Promotion
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "minimum_spend")
+	@Column(name = "minimumspend")
 	private double minimumSpend;
 
 	@Column(name = "discount")

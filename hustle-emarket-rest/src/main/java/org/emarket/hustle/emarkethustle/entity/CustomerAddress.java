@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "customer_address")
+@Table(name = "customeraddress")
 public class CustomerAddress
 {
 	@Id
@@ -45,7 +45,7 @@ public class CustomerAddress
 	@Column(name = "longitude")
 	private double longitude;
 
-	@Column(name = "customer_id", updatable = false)
+	@Column(name = "customerid", updatable = false)
 	private int customerId;
 
 	public CustomerAddress()

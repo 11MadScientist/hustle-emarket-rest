@@ -22,10 +22,10 @@ public class Favourite
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "customer_id")
+	@Column(name = "customerid")
 	private int customerId;
 
-	@Column(name = "item_id")
+	@Column(name = "itemid")
 	private int itemId;
 
 	public Favourite()

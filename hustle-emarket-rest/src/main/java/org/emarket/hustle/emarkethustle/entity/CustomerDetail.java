@@ -15,7 +15,7 @@ import io.micrometer.core.lang.NonNull;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "customer_detail")
+@Table(name = "customerdetail")
 public class CustomerDetail
 {
 	@Id
@@ -29,7 +29,7 @@ public class CustomerDetail
 	@Column(name = "gender")
 	private String gender;
 
-	@Column(name = "date_of_birth")
+	@Column(name = "dateofbirth")
 	private String dateOfBirth;
 
 	@NonNull
@@ -37,7 +37,7 @@ public class CustomerDetail
 	private String email;
 
 	@NonNull
-	@Column(name = "phone_number")
+	@Column(name = "phonenumber")
 	private String phoneNumber;
 
 	@Column(name = "status")

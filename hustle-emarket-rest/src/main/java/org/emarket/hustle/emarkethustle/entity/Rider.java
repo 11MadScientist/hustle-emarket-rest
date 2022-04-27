@@ -33,10 +33,10 @@ public class Rider extends User
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "first_name")
+	@Column(name = "firstname")
 	private String firstName;
 
-	@Column(name = "last_name")
+	@Column(name = "lastname")
 	private String lastName;
 
 	@Column(name = "username")
@@ -52,13 +52,14 @@ public class Rider extends User
 	private String role;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "rider_detail_id", updatable = false)
+	@JoinColumn(name = "riderdetailid", updatable = false)
 	private RiderDetail riderDetail;
 
-	@Column(name = "creation_date", updatable = false)
+
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public Rider()

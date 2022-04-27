@@ -14,7 +14,7 @@ import org.springframework.lang.NonNull;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "seller_detail")
+@Table(name = "sellerdetail")
 public class SellerDetail
 {
 	@Id
@@ -28,7 +28,7 @@ public class SellerDetail
 	@Column(name = "gender")
 	private String gender;
 
-	@Column(name = "date_of_birth")
+	@Column(name = "dateofbirth")
 	private String dateOfBirth;
 
 	@NonNull
@@ -36,7 +36,7 @@ public class SellerDetail
 	private String email;
 
 	@NonNull
-	@Column(name = "phone_number")
+	@Column(name = "phonenumber")
 	private String phoneNumber;
 
 	@Column(name = "status")

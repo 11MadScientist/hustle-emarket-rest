@@ -44,10 +44,10 @@ public class Item
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "in_stock")
+	@Column(name = "instock")
 	private double inStock;
 
-	@Column(name = "stock_sold")
+	@Column(name = "stocksold")
 	private double stockSold;
 
 	@NonNull
@@ -65,7 +65,7 @@ public class Item
 	@Column(name = "increment")
 	private double increment;
 
-	@Column(name = "overall_review")
+	@Column(name = "overallreview")
 	private double overallReview;
 
 	@Column(name = "description")
@@ -82,18 +82,18 @@ public class Item
 
 //	@JsonBackReference
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinColumn(name = "store_id", updatable = false)
+	@JoinColumn(name = "storeid", updatable = false)
 	private Store store;
 
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "item_id")
+	@JoinColumn(name = "itemid")
 	private List<ItemReview> itemReview;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public Item()

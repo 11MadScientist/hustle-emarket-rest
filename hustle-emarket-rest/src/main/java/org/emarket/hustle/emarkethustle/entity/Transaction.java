@@ -38,11 +38,11 @@ public class Transaction
 	private int id;
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE })
-	@JoinColumn(name = "customer_id", updatable = false)
+	@JoinColumn(name = "customerid", updatable = false)
 	private Customer customer;
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE })
-	@JoinColumn(name = "customer_address_id", updatable = false)
+	@JoinColumn(name = "customeraddressid", updatable = false)
 	private CustomerAddress customerAddress;
 
 	@Column(name = "station")
@@ -59,39 +59,39 @@ public class Transaction
 			mappedBy = "transaction")
 	private List<History> histories;
 
-	@Column(name = "sub_total")
+	@Column(name = "subtotal")
 	private double subTotal;
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(name = "promotion", updatable = false)
 	private Promotion promotion;
 
-	@Column(name = "service_fee")
+	@Column(name = "servicefee")
 	private double serviceFee;
 
-	@Column(name = "delivery_fee")
+	@Column(name = "deliveryfee")
 	private double deliveryFee;
 
-	@Column(name = "grand_total")
+	@Column(name = "grandtotal")
 	private double grandTotal;
 
-	@Column(name = "order_type")
+	@Column(name = "ordertype")
 	private String orderType;
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "rider_id")
+	@JoinColumn(name = "riderid")
 	private Rider rider;
 
-	@Column(name = "scheduled_time")
+	@Column(name = "scheduledtime")
 	private String scheduledTime;
 
-	@Column(name = "delivered_time")
+	@Column(name = "deliveredtime")
 	private String deliveredTime;
 
-	@Column(name = "creation_date")
+	@Column(name = "creationdate")
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public Transaction()

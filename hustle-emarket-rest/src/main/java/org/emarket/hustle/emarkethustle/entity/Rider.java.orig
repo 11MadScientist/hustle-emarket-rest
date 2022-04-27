@@ -21,12 +21,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "seller")
+@Table(name = "rider")
 @JsonIdentityInfo(
-		scope = Seller.class,
+		scope = Rider.class,
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class Seller extends User
+public class Rider extends User
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,24 +45,32 @@ public class Seller extends User
 	@Column(name = "password")
 	private String password;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "sellerdetailid", updatable = false)
-	private SellerDetail sellerDetail;
-
-	@OneToOne(cascade = CascadeType.ALL,
-			mappedBy = "seller")
-	private Store store;
+	@Column(name = "status")
+	private String status;
 
 	@Column(name = "role")
 	private String role;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "riderdetailid", updatable = false)
+	private RiderDetail riderDetail;
+
+<<<<<<< HEAD
+	@Column(name = "creation_date", updatable = false)
+=======
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "rider")
+	private List<Transaction> transactions;
+
 	@Column(name = "creationdate", updatable = false)
+>>>>>>> 5ba051c (alter:get all the underscore from database)
 	private String creationDate;
 
 	@Column(name = "modifieddate")
 	private String modifiedDate;
 
-	public Seller()
+	public Rider()
 	{
 
 	}
@@ -129,24 +137,24 @@ public class Seller extends User
 		this.password = password;
 	}
 
-	public SellerDetail getSellerDetail()
+	public String getStatus()
 	{
-		return sellerDetail;
+		return status;
 	}
 
-	public void setSellerDetail(SellerDetail sellerDetail)
+	public void setStatus(String status)
 	{
-		this.sellerDetail = sellerDetail;
+		this.status = status;
 	}
 
-	public Store getStore()
+	public RiderDetail getRiderDetail()
 	{
-		return store;
+		return riderDetail;
 	}
 
-	public void setStore(Store store)
+	public void setRiderDetail(RiderDetail riderDetail)
 	{
-		this.store = store;
+		this.riderDetail = riderDetail;
 	}
 
 	@Override
@@ -184,8 +192,8 @@ public class Seller extends User
 	@Override
 	public String toString()
 	{
-		return "Seller [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
-				+ ", password=" + password + ", sellerStore=" + store + ", creationDate=" + creationDate
+		return "Rider [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
+				+ ", password=" + password + ", riderDetail=" + riderDetail + ", creationDate=" + creationDate
 				+ ", modifiedDate=" + modifiedDate + "]";
 	}
 

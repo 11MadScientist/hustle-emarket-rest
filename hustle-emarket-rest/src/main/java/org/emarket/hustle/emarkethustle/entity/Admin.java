@@ -30,10 +30,10 @@ public class Admin extends User
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "first_name")
+	@Column(name = "firstname")
 	private String firstName;
 
-	@Column(name = "last_name")
+	@Column(name = "lastname")
 	private String lastName;
 
 	@Column(name = "username")
@@ -45,10 +45,10 @@ public class Admin extends User
 	@Column(name = "role")
 	private String role;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public Admin()

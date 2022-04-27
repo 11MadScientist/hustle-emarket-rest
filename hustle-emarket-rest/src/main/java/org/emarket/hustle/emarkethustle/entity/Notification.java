@@ -21,13 +21,13 @@ public class Notification
 	@Column(name = "id", updatable = false)
 	private int id;
 
-	@Column(name = "user_id", updatable = false)
+	@Column(name = "userid", updatable = false)
 	private int userId;
 
 	@Column(name = "link")
 	private String link;
 
-	@Column(name = "notif_type")
+	@Column(name = "notiftype")
 	private String notifType;
 
 	@Column(name = "isread")
@@ -39,10 +39,10 @@ public class Notification
 	@Column(name = "message", updatable = false)
 	private String message;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "read_date")
+	@Column(name = "readdate")
 	private String readDate;
 
 	public int getId()

@@ -37,18 +37,18 @@ public class History
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 	@JsonIdentityReference(alwaysAsId = true)
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinColumn(name = "transaction_id", updatable = false)
+	@JoinColumn(name = "transactionid", updatable = false)
 	private Transaction transaction;
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinColumn(name = "store_id", updatable = false)
+	@JoinColumn(name = "storeid", updatable = false)
 	private Store store;
 
 	@OneToOne(cascade = { CascadeType.MERGE })
-	@JoinColumn(name = "item_id", updatable = false)
+	@JoinColumn(name = "itemid", updatable = false)
 	private Item item;
 
-	@Column(name = "item_name")
+	@Column(name = "itemname")
 	private String itemName;
 
 	@Column(name = "price", updatable = false)
@@ -61,13 +61,13 @@ public class History
 	private String status;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "item_review_id")
+	@JoinColumn(name = "itemreviewid")
 	private ItemReview itemReview;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public History()

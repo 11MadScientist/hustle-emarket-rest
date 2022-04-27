@@ -34,11 +34,11 @@ public class Customer extends User
 	private int id;
 
 	@NonNull
-	@Column(name = "first_name")
+	@Column(name = "firstname")
 	private String firstName;
 
 	@NonNull
-	@Column(name = "last_name")
+	@Column(name = "lastname")
 	private String lastName;
 
 	@NonNull
@@ -50,24 +50,24 @@ public class Customer extends User
 	private String password;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "customer_detail_id")
+	@JoinColumn(name = "customerdetailid")
 	private CustomerDetail customerDetail;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "customerid")
 	private List<CustomerAddress> customerAddress;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "customerid")
 	private List<Basket> basket;
 
 	@Column(name = "role", updatable = false)
 	private String role;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date", updatable = false)
+	@Column(name = "modifieddate", updatable = false)
 	private String modifiedDate;
 
 	public Customer()

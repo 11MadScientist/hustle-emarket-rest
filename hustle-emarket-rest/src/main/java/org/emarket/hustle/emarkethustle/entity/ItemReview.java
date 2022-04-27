@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "item_review")
+@Table(name = "itemreview")
 @JsonIdentityInfo(
 		scope = ItemReview.class,
 		generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -40,17 +40,17 @@ public class ItemReview
 
 	@JsonIgnore
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
-	@JoinColumn(name = "item_id")
+	@JoinColumn(name = "itemid")
 	private Item item;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "customerid")
 	private Customer customer;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public ItemReview()

@@ -27,19 +27,19 @@ public class Basket
 	private int id;
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH })
-	@JoinColumn(name = "item_id", updatable = false)
+	@JoinColumn(name = "itemid", updatable = false)
 	private Item item;
 
 	@Column(name = "quantity")
 	private double quantity;
 
-	@Column(name = "customer_id")
+	@Column(name = "customerid")
 	private int customerId;
 
-	@Column(name = "creation_date", updatable = false)
+	@Column(name = "creationdate", updatable = false)
 	private String creationDate;
 
-	@Column(name = "modified_date")
+	@Column(name = "modifieddate")
 	private String modifiedDate;
 
 	public Basket()
