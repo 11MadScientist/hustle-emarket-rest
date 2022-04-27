@@ -9,28 +9,25 @@ import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.io.IOUtils;
+import org.emarket.hustle.emarkethustle.algorithms.LocalFileImpl;
 import org.emarket.hustle.emarkethustle.entity.ImageEntity;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 @Service
 public class ImageService
 {
 	Logger log = Logger.getLogger(ImageService.class.getName());
 
-	@Value("${application.bucket.name}")
-	private String bucketName;
+//	@Value("${application.bucket.name}")
+//	private String bucketName;
+
+//	@Autowired
+//	private AmazonS3 s3Client;
 
 	@Autowired
-	private AmazonS3 s3Client;
+	private LocalFileImpl localFile;
 
 	private final String format = ".jpg";
 
@@ -39,14 +36,14 @@ public class ImageService
 
 		String filePath = "images/" + entity + "/" + id + format;
 		System.out.println(filePath);
-		S3Object s3Object = s3Client.getObject(bucketName, filePath);
-		S3ObjectInputStream inputStream = s3Object.getObjectContent();
+//		S3Object s3Object = s3Client.getObject(bucketName, filePath);
+//		S3ObjectInputStream inputStream = s3Object.getObjectContent();
 
 		try
 		{
-			return IOUtils.toByteArray(inputStream);
+			return localFile.getFile(filePath);
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			throw new FailedException("FINDING IMAGE WITH PATH " + filePath);
 		}
@@ -62,12 +59,14 @@ public class ImageService
 
 		byte [] data = Base64.getDecoder().decode(imageEntity.getBase64Image());
 
-		File fileObj = writeByte(data, imageEntity.getId() + "");
+//		File fileObj = writeByte(data, imageEntity.getId() + "");
 
 		try
 		{
-			s3Client.putObject(new PutObjectRequest(bucketName, savePath, fileObj));
-			fileObj.delete();
+//			s3Client.putObject(new PutObjectRequest(bucketName, savePath, fileObj));
+//			fileObj.delete();
+
+			localFile.saveFile(data, savePath);
 		}
 		catch (Exception e)
 		{
@@ -79,10 +78,11 @@ public class ImageService
 	public void deleteImage(String entity, int id)
 	{
 		String fileName = "images/" + entity + "/" + id + format;
-		System.out.println(fileName);
+//		System.out.println(fileName);
 		try
 		{
-			s3Client.deleteObject(bucketName, fileName);
+//			s3Client.deleteObject(bucketName, fileName);
+			localFile.deleteFile(fileName);
 		}
 		catch (Exception e)
 		{
