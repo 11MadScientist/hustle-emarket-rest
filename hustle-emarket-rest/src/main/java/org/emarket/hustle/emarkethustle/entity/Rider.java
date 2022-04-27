@@ -1,7 +1,5 @@
 package org.emarket.hustle.emarkethustle.entity;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -58,11 +55,6 @@ public class Rider extends User
 	@JoinColumn(name = "rider_detail_id", updatable = false)
 	private RiderDetail riderDetail;
 
-	@OneToMany(
-			cascade = CascadeType.ALL,
-			mappedBy = "rider")
-	private List<Transaction> transactions;
-
 	@Column(name = "creation_date", updatable = false)
 	private String creationDate;
 
@@ -110,22 +102,26 @@ public class Rider extends User
 		this.lastName = lastName;
 	}
 
+	@Override
 	public String getUsername()
 	{
 		return username;
 	}
 
+	@Override
 	public void setUsername(String username)
 	{
 		this.username = username;
 	}
 
+	@Override
 	@JsonIgnore
 	public String getPassword()
 	{
 		return password;
 	}
 
+	@Override
 	@JsonProperty
 	public void setPassword(String password)
 	{
@@ -162,16 +158,6 @@ public class Rider extends User
 	public void setRole(String role)
 	{
 		this.role = role;
-	}
-
-	public List<Transaction> getTransactions()
-	{
-		return transactions;
-	}
-
-	public void setTransactions(List<Transaction> transactions)
-	{
-		this.transactions = transactions;
 	}
 
 	public String getCreationDate()

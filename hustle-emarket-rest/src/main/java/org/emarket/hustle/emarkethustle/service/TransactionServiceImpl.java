@@ -20,10 +20,6 @@ import org.emarket.hustle.emarkethustle.response.NotFoundException;
 import org.emarket.hustle.emarkethustle.response.NotificationMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -66,28 +62,21 @@ public class TransactionServiceImpl implements TransactionService
 	public List<Transaction> getTransaction(GetRequestTransaction getRequest)
 	{
 		// @formatter:off
-		Pageable pageable = PageRequest.of(getRequest.getPage(),
-							getRequest.getSize(),
-							Sort.by(Sort.Direction.DESC, getRequest.getField()));
+//		Pageable pageable = PageRequest.of(getRequest.getPage(),
+//							getRequest.getSize(),
+//							Sort.by(Sort.Direction.DESC, getRequest.getField()));
 
-		Slice<Transaction> slicedTransactions = null;
+		List<Transaction> transactions = null;
 
 		System.out.println(getRequest.getUserProfile());
 		if(getRequest.getUserProfile().equals("CUSTOMER"))
 		{
 			System.out.println("hello");
-			slicedTransactions = transactionRepository.findByCustomerId(getRequest.getUserId(), pageable);
+			transactions = transactionRepository.findByCustomerIdOrderByIdDesc(getRequest.getUserId());
 		}
 		else if(getRequest.getUserProfile().equals("RIDER"))
 		{
-			slicedTransactions = transactionRepository.findByRiderId(getRequest.getUserId(), pageable);
-		}
-
-		List<Transaction> transactions = slicedTransactions.getContent();
-
-		if(transactions.isEmpty())
-		{
-			throw new NotFoundException("TRANSACTIONS");
+			transactions = transactionRepository.findByRiderIdOrderByIdDesc(getRequest.getUserId());
 		}
 
 		return transactions;
