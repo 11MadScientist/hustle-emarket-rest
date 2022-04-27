@@ -52,7 +52,7 @@ public class SellerController
 			@RequestParam("file") MultipartFile file)
 	{
 		seller = sellerService.addSeller(seller);
-		String basePath = "documents/sellers/" + seller.getId();
+		String basePath = "sellers" + "/" + seller.getId();
 		seller.getStore().setDocuments(basePath);
 		seller = sellerService.updateSeller(seller);
 

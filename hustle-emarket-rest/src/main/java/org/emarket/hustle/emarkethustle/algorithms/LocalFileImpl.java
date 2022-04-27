@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileSystems;
 
 import org.apache.commons.io.IOUtils;
 import org.emarket.hustle.emarkethustle.response.FailedException;
@@ -14,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class LocalFileImpl
 {
-	private final String basePath = "./src/main/resources/";
+	private final String basePath = FileSystems.getDefault()
+			.getPath(".", "src", "main", "resources").toString();
 
 	public void saveFile(MultipartFile file, String filePath)
 	{
@@ -30,6 +32,7 @@ public class LocalFileImpl
 
 	public void saveFile(byte [] img, String filePath)
 	{
+		System.out.println(basePath + filePath);
 		try (OutputStream os = new FileOutputStream(basePath + filePath))
 		{
 			os.write(img);

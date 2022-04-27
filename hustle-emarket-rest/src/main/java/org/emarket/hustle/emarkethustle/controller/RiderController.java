@@ -48,9 +48,8 @@ public class RiderController
 			@RequestParam("file") MultipartFile file,
 			@ModelAttribute("rider") Rider rider)
 	{
-
 		rider = riderService.addRider(rider);
-		String basePath = "documents/riders/" + rider.getId();
+		String basePath = "riders" + "/" + rider.getId();
 		rider.getRiderDetail().setDocuments(basePath);
 		rider = riderService.updateRider(rider);
 

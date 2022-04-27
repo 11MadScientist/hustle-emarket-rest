@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.FileSystems;
 import java.util.Base64;
 import java.util.logging.Logger;
 
@@ -20,28 +21,19 @@ public class ImageService
 {
 	Logger log = Logger.getLogger(ImageService.class.getName());
 
-//	@Value("${application.bucket.name}")
-//	private String bucketName;
-
-//	@Autowired
-//	private AmazonS3 s3Client;
-
 	@Autowired
 	private LocalFileImpl localFile;
 
+	private String fs = FileSystems.getDefault().getSeparator();
+
+	private String filePath = fs + "images";
 	private final String format = ".jpg";
 
 	public byte [] getImage(String entity, int id)
 	{
-
-		String filePath = "images/" + entity + "/" + id + format;
-		System.out.println(filePath);
-//		S3Object s3Object = s3Client.getObject(bucketName, filePath);
-//		S3ObjectInputStream inputStream = s3Object.getObjectContent();
-
 		try
 		{
-			return localFile.getFile(filePath);
+			return localFile.getFile(filePath + fs + entity + fs + id + format);
 		}
 		catch (Exception e)
 		{
@@ -54,19 +46,13 @@ public class ImageService
 	public void saveImage(ImageEntity imageEntity)
 	{
 
-		String savePath = "images/" + imageEntity.getEntity() + "/"
-				+ imageEntity.getId() + format;
-
 		byte [] data = Base64.getDecoder().decode(imageEntity.getBase64Image());
-
-//		File fileObj = writeByte(data, imageEntity.getId() + "");
 
 		try
 		{
-//			s3Client.putObject(new PutObjectRequest(bucketName, savePath, fileObj));
-//			fileObj.delete();
 
-			localFile.saveFile(data, savePath);
+			localFile.saveFile(data, filePath + fs +
+					imageEntity.getEntity() + fs + imageEntity.getId() + format);
 		}
 		catch (Exception e)
 		{
@@ -77,16 +63,13 @@ public class ImageService
 
 	public void deleteImage(String entity, int id)
 	{
-		String fileName = "images/" + entity + "/" + id + format;
-//		System.out.println(fileName);
 		try
 		{
-//			s3Client.deleteObject(bucketName, fileName);
-			localFile.deleteFile(fileName);
+			localFile.deleteFile(filePath + fs + entity + fs + id + format);
 		}
 		catch (Exception e)
 		{
-			throw new FailedException("DELETING DOCUMENT WITH PATH " + fileName);
+			throw new FailedException("DELETING DOCUMENT WITH PATH " + filePath + fs + entity + fs + id + format);
 		}
 
 	}
