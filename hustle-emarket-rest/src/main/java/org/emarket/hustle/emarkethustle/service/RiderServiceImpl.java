@@ -1,7 +1,12 @@
 package org.emarket.hustle.emarkethustle.service;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.mail.MessagingException;
 
 import org.emarket.hustle.emarkethustle.algorithms.RiderSelection;
 import org.emarket.hustle.emarkethustle.dao.RiderRepository;
@@ -18,6 +23,8 @@ import org.emarket.hustle.emarkethustle.security.BcryptSecurity;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import freemarker.template.TemplateException;
 
 @Service
 public class RiderServiceImpl implements RiderService
@@ -94,9 +101,21 @@ public class RiderServiceImpl implements RiderService
 		/* encrypting password using bcrypt */
 		rider.setPassword(bcrypt.encode(rider.getPassword()));
 		riderRepository.save(rider);
-		emailSender.sendEmail(rider.getRiderDetail().getEmail(),
-				"Emarket Rider Registration",
-				EmailMessages.registrationMessage("RIDER"));
+
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", rider.getFirstName() + " " + rider.getLastName());
+		model.put("body", EmailMessages.registrationMessage("RIDER"));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					model,
+					rider.getRiderDetail().getEmail(),
+					"Emarket Rider Registration");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
 		return rider;
 
 	}

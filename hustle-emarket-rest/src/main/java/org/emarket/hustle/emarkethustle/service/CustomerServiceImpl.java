@@ -1,7 +1,12 @@
 package org.emarket.hustle.emarkethustle.service;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.mail.MessagingException;
 
 import org.emarket.hustle.emarkethustle.dao.CustomerRepository;
 import org.emarket.hustle.emarkethustle.entity.Customer;
@@ -20,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import freemarker.template.TemplateException;
 
 @Service
 public class CustomerServiceImpl implements CustomerService
@@ -133,9 +140,21 @@ public class CustomerServiceImpl implements CustomerService
 
 		customerRepository.save(customer);
 
-		emailSender.sendEmail(customer.getCustomerDetail().getEmail(),
-				"Emarket Customer Registration",
-				EmailMessages.registrationMessage("RIDER"));
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("name", customer.getFirstName() + " " + customer.getLastName());
+		model.put("body", EmailMessages.applicationApproved("CUSTOMER"));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					model,
+					customer.getCustomerDetail().getEmail(),
+					"Emarket Customer Registration");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
+
 
 		return customer;
 

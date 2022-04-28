@@ -1,6 +1,5 @@
 package org.emarket.hustle.emarkethustle.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -46,28 +44,17 @@ public class EmailSenderService
 		System.out.println("Message Sent Successfully");
 	}
 
-	public void sendEmailWithAttachment(
+	public void sendEmailWithTemplate(
 			Map<String, Object> model,
 			String toEmail,
-			String subject,
-			String attachment) throws MessagingException, TemplateNotFoundException, MalformedTemplateNameException,
+			String subject) throws MessagingException, TemplateNotFoundException, MalformedTemplateNameException,
 			ParseException, IOException, TemplateException
 	{
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,
 				MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED);
 
-		try
-		{
-			FileSystemResource fileSystemResource = new FileSystemResource(new File(attachment));
-			mimeMessageHelper.addAttachment(fileSystemResource.getFilename(), fileSystemResource);
-		}
-		catch (Exception e)
-		{
-			throw new MessagingException();
-		}
-
-		Template template = configuration.getTemplate("email-template.ftl");
+		Template template = configuration.getTemplate("email-template-final.ftl");
 		String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
 		mimeMessageHelper.setFrom("${spring.mail.username}");

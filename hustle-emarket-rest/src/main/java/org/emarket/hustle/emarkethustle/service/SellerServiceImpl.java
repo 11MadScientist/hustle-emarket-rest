@@ -1,8 +1,13 @@
 package org.emarket.hustle.emarkethustle.service;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+
+import javax.mail.MessagingException;
 
 import org.emarket.hustle.emarkethustle.dao.SellerRepository;
 import org.emarket.hustle.emarkethustle.entity.Seller;
@@ -20,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import freemarker.template.TemplateException;
 
 @Service
 public class SellerServiceImpl implements SellerService
@@ -151,9 +158,21 @@ public class SellerServiceImpl implements SellerService
 		}
 
 			sellerRepository.save(seller);
-			emailSender.sendEmail(seller.getSellerDetail().getEmail(),
-					"Emarket Seller Registration",
-					EmailMessages.registrationMessage("SELLER"));
+
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("name", seller.getFirstName() + " " + seller.getLastName());
+			model.put("body", EmailMessages.registrationMessage("SELLER"));
+			try
+			{
+				emailSender.sendEmailWithTemplate(
+						model,
+						seller.getSellerDetail().getEmail(),
+						"Emarket Rider Registration");
+			}
+			catch (MessagingException | IOException | TemplateException e)
+			{
+				e.printStackTrace();
+			}
 			return seller;
 	}
 

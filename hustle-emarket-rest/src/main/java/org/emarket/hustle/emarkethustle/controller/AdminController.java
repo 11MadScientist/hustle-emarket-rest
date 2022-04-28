@@ -2,8 +2,12 @@ package org.emarket.hustle.emarkethustle.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+
+import javax.mail.MessagingException;
 
 import org.emarket.hustle.emarkethustle.entity.Customer;
 import org.emarket.hustle.emarkethustle.entity.Promotion;
@@ -31,6 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import freemarker.template.TemplateException;
 
 @Controller
 @RequestMapping("/admins")
@@ -153,9 +159,21 @@ public class AdminController
 		Seller seller = sellerService.getSellerById(id);
 		seller.getSellerDetail().setAuthorized(true);
 		sellerService.updateSeller(seller);
-		emailSender.sendEmail(seller.getSellerDetail().getEmail(),
-				"Approved Seller Application",
-				EmailMessages.applicationApproved("SELLER"));
+
+		Map<String, Object> objModel = new HashMap<String, Object>();
+		objModel.put("name", seller.getFirstName() + " " + seller.getLastName());
+		objModel.put("body", EmailMessages.applicationApproved("SELLER"));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					objModel,
+					seller.getSellerDetail().getEmail(),
+					"Approved Seller Application");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
 
 		return "redirect:/admins/seller-requests?searchField=authorized&field=creationDate";
 	}
@@ -176,9 +194,20 @@ public class AdminController
 		seller.getSellerDetail().setProhibited(!seller.getSellerDetail().isProhibited());
 		sellerService.updateSeller(seller);
 
-		emailSender.sendEmail(seller.getSellerDetail().getEmail(),
-				"Account Prohibition",
-				EmailMessages.prohibitedMessage(seller.getSellerDetail().isProhibited()));
+		Map<String, Object> objModel = new HashMap<String, Object>();
+		objModel.put("name", seller.getFirstName() + " " + seller.getLastName());
+		objModel.put("body", EmailMessages.prohibitedMessage(seller.getSellerDetail().isProhibited()));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					objModel,
+					seller.getSellerDetail().getEmail(),
+					"Account Prohibition");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
 
 		return "redirect:/admins/seller-list?searchField=authorized&field=lastName"
 				+ "&authorized=true&prohibited=" + !seller.getSellerDetail().isProhibited();
@@ -283,10 +312,20 @@ public class AdminController
 		customer.getCustomerDetail().setProhibited(!customer.getCustomerDetail().isProhibited());
 		customerService.updateCustomer(customer);
 
-		emailSender.sendEmail(customer.getCustomerDetail().getEmail(),
-				"Account Prohibition",
-				EmailMessages.prohibitedMessage(customer.getCustomerDetail().isProhibited()));
-
+		Map<String, Object> objModel = new HashMap<String, Object>();
+		objModel.put("name", customer.getFirstName() + " " + customer.getLastName());
+		objModel.put("body", EmailMessages.prohibitedMessage(customer.getCustomerDetail().isProhibited()));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					objModel,
+					customer.getCustomerDetail().getEmail(),
+					"Account Prohibition");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
 		return "redirect:/admins/customer-list?searchField=name&field=lastName&prohibited="
 				+ !customer.getCustomerDetail().isProhibited();
 	}
@@ -396,9 +435,21 @@ public class AdminController
 		Rider rider = riderService.getRiderById(id);
 		rider.getRiderDetail().setAuthorized(true);
 		riderService.updateRider(rider);
-		emailSender.sendEmail(rider.getRiderDetail().getEmail(),
-				"Approved Seller Application",
-				EmailMessages.applicationApproved("RIDER"));
+
+		Map<String, Object> objModel = new HashMap<String, Object>();
+		objModel.put("name", rider.getFirstName() + " " + rider.getLastName());
+		objModel.put("body", EmailMessages.applicationApproved("RIDER"));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					objModel,
+					rider.getRiderDetail().getEmail(),
+					"Approved Rider Application");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
 
 		return "redirect:/admins/rider-requests?searchField=authorized&field=creationDate";
 	}
@@ -419,9 +470,20 @@ public class AdminController
 		rider.getRiderDetail().setProhibited(!rider.getRiderDetail().isProhibited());
 		riderService.updateRider(rider);
 
-		emailSender.sendEmail(rider.getRiderDetail().getEmail(),
-				"Account Prohibition",
-				EmailMessages.prohibitedMessage(rider.getRiderDetail().isProhibited()));
+		Map<String, Object> objModel = new HashMap<String, Object>();
+		objModel.put("name", rider.getFirstName() + " " + rider.getLastName());
+		objModel.put("body", EmailMessages.prohibitedMessage(rider.getRiderDetail().isProhibited()));
+		try
+		{
+			emailSender.sendEmailWithTemplate(
+					objModel,
+					rider.getRiderDetail().getEmail(),
+					"Account Prohibition");
+		}
+		catch (MessagingException | IOException | TemplateException e)
+		{
+			e.printStackTrace();
+		}
 
 		return "redirect:/admins/rider-list?searchField=authorized&field=lastName"
 				+ "&authorized=true&prohibited=" + !rider.getRiderDetail().isProhibited();
