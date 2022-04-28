@@ -167,7 +167,7 @@ public class SellerServiceImpl implements SellerService
 				emailSender.sendEmailWithTemplate(
 						model,
 						seller.getSellerDetail().getEmail(),
-						"Emarket Rider Registration");
+						"Emarket Seller Registration");
 			}
 			catch (MessagingException | IOException | TemplateException e)
 			{

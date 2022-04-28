@@ -33,7 +33,7 @@ public class CustomerAddress
 	@Column(name = "barangay")
 	private String barangay;
 
-	@Column(name = "zipCode")
+	@Column(name = "zipcode")
 	private int zipCode;
 
 	@Column(name = "direction")
