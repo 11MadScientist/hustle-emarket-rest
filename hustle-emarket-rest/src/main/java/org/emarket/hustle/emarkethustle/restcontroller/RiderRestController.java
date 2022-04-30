@@ -134,7 +134,7 @@ public class RiderRestController
 	@PostMapping("/riders/logout")
 	public Rider logoutRider(@RequestBody Rider rider)
 	{
-		return riderService.loginRider(rider);
+		return riderService.logoutRider(rider);
 	}
 
 	/*

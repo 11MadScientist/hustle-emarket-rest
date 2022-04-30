@@ -204,7 +204,6 @@ public class RiderServiceImpl implements RiderService
 
 		else if(bcrypt.matches(rider.getPassword(), dbrider.getPassword()))
 		{
-			riderRepository.save(dbrider);
 			return dbrider;
 		}
 		throw new ErrorLoginException("RIDER [Username, Password]");
