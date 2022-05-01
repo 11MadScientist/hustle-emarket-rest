@@ -13,19 +13,17 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "rider")
-@JsonIdentityInfo(
-		scope = Rider.class,
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+//@JsonIdentityInfo(
+//		scope = Rider.class,
+//		generator = ObjectIdGenerators.PropertyGenerator.class,
+//		property = "id")
 public class Rider extends User
 {
 	@Id
@@ -54,7 +52,6 @@ public class Rider extends User
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "riderdetailid", updatable = false)
 	private RiderDetail riderDetail;
-
 
 	@Column(name = "creationdate", updatable = false)
 	private String creationDate;

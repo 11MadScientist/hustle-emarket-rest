@@ -37,7 +37,7 @@ public class TransactionRestController
 	@GetMapping("/transactions")
 	public List<Transaction> getTransaction(
 			@RequestParam(name = "user", required = false) String userProfile,
-			@RequestParam(name = "id", required = false) int id,
+			@RequestParam(name = "id", required = false) Integer id,
 			@RequestParam(name = "page", required = false) Integer page)
 	{
 		if(userProfile == null)
