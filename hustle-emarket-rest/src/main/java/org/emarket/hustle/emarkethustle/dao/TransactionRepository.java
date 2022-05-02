@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer>
 {
+	public List<Transaction> findByCreationDateLikeOrderByIdDesc(String value);
+
 	public List<Transaction> findByCustomerIdOrderByIdDesc(
 			int id);
 

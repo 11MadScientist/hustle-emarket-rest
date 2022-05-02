@@ -10,10 +10,12 @@ import java.util.logging.Logger;
 import javax.mail.MessagingException;
 
 import org.emarket.hustle.emarkethustle.entity.Customer;
+import org.emarket.hustle.emarkethustle.entity.History;
 import org.emarket.hustle.emarkethustle.entity.Promotion;
 import org.emarket.hustle.emarkethustle.entity.Rider;
 import org.emarket.hustle.emarkethustle.entity.Seller;
 import org.emarket.hustle.emarkethustle.entity.Store;
+import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestStore;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestUser;
 import org.emarket.hustle.emarkethustle.response.EmailMessages;
@@ -24,6 +26,7 @@ import org.emarket.hustle.emarkethustle.service.PromotionService;
 import org.emarket.hustle.emarkethustle.service.RiderService;
 import org.emarket.hustle.emarkethustle.service.SellerService;
 import org.emarket.hustle.emarkethustle.service.StoreService;
+import org.emarket.hustle.emarkethustle.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -65,6 +68,9 @@ public class AdminController
 	@Autowired
 	EmailSenderService emailSender;
 
+	@Autowired
+	TransactionService transactionService;
+
 	/*
 	 * #######################################
 	 * ############### Dashboard #############
@@ -85,11 +91,13 @@ public class AdminController
 		int sellerRequestCount = 0;
 		int storeCount = 0;
 		int riderRequestCount = 0;
+		int transactionCount = 0;
 		try
 		{
 			sellerRequestCount = sellerService.countSellerRequest();
 			storeCount = storeService.countStores();
 			riderRequestCount = riderService.countRiderRequest();
+			transactionCount = transactionService.getTransactionCount();
 			stores = storeService.getStore(getRequestStore);
 		}
 		catch (Exception e)
@@ -97,9 +105,11 @@ public class AdminController
 			stores = new ArrayList<>();
 		}
 
+		System.out.println(transactionCount);
 		model.addAttribute("sellerRequestCount", sellerRequestCount);
 		model.addAttribute("riderRequestCount", riderRequestCount);
 		model.addAttribute("storeCount", storeCount);
+		model.addAttribute("transactionCount", transactionCount);
 		model.addAttribute("stores", stores);
 
 		return ("admins/dashboard");
@@ -609,6 +619,36 @@ public class AdminController
 		promotion.setDisabled(!promotion.isDisabled());
 		promotionService.updatePromotion(promotion);
 		return "redirect:/admins/promotions?disabled=" + !promotion.isDisabled();
+	}
+
+	/*
+	 * #######################################
+	 * #######################################
+	 * ############# REPORTS #################
+	 * #######################################
+	 * #######################################
+	 */
+
+	@GetMapping("/transactions")
+	public String getTransactions(
+			Model model,
+			@RequestParam(name = "value", defaultValue = "") String value)
+	{
+
+		List<Transaction> transactions = transactionService.getTransaction('%' + value + '%');
+		model.addAttribute("searchPattern", value);
+		model.addAttribute("transactions", transactions);
+		return "admins/transaction";
+	}
+
+	@GetMapping("/histories")
+	public String getHistories(
+			Model model,
+			@RequestParam(name = "id") int id)
+	{
+		List<History> histories = transactionService.getTransactionById(id).getHistories();
+		model.addAttribute("histories", histories);
+		return "admins/history";
 	}
 
 }

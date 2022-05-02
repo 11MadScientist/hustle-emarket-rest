@@ -41,10 +41,6 @@ public class StoreRestController
 			@RequestParam(name = "searchPattern", defaultValue = "") String searchPattern,
 			@RequestParam(name = "field", defaultValue = "storeName") String field)
 	{
-		if(searchPattern == null)
-		{
-			return storeService.getStore();
-		}
 		GetRequestStore getRequest = new GetRequestStore();
 		getRequest.setSearchField(searchField);
 		getRequest.setSearchPattern(searchPattern);

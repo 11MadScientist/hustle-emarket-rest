@@ -7,6 +7,12 @@ $(document).ready(function(){
 
 var search = document.getElementById("search");
 
+function transactionList()
+{	
+	search.href += document.getElementById("search-pattern").value;
+}
+
+
 function sellerList()
 {
 	var isProhibited = document.getElementById("prohibited").checked;

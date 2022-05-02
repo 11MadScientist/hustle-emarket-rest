@@ -42,7 +42,7 @@ public class TransactionRestController
 	{
 		if(userProfile == null)
 		{
-			return transactionService.getTransaction();
+			return transactionService.getTransaction("");
 		}
 		GetRequestTransaction getRequest = new GetRequestTransaction();
 		System.out.println(userProfile);

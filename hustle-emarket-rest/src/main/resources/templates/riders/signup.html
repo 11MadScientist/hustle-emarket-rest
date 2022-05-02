@@ -75,10 +75,17 @@
                         class="form-field" placeholder="Age"
                         id="age" required>
                     
-                        
-
-                    <input type="text" th:field = "*{riderDetail.gender}"
-                        class="form-field" placeholder="Gender" required>
+                        <div id="station"> 
+                            <label for="gender">Gender:</label>
+                            <select name="gender"
+                            th:field = "*{riderDetail.gender}"
+                                class="form-field" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            </select>
+                            <hr>
+                        </div>
+    
 
                     <input type="text" th:field = "*{riderDetail.dateOfBirth}"
                         class="form-field" placeholder="Date of Birth"

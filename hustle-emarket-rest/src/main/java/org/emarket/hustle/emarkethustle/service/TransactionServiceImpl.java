@@ -44,15 +44,16 @@ public class TransactionServiceImpl implements TransactionService
 	NotificationService notificationService;
 
 	@Override
-	public List<Transaction> getTransaction()
+	public int getTransactionCount()
 	{
-		log.info("From GetTransaction");
-		List<Transaction> transactions = transactionRepository.findAll();
+		return transactionRepository.findAll().size();
+	}
 
-		if(transactions.isEmpty())
-		{
-			throw new NotFoundException("TRANSACTIONS");
-		}
+	@Override
+	public List<Transaction> getTransaction(String value)
+	{
+		System.out.println(value + "value");
+		List<Transaction> transactions = transactionRepository.findByCreationDateLikeOrderByIdDesc(value);
 
 		return transactions;
 	}
@@ -394,6 +395,11 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("On Delivery");
+
+		for(History history:transaction.getHistories())
+		{
+			history.setStatus(transaction.getStatus());
+		}
 		updateTransaction(transaction);
 //		notification to inform customer that the order is on the way
 		notificationService.addNotification(NotificationMessages.transactionDelivering(transaction));
@@ -407,6 +413,10 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("Arrived");
+		for(History history:transaction.getHistories())
+		{
+			history.setStatus(transaction.getStatus());
+		}
 		updateTransaction(transaction);
 		notificationService.addNotification(NotificationMessages.transactionArrived(transaction));
 		return transaction;
@@ -418,6 +428,10 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 
 		transaction.setStatus("To Rate");
+		for(History history:transaction.getHistories())
+		{
+			history.setStatus(transaction.getStatus());
+		}
 
 //		updating the instock of the item by decrementing it with quantity
 		for(History history:transaction.getHistories())
@@ -446,10 +460,5 @@ public class TransactionServiceImpl implements TransactionService
 		updateTransaction(transaction);
 		return transaction;
 	}
-
-
-
-
-
 
 }

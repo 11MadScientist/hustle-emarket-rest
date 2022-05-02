@@ -8,7 +8,7 @@ import org.emarket.hustle.emarkethustle.entity.request.GetRequestTransaction;
 
 public interface TransactionService
 {
-	public List<Transaction> getTransaction();
+	public List<Transaction> getTransaction(String value);
 
 	public List<Transaction> getTransaction(GetRequestTransaction getRequest);
 
@@ -43,5 +43,7 @@ public interface TransactionService
 	public Transaction toRate(int id);
 
 	public Transaction completed(int id);
+
+	int getTransactionCount();
 
 }

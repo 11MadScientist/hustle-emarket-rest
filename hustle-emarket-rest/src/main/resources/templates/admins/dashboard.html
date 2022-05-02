@@ -99,12 +99,13 @@
                   </div>
                 </div>
                 <div class="card-content">
-                  <p class="category"><strong>Reports</strong></p>
-                  <h3 class="card-title">102</h3>
+                  <p class="category"><strong>Transaction</strong></p>
+                  <h3 class="card-title" th:text="${transactionCount}"></h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">info</i> View reports
+                    <i class="material-icons">info</i> 
+                    <a th:href="@{/admins/transactions}">View Transactions</a>
                   </div>
                 </div>
               </div>
@@ -124,7 +125,7 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">info</i> View all stores
+                    <a th:href="@{/admins/store-list?searchField=overallStock&authorized=true&prohibited=false}"><i class="material-icons">info</i> View all stores</a>
                   </div>
                 </div>
               </div>
