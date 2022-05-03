@@ -5,13 +5,9 @@ CREATE TABLE customeraddress
 (
 	id int NOT NULL AUTO_INCREMENT,
     `name` varchar(77) NOT NULL,
-    province varchar(77) NOT NULL,
-    city varchar(77) NOT NULL,
-    barangay varchar(77) NOT NULL,
-    zipcode int NOT NULL,
-    direction varchar(77) NOT NULL,
-    latitude double,
-    longitude double,
+    city varchar(77),
+    latitude double NOT NULL,
+    longitude double NOT NULL,
 
     customerid int NOT NULL,
     

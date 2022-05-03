@@ -24,20 +24,8 @@ public class CustomerAddress
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "province")
-	private String province;
-
 	@Column(name = "city")
 	private String city;
-
-	@Column(name = "barangay")
-	private String barangay;
-
-	@Column(name = "zipcode")
-	private int zipCode;
-
-	@Column(name = "direction")
-	private String direction;
 
 	@Column(name = "latitude")
 	private double latitude;
@@ -83,26 +71,6 @@ public class CustomerAddress
 		this.city = city;
 	}
 
-	public String getProvince()
-	{
-		return province;
-	}
-
-	public void setProvince(String province)
-	{
-		this.province = province;
-	}
-
-	public String getBarangay()
-	{
-		return barangay;
-	}
-
-	public void setBarangay(String barangay)
-	{
-		this.barangay = barangay;
-	}
-
 	public void setLatitude(double latitude)
 	{
 		this.latitude = latitude;
@@ -111,26 +79,6 @@ public class CustomerAddress
 	public void setLongitude(double longitude)
 	{
 		this.longitude = longitude;
-	}
-
-	public int getZipCode()
-	{
-		return zipCode;
-	}
-
-	public void setZipCode(int zipCode)
-	{
-		this.zipCode = zipCode;
-	}
-
-	public String getDirection()
-	{
-		return direction;
-	}
-
-	public void setDirection(String direction)
-	{
-		this.direction = direction;
 	}
 
 	public int getCustomerId()
@@ -146,9 +94,8 @@ public class CustomerAddress
 	@Override
 	public String toString()
 	{
-		return "CustomerAddress [id=" + id + ", name=" + name + ", city=" + city + ", province=" + province
-				+ ", zipCode=" + zipCode + ", direction=" + direction + ", latitude=" + latitude + ", longitude="
-				+ longitude + ", customerId=" + customerId + "]";
+		return "CustomerAddress [id=" + id + ", name=" + name + ", city=" + city + ", latitude=" + latitude
+				+ ", longitude=" + longitude + ", customerId=" + customerId + "]";
 	}
 
 }
