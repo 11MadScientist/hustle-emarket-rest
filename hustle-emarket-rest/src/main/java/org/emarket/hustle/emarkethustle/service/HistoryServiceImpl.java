@@ -2,6 +2,7 @@ package org.emarket.hustle.emarkethustle.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.algorithms.ChildTransactionHistoryRemover;
 import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class HistoryServiceImpl implements HistoryService
 {
+	Logger log = Logger.getLogger(HistoryServiceImpl.class.getName());
 	@Autowired
 	HistoryRepository historyRepository;
 
@@ -156,6 +158,7 @@ public class HistoryServiceImpl implements HistoryService
 			}
 			history.getTransaction().setStatus("Ready");
 			transactionService.updateTransaction(history.getTransaction());
+			log.info("Transaction with id: " + history.getTransaction().getId() + " status has been changed to Ready");
 			notificationService.addNotification(NotificationMessages.readyForPickup(history.getTransaction()));
 		}
 

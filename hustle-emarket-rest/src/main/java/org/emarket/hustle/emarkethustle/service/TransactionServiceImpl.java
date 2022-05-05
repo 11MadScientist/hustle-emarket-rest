@@ -116,9 +116,12 @@ public class TransactionServiceImpl implements TransactionService
 			}
 
 			transactionRepository.saveAll(transactions);
+			log.info("Saving Transactions");
 
-			// i think basket of customer should be delete here
+
+//			once transaction is added, baskets are deleted
 			basketRepository.deleteByCustomerId(transactions.get(0).getCustomer().getId());
+			log.info("Baskets Deleted");
 
 		}
 		catch (Exception e)
@@ -145,7 +148,9 @@ public class TransactionServiceImpl implements TransactionService
 			transaction.setId(0);
 
 			transactionRepository.save(transaction);
+			log.info("Saving Transactions");
 			basketRepository.deleteByCustomerId(transaction.getCustomer().getId());
+			log.info("Baskets Deleted");
 		}
 		catch (Exception e)
 		{
@@ -162,6 +167,7 @@ public class TransactionServiceImpl implements TransactionService
 		try
 		{
 			transactionRepository.save(transaction);
+			log.info("Updated Transaction with id: " + transaction.getId());
 		}
 		catch (Exception e)
 		{
@@ -211,8 +217,7 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public List<Transaction> checkout(List<Basket> baskets)
 	{
-		log.info("from checkout");
-//		log.info(baskets.get(0).getStoreAddress().equals(baskets.get(1).getStoreAddress()) + "");
+
 
 		int transactionCount = 0;
 		int historyCount = 0;
@@ -256,7 +261,7 @@ public class TransactionServiceImpl implements TransactionService
 			transactions.add(transaction);
 		}
 
-		log.info(transactions.size() + "");
+		log.info("Checking out with " + transactions.size() + " transactions");
 		return transactions;
 
 	}
@@ -275,6 +280,7 @@ public class TransactionServiceImpl implements TransactionService
 		{
 			if(history.getStatus().equals("Pending"))
 			{
+				log.info("history with id: " + history.getId() + "is pending, returning transaction");
 				return transaction;
 			}
 		}
@@ -283,6 +289,7 @@ public class TransactionServiceImpl implements TransactionService
 
 			if(history.getStatus().equals("Declined"))
 			{
+				log.info("history with id: " + history.getId() + " has been declined");
 				transaction.setSubTotal(transaction.getSubTotal() - history.getQuantity() * history.getPrice());
 				declined ++;
 			}
@@ -294,10 +301,14 @@ public class TransactionServiceImpl implements TransactionService
 			notificationService.addNotification(NotificationMessages.sellerDeclines(transaction));
 
 			transaction.setGrandTotal();
+
+			log.info("Transaction with id: "+ transaction.getId()
+			+ "has declined requests, grand total recalculated to "
+					+ transaction.getGrandTotal());
+
 			return transaction;
 		}
 
-		log.info("hello, no Pending, and declined");
 		for(History history:transaction.getHistories())
 		{
 			history.setStatus("Preparing");
@@ -309,6 +320,7 @@ public class TransactionServiceImpl implements TransactionService
 		transaction.setStatus("Preparing");
 
 		updateTransaction(transaction);
+		log.info("Transaction with id: " + transaction.getId() + " has no declined requests, proceeded to preparing.");
 
 //		notification when transaction has been continued
 		notificationService.addNotification(NotificationMessages.transactionPreparing(transaction));
@@ -330,6 +342,7 @@ public class TransactionServiceImpl implements TransactionService
 				notificationService.addNotification(NotificationMessages.customerContinues(history));
 			}
 		}
+		transaction.setStatus("Preparing");
 
 		updateTransaction(transaction);
 		return transaction;
@@ -363,12 +376,11 @@ public class TransactionServiceImpl implements TransactionService
 
 		if(riderSelection.isStationNull(transaction.getStation()))
 		{
-			System.out.println("it was null");
+			log.info("There is no rider at station: " + transaction.getStation());
 			return null;
 		}
 
-		System.out.print("before assignment: " );
-		riderSelection.printRiders();
+//		riderSelection.printRiders();
 
 //		you need to implement notification for the rider here.
 		Rider rider = riderSelection.dequeueRider(transaction.getStation());
@@ -377,8 +389,8 @@ public class TransactionServiceImpl implements TransactionService
 
 		transaction.setRider(rider);
 		updateTransaction(transaction);
-		System.out.print("after assignment: " );
-		riderSelection.printRiders();
+		log.info("Transaction with id: " + transaction.getId() + "was assigned with rider " + rider.getFirstName() + " " + rider.getLastName());
+//		riderSelection.printRiders();
 		return transaction;
 
 	}
@@ -386,6 +398,7 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public Transaction getRiderAssignment(int id)
 	{
+		log.info("Rider with id: " + id + " is querying if there is an assignment.");
 		return transactionRepository.findByRiderIdAndStatus(id, "Preparing");
 	}
 
@@ -401,6 +414,7 @@ public class TransactionServiceImpl implements TransactionService
 			history.setStatus(transaction.getStatus());
 		}
 		updateTransaction(transaction);
+		log.info("Transaction with id: " + id + " is On Delivery");
 //		notification to inform customer that the order is on the way
 		notificationService.addNotification(NotificationMessages.transactionDelivering(transaction));
 
@@ -418,6 +432,7 @@ public class TransactionServiceImpl implements TransactionService
 			history.setStatus(transaction.getStatus());
 		}
 		updateTransaction(transaction);
+		log.info("Transaction with id: " + id + " has Arrived");
 		notificationService.addNotification(NotificationMessages.transactionArrived(transaction));
 		return transaction;
 	}
@@ -445,6 +460,7 @@ public class TransactionServiceImpl implements TransactionService
 		}
 
 		updateTransaction(transaction);
+		log.info("Transaction with id: " + id + " has been received.");
 
 //		notification for the customer that the transaction was completed
 		notificationService.addNotification(NotificationMessages.customerTransactionComplete(transaction));
@@ -455,9 +471,10 @@ public class TransactionServiceImpl implements TransactionService
 	public Transaction completed(int id)
 	{
 		Transaction transaction = getTransactionById(id);
-
 		transaction.setStatus("Completed");
 		updateTransaction(transaction);
+
+		log.info("Transaction with id: has its history all rated.");
 		return transaction;
 	}
 
