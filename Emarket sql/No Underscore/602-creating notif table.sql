@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS notification;
 CREATE TABLE notification(
 	id int NOT NULL AUTO_INCREMENT,
     userid int,
-    link varchar(112),
     notiftype varchar(25),
     isread boolean default false,
     `role` varchar(11),

@@ -79,6 +79,7 @@
                             <th>Name</th>
                             <th>Username</th>
                             <th>Email</th>
+                            <th>Station</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -89,6 +90,7 @@
                           <td th:text="${rider.firstName} + ' ' + ${rider.lastName}"></td>
                           <td th:text="${rider.username}"></td>
                           <td th:text="${rider.riderDetail.email}"></td>
+                          <td th:text="${rider.riderDetail.station}"></td>
                           <td th:text="${rider.status}"></td>
                           <td>
                               <a th:target="_blank" th:href="@{/admins/documents?entity=riders&id=}+${rider.id}+@{&fileName=}+${rider.riderDetail.documents}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>

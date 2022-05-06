@@ -52,7 +52,6 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public List<Transaction> getTransaction(String value)
 	{
-		System.out.println(value + "value");
 		List<Transaction> transactions = transactionRepository.findByCreationDateLikeOrderByIdDesc(value);
 
 		return transactions;
@@ -69,10 +68,8 @@ public class TransactionServiceImpl implements TransactionService
 
 		List<Transaction> transactions = null;
 
-		System.out.println(getRequest.getUserProfile());
 		if(getRequest.getUserProfile().equals("CUSTOMER"))
 		{
-			System.out.println("hello");
 			transactions = transactionRepository.findByCustomerIdOrderByIdDesc(getRequest.getUserId());
 		}
 		else if(getRequest.getUserProfile().equals("RIDER"))
@@ -272,7 +269,6 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public Transaction checkTransactionComplete(int id)
 	{
-		log.info("hello from the checkTransactionComplete");
 		Transaction transaction = getTransactionById(id);
 		int declined = 0;
 
@@ -280,7 +276,7 @@ public class TransactionServiceImpl implements TransactionService
 		{
 			if(history.getStatus().equals("Pending"))
 			{
-				log.info("history with id: " + history.getId() + "is pending, returning transaction");
+				log.info("history with id: " + history.getId() + " is pending, returning transaction");
 				return transaction;
 			}
 		}
@@ -464,7 +460,11 @@ public class TransactionServiceImpl implements TransactionService
 
 //		notification for the customer that the transaction was completed
 		notificationService.addNotification(NotificationMessages.customerTransactionComplete(transaction));
+
+//		rider status turned to offline
+		transaction.getRider().setStatus("Offline");
 		return transaction;
+
 	}
 
 	@Override

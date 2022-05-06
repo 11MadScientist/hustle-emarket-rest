@@ -83,7 +83,7 @@
                         <tr th:each="transaction: ${transactions}">
                           <td th:text="${transaction.id}"></td>
                           <td th:text="${transaction.customer.firstName} + ' ' + ${transaction.customer.lastName}"></td>
-                          <td th:text="${transaction.grandTotal}"></td>
+                          <td th:text="&#x20B1;+ ${transaction.grandTotal}"></td>
                           <td th:text="${transaction.status}"></td>
                           <td th:text="${transaction.station}"></td>
                           <td th:text="${transaction.creationDate}"></td>

@@ -13,6 +13,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
 		notification.setNotifType("Order Declined");
 //		notification.setLink("");
 		notification
@@ -29,6 +30,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
 		notification.setNotifType("Order Preparing");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -43,6 +45,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
 		notification.setNotifType("Order On Delivery");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -59,6 +62,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
 		notification.setNotifType("Order Arrived");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -72,6 +76,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
 		notification.setNotifType("Order Complete");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -86,6 +91,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
 		notification.setNotifType("Ready For Pickup");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -101,6 +107,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
+		notification.setRole(history.getStore().getSeller().getRole());
 		notification.setNotifType("Order Cancelled");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -114,6 +121,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
+		notification.setRole(history.getStore().getSeller().getRole());
 		notification.setNotifType("Order Proceed");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -133,6 +141,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
+		notification.setRole(history.getStore().getSeller().getRole());
 		notification.setNotifType("Order Complete");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
@@ -152,6 +161,7 @@ public class NotificationMessages
 	{
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
+		notification.setRole(history.getStore().getSeller().getRole());
 		notification.setNotifType("Item Rated");
 //		notification.setLink(null);
 		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"

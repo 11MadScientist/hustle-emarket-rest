@@ -9,12 +9,18 @@
     <body style="margin: auto; align-items: center; text-align: center;max-width: 600px;
     min-width: 300px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
        <div class="overall-layer">
-           <div class="top-layer" style="background-image: linear-gradient(to top left, #033150, #04b474);height: 20vh;min-height: 70px;">
-            <img style="height: 7vh;
+           <div class="top-layer" 
+           style="background-image: linear-gradient(to top left, #033150, #04b474);height: 20vh;min-height: 70px;">
+            <img 
+            style="height: 7vh;
             margin-top: 5vh;
-            min-height: 30px;" src="http://emarket-hustle.com/api/images/emarket/2" alt="">
+            min-height: 30px;
+            max-height: 100px;
+            max-width: 400px;" 
+            src="http://emarket-hustle.com/api/images/emarket/2" alt="">
            </div>
-           <div class="content-layer" style="padding: 20px;
+           <div class="content-layer" 
+           style="padding: 20px;
            margin-bottom: 10px;
            font-size: 13px;
            text-align: left;
@@ -24,16 +30,26 @@
                <p>Sincerely Yours,<br>Emarket Team</p>
 
            </div>
-           <div class="bottom-layer" style="text-align: center;height: 20vh;min-height: 70px;">
-               <div style="display: inline-block;padding-bottom: 200vh;" class="logo-name">
-                <img style="width: 15vw;height: 15vh;" src="http://emarket-hustle.com/api/images/emarket/1" alt=""></div>
+           <div class="bottom-layer"
+            style="text-align: center;
+            height: 8vw;
+            min-height: 70px;">
+               <div style="display: inline-block;" 
+               class="logo-name">
+                <img 
+                style="width: 16vw;
+                height: 8vw;
+                min-width: 100px;" 
+                src="http://emarket-hustle.com/api/images/emarket/1" alt=""></div>
                <div class="border" style="display: inline-block;
                height: 100%;
                width: 2px;
                background-color: rgb(48, 47, 47);"></div>
-               <div class="information-content" style="display: inline-block;
+               <div class="information-content" 
+               style="width: 10v;
+               display: inline-block;
                line-height: 4px;
-               font-size: 13px;
+               font-size: .8vw;
                text-align: left;">
                    <h3><em style="color: #41a8ca;">Hustle Company</em></h3>
                    <h4>Business Software Solutions</h4>

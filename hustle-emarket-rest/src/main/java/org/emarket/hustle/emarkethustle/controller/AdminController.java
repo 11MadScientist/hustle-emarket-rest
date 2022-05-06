@@ -404,7 +404,7 @@ public class AdminController
 			@RequestParam(value = "size", defaultValue = "50") int size)
 
 	{
-		log.info("hello");
+
 		GetRequestUser getRequestUser = new GetRequestUser();
 		getRequestUser.setSearchField(searchField);
 		getRequestUser.setField(field);
@@ -422,8 +422,6 @@ public class AdminController
 		{
 			riders = new ArrayList<>();
 		}
-
-		log.info(riders.size() + "");
 
 		model.addAttribute("searchPattern", getRequestUser.getSearchPattern());
 		model.addAttribute("riders", riders);

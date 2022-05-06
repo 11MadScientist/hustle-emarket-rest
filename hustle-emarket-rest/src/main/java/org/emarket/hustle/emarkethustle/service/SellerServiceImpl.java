@@ -173,6 +173,7 @@ public class SellerServiceImpl implements SellerService
 			{
 				e.printStackTrace();
 			}
+			log.info("Seller " + seller.getFirstName() + " " + seller.getLastName() + " has registered");
 			return seller;
 	}
 

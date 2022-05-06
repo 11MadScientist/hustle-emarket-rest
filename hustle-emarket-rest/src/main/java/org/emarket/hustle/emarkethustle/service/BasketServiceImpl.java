@@ -65,6 +65,7 @@ public class BasketServiceImpl implements BasketService
 		{
 			throw new NotFoundException("BASKET FOR CUSTOMER: " + customerId);
 		}
+		log.info("Customer with id: " + customerId + " has requested for get basket by customer");
 
 		return baskets;
 

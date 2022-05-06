@@ -45,14 +45,13 @@ public class TransactionRestController
 			return transactionService.getTransaction("");
 		}
 		GetRequestTransaction getRequest = new GetRequestTransaction();
-		System.out.println(userProfile);
+		log.info(userProfile + " has requested get transaction.");
 		getRequest.setUserProfile(userProfile);
 		getRequest.setUserId(id);
 		if(page != null)
 		{
 			getRequest.setPage(page);
 		}
-		System.out.println(getRequest);
 		return transactionService.getTransaction(getRequest);
 	}
 
@@ -77,7 +76,6 @@ public class TransactionRestController
 	@PostMapping("/transactions")
 	public List<Transaction> addTransactions(@RequestBody List<Transaction> transactions)
 	{
-		log.info("hello from transactions");
 
 		transactionService.addTransaction(transactions);
 

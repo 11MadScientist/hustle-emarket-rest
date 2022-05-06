@@ -40,7 +40,6 @@ public class HistoryRestController
 
 		if(id == null)
 		{
-			System.out.println("hello");
 			return ChildTransactionHistoryRemover.removeHistoryFromChildTransaction(historyService.getHistory());
 		}
 		GetRequestHistory getRequest = new GetRequestHistory();

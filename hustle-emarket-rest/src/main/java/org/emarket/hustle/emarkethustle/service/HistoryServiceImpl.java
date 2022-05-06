@@ -60,7 +60,6 @@ public class HistoryServiceImpl implements HistoryService
 
 		if(getRequest.getUser().equals("Store"))
 		{
-			System.out.println(getRequest.getId());
 			return historyRepository.findHistoryByStoreIdOrderByIdDesc(getRequest.getId());
 		}
 		else

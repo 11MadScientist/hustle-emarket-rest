@@ -116,6 +116,7 @@ public class RiderServiceImpl implements RiderService
 		{
 			e.printStackTrace();
 		}
+		log.info("Rider " + rider.getFirstName() + " " + rider.getLastName() + " has registered");
 		return rider;
 
 	}

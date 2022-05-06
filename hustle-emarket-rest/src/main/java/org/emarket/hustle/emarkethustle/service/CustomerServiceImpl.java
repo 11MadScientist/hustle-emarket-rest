@@ -154,7 +154,7 @@ public class CustomerServiceImpl implements CustomerService
 		{
 			e.printStackTrace();
 		}
-
+		log.info("Customer " + customer.getFirstName() + " " + customer.getLastName() + " has regsitered");
 
 		return customer;
 

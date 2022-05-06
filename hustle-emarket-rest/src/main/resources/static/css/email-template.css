@@ -6,7 +6,9 @@ body
     max-width: 600px;
     min-width: 300px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    
 }
+
 
 .top-layer
 {
@@ -19,6 +21,8 @@ body
     height: 7vh;
     margin-top: 5vh;
     min-height: 30px;
+    max-height: 100px;
+    max-width: 400px;
     
 }
 
@@ -34,19 +38,18 @@ body
 .bottom-layer
 {
     text-align: center;
-    height: 16vh;
+    height: 8vw;
     min-height: 70px;
 }
 .logo-name
 {
     display: inline-block;
-    padding-bottom: 200vh;
-
 }
 .logo-name img
 {
-    width: 15vw;
-    height: 15vh;
+    width: 16vw;
+    height: 8vw;
+    min-width: 100px;
 }
 .border
 {
@@ -57,14 +60,16 @@ body
 }
 .information-content
 {
+    width: 10v;
     display: inline-block;
     line-height: 4px;
-    font-size: 13px;
+    font-size: .8vw;
     text-align: left;
 }
 .information-content em
 {
     color: #41a8ca;
+    
 }
 
 .icons
