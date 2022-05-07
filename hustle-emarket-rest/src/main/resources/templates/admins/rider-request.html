@@ -86,7 +86,7 @@
                           <td th:text="${rider.status}"></td>
                           <td>
                               <a th:target="_blank" th:href="@{/admins/documents?fileName=}+${rider.riderDetail.documents}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                              <a onclick="return confirm('Are you sure you want to Verify this seller?')" 
+                              <a onclick="return confirm('Are you sure you want to Verify this rider?')" 
                                th:href="@{/admins/verify-rider?riderId=} + ${rider.id}" class="verify" title="Verify" data-toggle="tooltip"><i class="material-icons">verified</i></a>
                               <a th:href="@{/admins/delete?entity=riders&id=} + ${rider.id}" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                           </td>

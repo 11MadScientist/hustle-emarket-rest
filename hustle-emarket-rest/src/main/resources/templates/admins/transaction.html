@@ -71,6 +71,9 @@
                         <tr>
                             <th>#</th>
                             <th>Customer</th>
+                            <th>Delivery Fee</th>
+                            <th>Service Fee</th>
+                            <th>Promotion</th>
                             <th>Total</th>
                             <th>Status</th>
                             <th>Station</th>
@@ -83,6 +86,10 @@
                         <tr th:each="transaction: ${transactions}">
                           <td th:text="${transaction.id}"></td>
                           <td th:text="${transaction.customer.firstName} + ' ' + ${transaction.customer.lastName}"></td>
+                          <td th:text="&#x20B1;+${transaction.deliveryFee}"></td>
+                          <td th:text="&#x20B1;+${transaction.serviceFee}"></td>
+                          <td th:if="${transaction.promotion != null}" th:text="&#x20B1;+ ${transaction.promotion.discount} + ' Off'"></td>
+                          <td th:if="${transaction.promotion == null}">&#x20B1; 0 Off</td>
                           <td th:text="&#x20B1;+ ${transaction.grandTotal}"></td>
                           <td th:text="${transaction.status}"></td>
                           <td th:text="${transaction.station}"></td>

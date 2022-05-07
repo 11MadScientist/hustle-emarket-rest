@@ -293,6 +293,7 @@ public class TransactionServiceImpl implements TransactionService
 
 		if(declined != 0)
 		{
+			transaction.setStatus("Declined");
 //			notification when one/more seller declines
 			notificationService.addNotification(NotificationMessages.sellerDeclines(transaction));
 
@@ -309,14 +310,20 @@ public class TransactionServiceImpl implements TransactionService
 		{
 			history.setStatus("Preparing");
 
+//			updating inventory
+			itemService.updateItemStock(
+					history.getItem().getId(),
+					 (- history.getQuantity()));
+
 //			notification for the sellers that the transaction has continued
 			notificationService.addNotification(NotificationMessages.customerContinues(history));
 
 		}
 		transaction.setStatus("Preparing");
+		log.info("Transaction with id: " + transaction.getId() + " status has been changed to Preparing");
 
 		updateTransaction(transaction);
-		log.info("Transaction with id: " + transaction.getId() + " has no declined requests, proceeded to preparing.");
+		log.info("Transaction with id: " + transaction.getId() + " has no declined requests.");
 
 //		notification when transaction has been continued
 		notificationService.addNotification(NotificationMessages.transactionPreparing(transaction));
@@ -332,6 +339,11 @@ public class TransactionServiceImpl implements TransactionService
 			if(history.getStatus().equals("Accepted"))
 			{
 				history.setStatus("Preparing");
+
+//				updating inventory
+				itemService.updateItemStock(
+						history.getItem().getId(),
+						 (- history.getQuantity()));
 
 //				notification that the transaction continues, sent to those sellers
 //				who accepted the order
@@ -444,19 +456,15 @@ public class TransactionServiceImpl implements TransactionService
 			history.setStatus(transaction.getStatus());
 		}
 
-//		updating the instock of the item by decrementing it with quantity
-		for(History history:transaction.getHistories())
-		{
-			itemService.updateItemStock(
-					history.getItem().getId(),
-					 (- history.getQuantity()));
-
-//			notification for the sellers that the transaction was completed
-			notificationService.addNotification(NotificationMessages.sellerTransactionComplete(history));
-		}
 
 		updateTransaction(transaction);
 		log.info("Transaction with id: " + id + " has been received.");
+
+		for(History history:transaction.getHistories())
+		{
+//			notification for the sellers that the transaction was completed
+			notificationService.addNotification(NotificationMessages.sellerTransactionComplete(history));
+		}
 
 //		notification for the customer that the transaction was completed
 		notificationService.addNotification(NotificationMessages.customerTransactionComplete(transaction));

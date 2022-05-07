@@ -35,6 +35,9 @@ public class HistoryServiceImpl implements HistoryService
 	@Autowired
 	NotificationService notificationService;
 
+	@Autowired
+	ItemService itemService;
+
 	@Override
 	public List<History> getHistory()
 	{
@@ -150,14 +153,16 @@ public class HistoryServiceImpl implements HistoryService
 		{
 			for (History hist : history.getTransaction().getHistories())
 			{
-				if(!hist.getStatus().equals("Ready"))
+				if(hist.getStatus().equals("Preparing"))
 				{
 					return;
 				}
 			}
+
 			history.getTransaction().setStatus("Ready");
+
 			transactionService.updateTransaction(history.getTransaction());
-			log.info("Transaction with id: " + history.getTransaction().getId() + " status has been changed to Ready");
+
 			notificationService.addNotification(NotificationMessages.readyForPickup(history.getTransaction()));
 		}
 

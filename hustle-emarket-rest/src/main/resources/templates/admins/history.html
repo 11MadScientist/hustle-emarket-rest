@@ -72,7 +72,8 @@
                             <th>Seller</th>
                             <th>Item</th>
                             <th>Quantity</th>
-                            <th>Cost</th>
+                            <th>Price</th>
+                            <th>Total</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -80,8 +81,9 @@
                         <tr th:each="history: ${histories}">
                           <td th:text="${history.store.seller.firstName} + ' ' + ${history.store.seller.lastName}"></td>
                           <td th:text="${history.item.name}"></td>
-                          <td th:text="${history.quantity} + ' ' + ${history.item.measurement}"></td>
-                          <td th:text="${history.item.price}"></td>
+                          <td th:text="${history.quantity} "></td>
+                          <td th:text="${history.item.price}+ '' + ${history.item.measurement}"></td>
+                          <td th:text="${history.quantity * history.item.price}"></td>
                           <td th:text="${history.status}"></td>
                         </tr>
                               
