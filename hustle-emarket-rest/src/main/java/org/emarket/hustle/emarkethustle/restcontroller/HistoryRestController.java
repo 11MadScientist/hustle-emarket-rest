@@ -1,9 +1,11 @@
 package org.emarket.hustle.emarkethustle.restcontroller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.emarket.hustle.emarkethustle.algorithms.ChildTransactionHistoryRemover;
 import org.emarket.hustle.emarkethustle.entity.History;
+import org.emarket.hustle.emarkethustle.entity.ItemReview;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestHistory;
 import org.emarket.hustle.emarkethustle.response.ProcessConfirmation;
 import org.emarket.hustle.emarkethustle.service.HistoryService;
@@ -24,6 +26,8 @@ public class HistoryRestController
 {
 	@Autowired
 	HistoryService historyService;
+
+	Logger log = Logger.getLogger(HistoryRestController.class.getName());
 
 	/*
 	 * #######################################
@@ -120,18 +124,20 @@ public class HistoryRestController
 	public ProcessConfirmation updateStatus(
 			@RequestBody History history)
 	{
+		log.info("Hello");
 		historyService.updateHistoryStatus(history.getStatus(), history.getId());
 		return new ProcessConfirmation("SUCCESS", "HISTORY",
 				"THE HISTORY WITH ID: " + history.getId() + " WAS " + history.getStatus().toUpperCase());
 	}
 
-	@PostMapping("/histories/rate")
+	@PostMapping("/histories/rate/{id}")
 	public ProcessConfirmation rateHistory(
-			@RequestBody History history)
+			@PathVariable int id,
+			@RequestBody ItemReview itemReview)
 	{
-		historyService.rateHistory(history);
+		historyService.rateHistory(itemReview, id);
 		return new ProcessConfirmation("SUCCESS", "HISTORY",
-				"THE ITEM WITH ID: " + history.getItem().getId() + " WAS " + "RATED SUCCESSFULLY");
+				"THE ITEM WITH ID: " + itemReview.getItem().getId() + " WAS " + "RATED SUCCESSFULLY");
 	}
 
 }

@@ -306,6 +306,12 @@ public class Item
 	}
 
 	@JsonIgnore
+	public void updateStockSold(double num)
+	{
+		stockSold -= num;
+	}
+
+	@JsonIgnore
 	public boolean checkLessZero(double num)
 	{
 		if(num < 0)
@@ -314,6 +320,16 @@ public class Item
 		}
 
 		return false;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Item [id=" + id + ", category=" + category + ", name=" + name + ", inStock=" + inStock + ", stockSold="
+				+ stockSold + ", price=" + price + ", measurement=" + measurement + ", increment=" + increment
+				+ ", overallReview=" + overallReview + ", description=" + description + ", ingredient=" + ingredient
+				+ ", direction=" + direction + ", delisted=" + delisted + ", store=" + store + ", itemReview="
+				+ itemReview + ", creationDate=" + creationDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 
 }

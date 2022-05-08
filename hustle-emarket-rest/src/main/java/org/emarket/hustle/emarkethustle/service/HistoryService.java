@@ -3,6 +3,7 @@ package org.emarket.hustle.emarkethustle.service;
 import java.util.List;
 
 import org.emarket.hustle.emarkethustle.entity.History;
+import org.emarket.hustle.emarkethustle.entity.ItemReview;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestHistory;
 
 public interface HistoryService
@@ -21,6 +22,6 @@ public interface HistoryService
 
 	void updateHistoryStatus(String value, int id);
 
-	History rateHistory(History history);
+	History rateHistory(ItemReview itemReview, int id);
 
 }

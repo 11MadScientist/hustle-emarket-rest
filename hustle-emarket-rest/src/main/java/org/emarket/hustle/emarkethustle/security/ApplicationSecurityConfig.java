@@ -56,7 +56,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter
 					.antMatchers("/api/seller-details/**").hasAnyRole("ADMIN", "SELLER")
 					.antMatchers("/api/stores/**").hasAnyRole("ADMIN", "SELLER")
 					.antMatchers("/api/items/**").hasAnyRole("ADMIN", "SELLER")
-					.antMatchers("/api/histories/**").hasAnyRole("ADMIN", "SELLER")
+					.antMatchers("/api/histories/**").hasAnyRole("ADMIN", "SELLER", "CUSTOMER")
 
 //			rider urls
 					.antMatchers("/api/riders/**").hasAnyRole("ADMIN", "RIDER")

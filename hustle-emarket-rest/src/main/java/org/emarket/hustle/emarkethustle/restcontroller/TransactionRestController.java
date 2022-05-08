@@ -148,9 +148,10 @@ public class TransactionRestController
 	 * ###############################################
 	 */
 
-	@PostMapping("/transactions/continue")
+	@PutMapping("/transactions/customers/continue")
 	public Transaction continueTransaction(@RequestBody Transaction transaction)
 	{
+		log.info("Continuing transaction: " + transaction.getId());
 		return transactionService.continueTransaction(transaction);
 	}
 
@@ -160,9 +161,10 @@ public class TransactionRestController
 	 * ###############################################
 	 */
 
-	@PostMapping("/transactions/cancel")
+	@PutMapping("/transactions/customers/cancel")
 	public Transaction cancelTransaction(@RequestBody Transaction transaction)
 	{
+		log.info("Cancelling transaction: " + transaction.getId());
 		return transactionService.cancelTransaction(transaction);
 	}
 
@@ -216,6 +218,18 @@ public class TransactionRestController
 
 	/*
 	 * ###############################################
+	 * ############## CLAIM CUSTOMER #################
+	 * ###############################################
+	 */
+
+	@GetMapping("/transactions/customers/claim/{id}")
+	public Transaction claim(@PathVariable int id)
+	{
+		return transactionService.claim(id);
+	}
+
+	/*
+	 * ###############################################
 	 * ############# TO RATE CUSTOMER ################
 	 * ###############################################
 	 */
@@ -231,10 +245,10 @@ public class TransactionRestController
 	 * ###############################################
 	 */
 
-	@GetMapping("/transactions/customer/complete/{id}")
-	public Transaction completed(@PathVariable int id)
-	{
-		return transactionService.completed(id);
-	}
+//	@GetMapping("/transactions/customer/complete/{id}")
+//	public Transaction completed(@PathVariable int id)
+//	{
+//		return transactionService.completed(id);
+//	}
 
 }

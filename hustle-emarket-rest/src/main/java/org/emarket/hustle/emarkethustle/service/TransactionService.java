@@ -42,8 +42,8 @@ public interface TransactionService
 
 	public Transaction toRate(int id);
 
-	public Transaction completed(int id);
-
 	int getTransactionCount();
+
+	Transaction claim(int id);
 
 }

@@ -186,7 +186,7 @@ public class RiderServiceImpl implements RiderService
 	@Override
 	public Rider loginRider(Rider rider)
 	{
-
+		log.info("Rider with username: " + rider.getUsername() + " is trying to login");
 		Rider dbrider;
 		try
 		{

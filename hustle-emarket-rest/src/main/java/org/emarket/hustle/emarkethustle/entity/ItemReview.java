@@ -14,8 +14,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import io.micrometer.core.lang.NonNull;
 
 @Entity
 @DynamicInsert
@@ -38,12 +39,13 @@ public class ItemReview
 	@Column(name = "review")
 	private String review;
 
-	@JsonIgnore
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@NonNull
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "itemid")
 	private Item item;
 
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@NonNull
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "customerid")
 	private Customer customer;
 

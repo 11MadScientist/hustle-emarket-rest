@@ -8,6 +8,8 @@ import org.emarket.hustle.emarkethustle.algorithms.ChildTransactionHistoryRemove
 import org.emarket.hustle.emarkethustle.algorithms.RecallibrateRatings;
 import org.emarket.hustle.emarkethustle.dao.HistoryRepository;
 import org.emarket.hustle.emarkethustle.entity.History;
+import org.emarket.hustle.emarkethustle.entity.ItemReview;
+import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestHistory;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
@@ -144,36 +146,92 @@ public class HistoryServiceImpl implements HistoryService
 	@Override
 	public void updateHistoryStatus(String value, int id)
 	{
-		History history = getHistoryById(id);
-		history.setStatus(value);
-		saveHistory(history);
+		Optional<History> getHistory = historyRepository.findById(id);
 
-		if(history.getTransaction().getOrderType().equals("Pick Up")
+		History hist = getHistory.get();
+
+		log.info("Hello from updateHistory");
+
+		if(hist.getTransaction().getOrderType().equals("Pick Up")
 				&& value.equals("Ready"))
 		{
-			for (History hist : history.getTransaction().getHistories())
+			Transaction transaction = transactionService.getTransactionById(hist.getTransaction().getId());
+
+			for (History history : transaction.getHistories())
 			{
-				if(hist.getStatus().equals("Preparing"))
+				log.info(history + " History");
+			}
+
+			int count = 0;
+			for (History history : transaction.getHistories())
+			{
+				if(hist.getId() == history.getId())
 				{
-					return;
+					log.info("Same Id");
+					hist.setStatus(value);
+				}
+				else if(hist.getStatus().equals("Preparing"))
+				{
+					log.info("Some Status still Preparing");
+					count++;
 				}
 			}
 
-			history.getTransaction().setStatus("Ready");
+			if(count == 0)
+			{
+				transaction.setStatus("Ready");
+			}
 
-			transactionService.updateTransaction(history.getTransaction());
+			transactionService.updateTransaction(transaction);
 
-			notificationService.addNotification(NotificationMessages.readyForPickup(history.getTransaction()));
+			notificationService.addNotification(NotificationMessages.readyForPickup(transaction));
+			return;
 		}
+
+		hist.setStatus(value);
+		saveHistory(hist);
+		log.info("History with id: " + hist.getId() + " is updating");
 
 	}
 
 	@Override
-	public History rateHistory(History history)
+	public History rateHistory(ItemReview itemReview, int id)
 	{
-		saveHistory(history);
-		notificationService.addNotification(NotificationMessages.itemRated(history));
+		log.info("Rating Item");
+
+		Optional<History> getHistory = historyRepository.findById(id);
+
+		History history = getHistory.get();
+		Transaction transaction = transactionService.getTransactionById(history.getTransaction().getId());
+
+		int count = 0;
+		log.info("history : " + history.toString());
+		for (History hist : transaction.getHistories())
+		{
+			if(hist.getId() == id)
+			{
+				log.info("Same Id");
+				hist.setStatus("Completed");
+				hist.setItemReview(itemReview);
+				history = hist;
+			}
+			else if(!hist.getStatus().equals("Completed"))
+			{
+				log.info("Some History still needs to be rated");
+				count++;
+			}
+		}
+
+		log.info("count: " + count);
+		if(count == 0)
+		{
+			transaction.setStatus("Completed");
+		}
+
+		log.info("transaction status: " + transaction.getStatus());
+		transactionService.updateTransaction(transaction);
 		recallibrateRatings.recalibrateOverallRating(history.getItem());
+		notificationService.addNotification(NotificationMessages.itemRated(history));
 		return history;
 	}
 

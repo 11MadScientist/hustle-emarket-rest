@@ -8,12 +8,14 @@ import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.service.ItemReviewService;
 import org.emarket.hustle.emarkethustle.service.ItemService;
 import org.emarket.hustle.emarkethustle.service.StoreService;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class RecallibrateRatings
 {
 	@Autowired
 	ItemReviewService itemReviewService;
+	Logger log = Logger.getLogger(RecallibrateRatings.class.getName());
 
 	@Autowired
 	private ItemService itemService;
@@ -26,6 +28,7 @@ public class RecallibrateRatings
 	{
 		List<ItemReview> itemReviews = itemReviewService.getItemReviewByItem(item);
 
+		log.info("recallibrating");
 		double sum = 0;
 
 		for (ItemReview itemReview : itemReviews)
@@ -39,13 +42,15 @@ public class RecallibrateRatings
 
 		List<Item> items = itemService.getItemByStore(store);
 		sum = 0;
-
+		log.info("here1");
 		for (Item storeItem : items)
 		{
 			sum += storeItem.getOverallReview();
 		}
+		log.info("here2");
 		store.setOverallRating(sum / items.size());
 
+		log.info("here3");
 		storeService.saveStore(store);
 
 	}

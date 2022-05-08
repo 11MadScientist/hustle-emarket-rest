@@ -174,11 +174,12 @@ public class ItemServiceImpl implements ItemService
 	}
 
 	@Override
-	public void updateItemStock(int id, double value)
+	public void updateItemStockStockSold(int id, double value)
 	{
 		Item item = getItemById(id);
 
 		item.updateInStock(value);
+		item.updateStockSold(value);
 		saveItem(item);
 	}
 

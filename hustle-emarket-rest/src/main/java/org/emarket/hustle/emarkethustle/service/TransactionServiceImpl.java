@@ -17,6 +17,7 @@ import org.emarket.hustle.emarkethustle.entity.Transaction;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestTransaction;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.emarket.hustle.emarkethustle.response.NotPermittedException;
 import org.emarket.hustle.emarkethustle.response.NotificationMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -272,6 +273,12 @@ public class TransactionServiceImpl implements TransactionService
 		Transaction transaction = getTransactionById(id);
 		int declined = 0;
 
+		if(!transaction.getStatus().equals("Pending"))
+		{
+			log.info("Transaction that is not 'Pending' is trying to access checkTransactionComplete Method");
+			return transaction;
+		}
+
 		for(History history:transaction.getHistories())
 		{
 			if(history.getStatus().equals("Pending"))
@@ -311,7 +318,7 @@ public class TransactionServiceImpl implements TransactionService
 			history.setStatus("Preparing");
 
 //			updating inventory
-			itemService.updateItemStock(
+			itemService.updateItemStockStockSold(
 					history.getItem().getId(),
 					 (- history.getQuantity()));
 
@@ -341,7 +348,7 @@ public class TransactionServiceImpl implements TransactionService
 				history.setStatus("Preparing");
 
 //				updating inventory
-				itemService.updateItemStock(
+				itemService.updateItemStockStockSold(
 						history.getItem().getId(),
 						 (- history.getQuantity()));
 
@@ -359,15 +366,24 @@ public class TransactionServiceImpl implements TransactionService
 	@Override
 	public Transaction cancelTransaction(Transaction transaction)
 	{
-		for(History history:transaction.getHistories())
+		Transaction dbTransaction = getTransactionById(transaction.getId());
+		log.info("cancel transaction: " + transaction.getId());
+		if(dbTransaction.getStatus().equals("Preparing"))
+		{
+			throw new NotPermittedException("CANCELLING ORDER WITH STATUS 'PREPARING'");
+		}
+
+
+		for(History history:dbTransaction.getHistories())
 		{
 			history.setStatus("Cancelled");
 			notificationService.addNotification(NotificationMessages.customerCancels(history));
 
 		}
-		transaction.setStatus("Cancelled");
+		dbTransaction.setStatus("Cancelled");
+		updateTransaction(dbTransaction);
 
-		return transaction;
+		return dbTransaction;
 	}
 
 
@@ -446,6 +462,22 @@ public class TransactionServiceImpl implements TransactionService
 	}
 
 	@Override
+	public Transaction claim(int id)
+	{
+		Transaction transaction = getTransactionById(id);
+
+		transaction.setStatus("To Rate");
+		for(History history:transaction.getHistories())
+		{
+			history.setStatus(transaction.getStatus());
+		}
+		updateTransaction(transaction);
+		log.info("Transaction with id: " + id + " has been claimed");
+		notificationService.addNotification(NotificationMessages.transactionArrived(transaction));
+		return transaction;
+	}
+
+	@Override
 	public Transaction toRate(int id)
 	{
 		Transaction transaction = getTransactionById(id);
@@ -475,15 +507,15 @@ public class TransactionServiceImpl implements TransactionService
 
 	}
 
-	@Override
-	public Transaction completed(int id)
-	{
-		Transaction transaction = getTransactionById(id);
-		transaction.setStatus("Completed");
-		updateTransaction(transaction);
-
-		log.info("Transaction with id: has its history all rated.");
-		return transaction;
-	}
+//	@Override
+//	public Transaction completed(int id)
+//	{
+//		Transaction transaction = getTransactionById(id);
+//		transaction.setStatus("Completed");
+//		updateTransaction(transaction);
+//
+//		log.info("Transaction with id: has its history all rated.");
+//		return transaction;
+//	}
 
 }
