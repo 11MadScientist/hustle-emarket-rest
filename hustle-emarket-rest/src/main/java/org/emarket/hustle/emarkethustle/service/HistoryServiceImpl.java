@@ -150,6 +150,11 @@ public class HistoryServiceImpl implements HistoryService
 
 		History hist = getHistory.get();
 
+		if(hist.getTransaction().getStatus().equals("Cancelled"))
+		{
+			return;
+		}
+
 		log.info("Hello from updateHistory");
 
 		if(hist.getTransaction().getOrderType().equals("Pick Up")

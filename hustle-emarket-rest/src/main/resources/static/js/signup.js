@@ -1,3 +1,12 @@
+document.addEventListener('keypress', function (e) {
+    if (e.keyCode === 13 || e.which === 13) {
+        e.preventDefault();
+        return false;
+    }
+    
+});
+
+
 var currentTab = 0;
 
 var step1 = document.getElementById("step1");

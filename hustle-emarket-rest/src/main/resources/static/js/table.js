@@ -111,7 +111,6 @@ isDisabled.onchange = function()
     document.getElementById('search').click();
 }
 
-isDisabled.onch
 
 function promotionList()
 {

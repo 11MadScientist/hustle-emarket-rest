@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
+    <link rel="icon" type="image/x-icon" th:href="@{/emarket-page/logo.png}">
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -81,7 +82,7 @@
                             <th>No. of Items</th>
                             <th>Store Address</th>
                             <th>Date Created</th>
-                            <th>Actions</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -93,11 +94,7 @@
                           <td th:text="${store.itemsAdded}"></td>
                           <td th:text="${store.storeAddress}"></td>
                           <td th:text="${store.creationDate}"></td>
-                          <td>
-                              <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                              <a href="#" class="verify" title="Verify" data-toggle="tooltip"><i class="material-icons">verified</i></a>
-                              <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                          </td>
+                         
                         </tr>
                               
                     </tbody>

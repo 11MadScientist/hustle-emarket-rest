@@ -105,7 +105,6 @@ public class AdminController
 			stores = new ArrayList<>();
 		}
 
-		System.out.println(transactionCount);
 		model.addAttribute("sellerRequestCount", sellerRequestCount);
 		model.addAttribute("riderRequestCount", riderRequestCount);
 		model.addAttribute("storeCount", storeCount);
