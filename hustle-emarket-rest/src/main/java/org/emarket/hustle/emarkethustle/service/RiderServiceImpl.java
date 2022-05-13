@@ -177,6 +177,10 @@ public class RiderServiceImpl implements RiderService
 	public Rider availableRider(Rider rider)
 	{
 		Rider dbRider = getRiderById(rider.getId());
+		if(dbRider.getStatus().equals("Occupied"))
+		{
+			return dbRider;
+		}
 		dbRider.setStatus("Available");
 		riderRepository.save(dbRider);
 		riderSeletion.enqueueRider(dbRider);

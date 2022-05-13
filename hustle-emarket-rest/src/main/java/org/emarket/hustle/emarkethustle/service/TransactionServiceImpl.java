@@ -300,6 +300,17 @@ public class TransactionServiceImpl implements TransactionService
 
 		if(declined != 0)
 		{
+			if(declined == transaction.getHistories().size())
+			{
+				transaction.setStatus("Cancelled");
+				for(History history:transaction.getHistories())
+				{
+					history.setStatus(transaction.getStatus());
+				}
+				notificationService.addNotification(NotificationMessages.allSellerDeclines(transaction));
+				return transaction;
+			}
+
 			transaction.setStatus("Declined");
 //			notification when one/more seller declines
 			notificationService.addNotification(NotificationMessages.sellerDeclines(transaction));
@@ -339,8 +350,9 @@ public class TransactionServiceImpl implements TransactionService
 	}
 
 	@Override
-	public Transaction continueTransaction(Transaction transaction)
+	public Transaction continueTransaction(Transaction trans)
 	{
+		Transaction transaction = getTransactionById(trans.getId());
 		for(History history:transaction.getHistories())
 		{
 			if(history.getStatus().equals("Accepted"))
@@ -488,8 +500,12 @@ public class TransactionServiceImpl implements TransactionService
 			history.setStatus(transaction.getStatus());
 		}
 
-
+//		rider status turned to offline
+		log.info(transaction.getRider().getStatus());
+		transaction.getRider().setStatus("Offline");
+		log.info(transaction.getRider().getStatus());
 		updateTransaction(transaction);
+
 		log.info("Transaction with id: " + id + " has been received.");
 
 		for(History history:transaction.getHistories())
@@ -501,8 +517,7 @@ public class TransactionServiceImpl implements TransactionService
 //		notification for the customer that the transaction was completed
 		notificationService.addNotification(NotificationMessages.customerTransactionComplete(transaction));
 
-//		rider status turned to offline
-		transaction.getRider().setStatus("Offline");
+
 		return transaction;
 
 	}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,13 +26,16 @@ public class ItemReviewRestController
 	ItemReviewService itemReviewService;
 
 	@GetMapping("/item-reviews")
-	public List<ItemReview> getItemReview(@RequestBody(required = false) Item item)
+	public List<ItemReview> getItemReview(
+			@RequestParam(name = "id", required = false) Integer id)
 	{
-		if(item == null)
+		log.info("ItemReviews for id:" + id + " is being asked");
+		if(id == null)
 		{
 			return itemReviewService.getItemReview();
 		}
-
+		Item item = new Item();
+		item.setId(id);
 		return itemReviewService.getItemReviewByItem(item);
 	}
 

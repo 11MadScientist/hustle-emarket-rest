@@ -32,7 +32,7 @@ public class BasketServiceImpl implements BasketService
 	public boolean checkQuantity(Basket basket)
 	{
 
-		if(basket.getItem().getInStock() < basket.getQuantity() || basket.getQuantity() < 1)
+		if(basket.getItem().getInStock() < basket.getQuantity() || basket.getQuantity() < 0)
 		{
 			log.info(basket.getItem().getInStock() + ":" + basket.getQuantity());
 			throw new NotPermittedException("DECLARING QUANTITY GREATER THAN INSTOCK OR LESS THAN 0");

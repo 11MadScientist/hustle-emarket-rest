@@ -33,6 +33,7 @@ public class ImageService
 	{
 		try
 		{
+			log.info("Requesting item image of id: " + id);
 			return localFile.getFile(filePath + fs + entity + fs + id + format);
 		}
 		catch (Exception e)

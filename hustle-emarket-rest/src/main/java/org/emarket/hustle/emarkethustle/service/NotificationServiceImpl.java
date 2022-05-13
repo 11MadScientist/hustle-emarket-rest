@@ -6,12 +6,14 @@ import java.util.Optional;
 import org.emarket.hustle.emarkethustle.dao.NotificationRepository;
 import org.emarket.hustle.emarkethustle.entity.Notification;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationServiceImpl implements NotificationService
 {
+	Logger log = Logger.getLogger(NotificationServiceImpl.class.getName());
 
 	@Autowired
 	private NotificationRepository notificationRepository;
@@ -21,6 +23,7 @@ public class NotificationServiceImpl implements NotificationService
 	{
 		try
 		{
+			log.info(role + " with id " + id + " asking for notifications");
 			return notificationRepository.findByUserAndRole(id, role);
 		}
 		catch (Exception e)

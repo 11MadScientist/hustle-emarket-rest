@@ -49,7 +49,6 @@ public class ItemRestController
 	{
 		if(custom == false)
 		{
-			System.out.println("hello");
 			return itemService.getItem();
 		}
 		GetRequestItem getRequest = new GetRequestItem();

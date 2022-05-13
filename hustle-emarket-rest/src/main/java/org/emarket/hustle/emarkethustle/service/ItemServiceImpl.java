@@ -3,8 +3,6 @@ package org.emarket.hustle.emarkethustle.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.emarket.hustle.emarkethustle.dao.BasketRepository;
 import org.emarket.hustle.emarkethustle.dao.ItemRepository;
 import org.emarket.hustle.emarkethustle.entity.Item;
@@ -12,15 +10,14 @@ import org.emarket.hustle.emarkethustle.entity.Store;
 import org.emarket.hustle.emarkethustle.entity.request.GetRequestItem;
 import org.emarket.hustle.emarkethustle.response.FailedException;
 import org.emarket.hustle.emarkethustle.response.NotFoundException;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ItemServiceImpl implements ItemService
 {
+	Logger log = Logger.getLogger(getClass().getName());
 	@Autowired
 	ItemRepository itemRepository;
 
@@ -30,6 +27,7 @@ public class ItemServiceImpl implements ItemService
 	@Override
 	public List<Item> getItem()
 	{
+		log.info("Get Items with findAll");
 		List<Item> items = itemRepository.findAll();
 
 		if(items.isEmpty())
@@ -47,20 +45,21 @@ public class ItemServiceImpl implements ItemService
 	}
 
 	@Override
-	@Transactional
+//	@Transactional
 	public List<Item> getItem(GetRequestItem getRequest)
 	{
+		log.info("Get item with GetRequestItem");
 
 		// @formatter:off
-		Pageable pageable = PageRequest.of(getRequest.getPage(),
-							getRequest.getSize(),
-							Sort.by(Sort.Direction.DESC, getRequest.getField()));
+//		Pageable pageable = PageRequest.of(getRequest.getPage(),
+//							getRequest.getSize	),
+//							Sort.by(Sort.Direction.DESC, getRequest.getField()));
 
 		// @formatter:off
-		List<Item> items = getRequest.getCategory() == null ?
+		List<Item> items = getRequest.getCategory().isEmpty() ?
 								  itemRepository.findByDelisted(false)
 								  : itemRepository.findByCategory(getRequest.getCategory(),
-							      "%" + getRequest.getName() + "%", pageable);
+							      "%" + getRequest.getName() + "%");
 
 
 		if(items.isEmpty())
@@ -94,6 +93,7 @@ public class ItemServiceImpl implements ItemService
 	@Override
 	public void saveItem(Item item)
 	{
+		log.info("Saving Item");
 		try
 		{
 			if(item.isDelisted() && item.getId() != 0)

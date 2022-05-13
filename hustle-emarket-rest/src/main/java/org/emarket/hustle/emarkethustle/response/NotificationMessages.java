@@ -14,14 +14,29 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
 		notification.setRole(transaction.getCustomer().getRole());
-		notification.setNotifType("Order Declined");
+		notification.setNotifType("Order Status");
 //		notification.setLink("");
 		notification
-				.setMessage("Order Number: &lt;font color='black'>&lt;b>" + String.format("%08d", transaction.getId()) +
-						"&lt;/b>&lt;/font> have items declined. Click to check.");
+				.setMessage("Order Number:(" + String.format("%08d", transaction.getId()) +
+						") have items declined. Click to check.");
 
 		return notification;
 
+	}
+
+// all seller declines
+	public static Notification allSellerDeclines(Transaction transaction)
+	{
+		Notification notification = new Notification();
+		notification.setUserId(transaction.getCustomer().getId());
+		notification.setRole(transaction.getCustomer().getRole());
+		notification.setNotifType("Order Status");
+//		notification.setLink("");
+		notification
+				.setMessage("Order Number:(" + String.format("%08d", transaction.getId()) +
+						") has been cancelled as all sellers declines");
+
+		return notification;
 	}
 
 //	transaction Preparing stage
@@ -31,11 +46,11 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
 		notification.setRole(transaction.getCustomer().getRole());
-		notification.setNotifType("Order Preparing");
+		notification.setNotifType("Order Status");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", transaction.getId())
-				+ "&lt;/b>&lt;/font> is being prepared for pickup.");
+				+ ") is being prepared.");
 		return notification;
 	}
 
@@ -46,13 +61,13 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
 		notification.setRole(transaction.getCustomer().getRole());
-		notification.setNotifType("Order On Delivery");
+		notification.setNotifType("Order Delivery");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", transaction.getId())
-				+ "&lt;/b>&lt;/font> has been picked up by the rider. Prepare a cash total &lt;font> color='black'&lt;b>₱"
+				+ ") has been picked up by the rider. Prepare a cash total &lt;font> color='black'&lt;b>₱"
 				+ transaction.getGrandTotal()
-				+ "\"&lt;/b>&lt;/font> and wait for a few minutes for a door to door delivery.");
+				+ "\") and wait for a few minutes for a door to door delivery.");
 		return notification;
 	}
 
@@ -63,11 +78,11 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
 		notification.setRole(transaction.getCustomer().getRole());
-		notification.setNotifType("Order Arrived");
+		notification.setNotifType("Order Delivery");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", transaction.getId())
-				+ "&lt;/b>&lt;/font> has arrived. Receive your Order from the Rider.");
+				+ ") has arrived. Receive your Order from the Rider.");
 		return notification;
 	}
 
@@ -77,11 +92,11 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
 		notification.setRole(transaction.getCustomer().getRole());
-		notification.setNotifType("Order Complete");
+		notification.setNotifType("Feedback");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", transaction.getId())
-				+ "&lt;/b>&lt;/font> has been completed."
+				+ ") has been completed."
 				+ "Looking forward to your next shopping!");
 		return notification;
 	}
@@ -92,11 +107,11 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(transaction.getCustomer().getId());
 		notification.setRole(transaction.getCustomer().getRole());
-		notification.setNotifType("Ready For Pickup");
+		notification.setNotifType("Order Status");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", transaction.getId())
-				+ "&lt;/b>&lt;/font> is ready for Pick Up."
+				+ ") is ready for Pick Up."
 				+ "Looking forward to arrival!");
 		return notification;
 	}
@@ -108,11 +123,11 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
 		notification.setRole(history.getStore().getSeller().getRole());
-		notification.setNotifType("Order Cancelled");
+		notification.setNotifType("Order Status");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", history.getId())
-				+ "&lt;/b>&lt;/font> has been cancelled.");
+				+ ") has been cancelled.");
 		return notification;
 	}
 
@@ -122,17 +137,17 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
 		notification.setRole(history.getStore().getSeller().getRole());
-		notification.setNotifType("Order Proceed");
+		notification.setNotifType("Order Status");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", history.getId())
-				+ "&lt;/b>&lt;/font>: "
+				+ "): "
 				+ history.getQuantity() + " " + history.getItem().getMeasurement()
 				+ " of " + history.getItemName()
 				+ " needs to be prepared and delivered to the station,"
-				+ " with Transaction ID: &lt;font color='black'>&lt;b>"
+				+ " with Transaction ID:("
 				+ history.getTransaction().getId()
-				+ "&lt;/b>&lt;/font>: ");
+				+ "): ");
 		return notification;
 	}
 
@@ -142,17 +157,18 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
 		notification.setRole(history.getStore().getSeller().getRole());
-		notification.setNotifType("Order Complete");
+		notification.setNotifType("Order Status");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", history.getId())
-				+ "&lt;/b>&lt;/font>: "
+				+ "): "
 				+ history.getQuantity() + " " + history.getItem().getMeasurement()
 				+ " of " + history.getItemName()
-				+ " with Transaction ID: &lt;font color='black'>&lt;b>"
+				+ " with Transaction ID:("
 				+ history.getTransaction().getId()
-				+ "&lt;/b>&lt;/font>: "
-				+ " has been completed!");
+				+ "): "
+				+ " has been completed!"
+				+ " You can claim your profit at the counter after a while.");
 		return notification;
 	}
 
@@ -162,15 +178,15 @@ public class NotificationMessages
 		Notification notification = new Notification();
 		notification.setUserId(history.getStore().getSeller().getId());
 		notification.setRole(history.getStore().getSeller().getRole());
-		notification.setNotifType("Item Rated");
+		notification.setNotifType("Feedback");
 //		notification.setLink(null);
-		notification.setMessage("Order Number: &lt;font color='black'>&lt;b>"
+		notification.setMessage("Order Number:("
 				+ String.format("%08d", history.getId())
-				+ "&lt;/b>&lt;/font>: "
+				+ "): "
 				+ " of " + history.getItemName()
-				+ " with Transaction ID: &lt;font color='black'>&lt;b>"
+				+ " with Transaction ID:("
 				+ history.getTransaction().getId()
-				+ "&lt;/b>&lt;/font>: "
+				+ "): "
 				+ " has been rated!");
 		return notification;
 	}
