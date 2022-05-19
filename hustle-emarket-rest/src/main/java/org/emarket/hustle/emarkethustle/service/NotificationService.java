@@ -17,4 +17,6 @@ public interface NotificationService
 	public void updateNotification(Notification notification);
 
 	public void deleteNotification(Notification notification);
+
+	int getNotifCount(int id, String role);
 }

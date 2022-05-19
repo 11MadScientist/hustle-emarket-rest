@@ -46,4 +46,6 @@ public interface TransactionService
 
 	Transaction claim(int id);
 
+	List<Transaction> getTransactionByCustomer(int id);
+
 }

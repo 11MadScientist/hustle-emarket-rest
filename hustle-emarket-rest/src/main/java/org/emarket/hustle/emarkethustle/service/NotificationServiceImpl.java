@@ -33,6 +33,12 @@ public class NotificationServiceImpl implements NotificationService
 	}
 
 	@Override
+	public int getNotifCount(int id, String role)
+	{
+		return notificationRepository.findByUserAndRole(id, role).size();
+	}
+
+	@Override
 	public List<Notification> getNotifications()
 	{
 		try

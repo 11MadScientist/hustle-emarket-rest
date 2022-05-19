@@ -39,6 +39,14 @@ public class NotificationRestController
 		return notificationService.getNotificationByUserAndRole(id, role);
 	}
 
+	@GetMapping("/notifications/count")
+	public Integer getNotificationCount(
+			@RequestParam int id,
+			@RequestParam String role)
+	{
+		return notificationService.getNotifCount(id, role);
+	}
+
 	/*
 	 * #######################################
 	 * ######### ADD NOTIFICATION ############

@@ -51,6 +51,12 @@ public class TransactionServiceImpl implements TransactionService
 	}
 
 	@Override
+	public List<Transaction> getTransactionByCustomer(int id)
+	{
+		return transactionRepository.findByCustomerPreparingAndPending(id);
+	}
+
+	@Override
 	public List<Transaction> getTransaction(String value)
 	{
 		List<Transaction> transactions = transactionRepository.findByCreationDateLikeOrderByIdDesc(value);

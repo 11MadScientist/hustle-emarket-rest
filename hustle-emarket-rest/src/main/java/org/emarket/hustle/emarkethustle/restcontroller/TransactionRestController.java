@@ -61,6 +61,20 @@ public class TransactionRestController
 	 * #######################################
 	 */
 
+	@GetMapping("/transactions/getByPreparingAndPending/{id}")
+	public List<Transaction> getByPreparingAndPending(
+			@PathVariable(name = "id") int id)
+	{
+		log.info("id: " + id);
+		return transactionService.getTransactionByCustomer(id);
+	}
+
+	/*
+	 * #######################################
+	 * ########### GET TRANSACTION BY ID #####
+	 * #######################################
+	 */
+
 	@GetMapping("/transactions/{id}")
 	public Transaction getTransactionById(@PathVariable int id)
 	{
